@@ -39,8 +39,17 @@ $(function(){
 			text:'增加',
 			handler: function(){
 				method="add";
-				$('#editWindow').window('open');
-				$('#editForm').form('clear');
+				// $('#editWindow').window('open');
+				// $('#editForm').form('clear');
+
+                layer.open({
+                    type: 2,
+                    title: '用户管理',
+                    maxmin: true,
+                    shadeClose: true, //点击遮罩关闭层
+                    area : ['80%' , '80%'],
+                    content: 'userEdit.html'
+                });
 			}
 		}]
 
@@ -109,20 +118,30 @@ function dele(id){
  * 编辑
  */
 function edit(id){
-	method="update";
-	$('#editWindow').window('open');
 
-    $.ajax({
-        url: baseUrl + '/user/get?id='+id,
-        dataType:'json',
-        type:'post',
-        success:function(value){
-
-            if(value.type = 'success'){
-                $('#editForm').form('load', value.resultData.row);
-            }
-        }
+    layer.open({
+        type: 2,
+        title: '用户管理',
+        maxmin: true,
+        shadeClose: true, //点击遮罩关闭层
+        area : ['80%' , '80%'],
+        content: 'userEdit.html?id=' + id
     });
+
+    // method="update";
+    // $('#editWindow').window('open');
+    //
+    // $.ajax({
+    //     url: baseUrl + '/user/get?id='+id,
+    //     dataType:'json',
+    //     type:'post',
+    //     success:function(value){
+    //
+    //         if(value.type = 'success'){
+    //             $('#editForm').form('load', value.resultData.row);
+    //         }
+    //     }
+    // });
 
 	// $('#editForm').form('load', '/user/get?id='+id);
 }
@@ -139,27 +158,56 @@ function intDepartment() {
     //     textField:'name'
     // });
 
-    $.ajax({
-        url: baseUrl + '/org/listAll',
-        dataType:'json',
-        type:'post',
-        success:function(value){
+    // $.ajax({
+    //     url: baseUrl + '/org/listAll',
+    //     dataType:'json',
+    //     type:'post',
+    //     success:function(value){
+    //
+    //         if(value.type = 'success'){
+    //             var datas = value.resultData.rows;
+    //
+		// 		for(var i=0; i<datas.length; i++) {
+    //                 var option = "";
+    //                 if (datas[i].id.length == 1) {
+    //                 	option = $("<option value='"+ datas[i].id +"'>"+ datas[i].name +"    </option>");
+		// 			} else if (datas[i].id.length == 2) {
+    //                     option = $("<option value='"+ datas[i].id +"'>----"+ datas[i].name +"    </option>");
+		// 			} else if (datas[i].id.length == 4) {
+    //                     option = $("<option value='"+ datas[i].id +"'>--------"+ datas[i].name +"    </option>");
+		// 			}
+    //                 $("#departmentSelect").append(option);
+		// 		}
+    //         }
+    //     }
+    // });
 
-            if(value.type = 'success'){
-                var datas = value.resultData.rows;
 
-				for(var i=0; i<datas.length; i++) {
-                    var option = "";
-                    if (datas[i].id.length == 1) {
-                    	option = $("<option value='"+ datas[i].id +"'>"+ datas[i].name +"    </option>");
-					} else if (datas[i].id.length == 2) {
-                        option = $("<option value='"+ datas[i].id +"'>----"+ datas[i].name +"    </option>");
-					} else if (datas[i].id.length == 4) {
-                        option = $("<option value='"+ datas[i].id +"'>--------"+ datas[i].name +"    </option>");
-					}
-                    $("#departmentSelect").append(option);
-				}
+    $('#departmentSelect').combobox({
+        url: baseUrl + "/org/listAll",
+        loadFilter: function(data){
+            return data.resultData.rows;
+        },
+        formatter: function(row){
+            var opts = $(this).combobox('options');
+            var value = row[opts.valueField]
+            var text = row[opts.textField]
+
+            var option = "";
+            if (value.length == 1) {
+
+            } else if (value.length == 2) {
+                text = "----" + text;
+            } else if (value.length == 4) {
+                text = "--------" + text;
             }
-        }
+            return text;
+        },
+        valueField:'id',
+        textField:'name'
     });
+}
+
+function doSearch() {
+    $('#grid').datagrid('reload');
 }

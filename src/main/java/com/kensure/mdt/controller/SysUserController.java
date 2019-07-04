@@ -38,6 +38,13 @@ public class SysUserController {
 	}
 
 	@ResponseBody
+	@RequestMapping(value = "listAll", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
+	public ResultInfo listAll(HttpServletRequest req, HttpServletResponse rep) {
+        List<SysUser> list = sysUserService.selectList();
+		return new ResultRowsInfo(list);
+	}
+
+	@ResponseBody
 	@RequestMapping(value = "saveRole", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
 	public ResultInfo save(Long userId, String checkedStr) {
 

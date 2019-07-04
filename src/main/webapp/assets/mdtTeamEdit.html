@@ -19,12 +19,13 @@
 
 	<form id="editForm">
 		<input id="id" name="id" type="hidden">
+		<input id="auditStatus" name="auditStatus" type="hidden">
 
 		<table border="0" cellspacing="0">
 			<tr>
 				<td>申请人:</td>
 				<td colspan="3">
-					<input name="proposer" class="easyui-textbox">
+					<input id="proposer" name="proposer" class="easyui-textbox">
 				</td>
 			</tr>
 			<tr>
@@ -52,9 +53,68 @@
 			</tr>
 
 			<tr>
-				<td colspan="4">
+				<td colspan="4" style="background-color: #8D8D8D">
+					<br>
 					团队建设责任目标
+					<br>
 				</td>
+			</tr>
+			<tr>
+				<td>年度:</td>
+				<td>
+					<input name="year" class="easyui-numberbox">
+				</td>
+				<td>年度目标完成例次:</td>
+				<td>
+					<input name="yearSum" class="easyui-numberbox">
+				</td>
+			</tr>
+			<tr>
+				<td>MDT病种相关研究核心期刊论文发表量:</td>
+				<td>
+					<input name="papersNum" class="easyui-numberbox">
+				</td>
+				<td>其他:</td>
+				<td>
+					<input name="other" class="easyui-textbox">
+				</td>
+			</tr>
+			<tr>
+				<td colspan="4">
+					<br>
+					月度目标指标完成情况(从申请日期的下个月开始，填写12个月的目标完成例数)
+				</td>
+			</tr>
+		</table>
+
+		<table>
+			<tr>
+				<td style="width: 8%"><input  id="m1"  name="m1" class="easyui-textbox" style="width: 50px" value="1月"></td>
+				<td style="width: 8%"><input  id="m2"  name="m2" class="easyui-textbox" style="width: 50px" value="2月"></td>
+				<td style="width: 8%"><input  id="m3"  name="m3" class="easyui-textbox" style="width: 50px" value="3月"></td>
+				<td style="width: 8%"><input  id="m4"  name="m4" class="easyui-textbox" style="width: 50px" value="4月"></td>
+				<td style="width: 8%"><input  id="m5"  name="m5" class="easyui-textbox" style="width: 50px" value="5月"></td>
+				<td style="width: 8%"><input  id="m6"  name="m6" class="easyui-textbox" style="width: 50px" value="6月"></td>
+				<td style="width: 8%"><input  id="m7"  name="m7" class="easyui-textbox" style="width: 50px" value="7月"></td>
+				<td style="width: 8%"><input  id="m8"  name="m8" class="easyui-textbox" style="width: 50px" value="8月"></td>
+				<td style="width: 8%"><input  id="m9"  name="m9" class="easyui-textbox" style="width: 50px" value="9月"></td>
+				<td style="width: 8%"><input id="m10" name="m10" class="easyui-textbox" style="width: 50px" value="10月"></td>
+				<td style="width: 8%"><input id="m11" name="m11" class="easyui-textbox" style="width: 50px" value="11月"></td>
+				<td style="width: 8%"><input id="m12" name="m12" class="easyui-textbox" style="width: 50px" value="12月"></td>
+			</tr>
+			<tr>
+				<td ><input id="month1"  name="month1"  class="easyui-numberbox" style="width: 50px"></td>
+				<td ><input id="month2"  name="month2"  class="easyui-numberbox" style="width: 50px"></td>
+				<td ><input id="month3"  name="month3"  class="easyui-numberbox" style="width: 50px"></td>
+				<td ><input id="month4"  name="month4"  class="easyui-numberbox" style="width: 50px"></td>
+				<td ><input id="month5"  name="month5"  class="easyui-numberbox" style="width: 50px"></td>
+				<td ><input id="month6"  name="month6"  class="easyui-numberbox" style="width: 50px"></td>
+				<td ><input id="month7"  name="month7"  class="easyui-numberbox" style="width: 50px"></td>
+				<td ><input id="month8"  name="month8"  class="easyui-numberbox" style="width: 50px"></td>
+				<td ><input id="month9"  name="month9"  class="easyui-numberbox" style="width: 50px"></td>
+				<td ><input id="month10" name="month10" class="easyui-numberbox" style="width: 50px"></td>
+				<td ><input id="month11" name="month11" class="easyui-numberbox" style="width: 50px"></td>
+				<td ><input id="month12" name="month12" class="easyui-numberbox" style="width: 50px"></td>
 			</tr>
 		</table>
 

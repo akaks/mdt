@@ -4,12 +4,14 @@
 	<!-- <cache readOnly="true"/> -->
     <sql id="allFields">
 		id,
-		name
+		name,
+		level
     </sql>
     
 	<sql id="insertFields">
 		id,
-		name
+		name,
+		level
     </sql>
 	
 	<insert id="insert" parameterType="com.kensure.mdt.entity.SysRole">

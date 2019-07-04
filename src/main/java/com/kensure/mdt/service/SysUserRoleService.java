@@ -1,12 +1,3 @@
-/*
- * ----------------------------------------------------------------------------------------------
- * 修改历史:
- * ----------------------------------------------------------------------------------------------
- * 修改原因: 新增
- * 修改人员: fankd
- * 修改日期: 2019-6-12
- * 修改内容: 
- */
 package com.kensure.mdt.service;
 
 import co.kensure.mem.MapUtils;
@@ -23,8 +14,6 @@ import java.util.Map;
 
 /**
  * 用户角色表服务实现类
- * @author fankd created on 2019-6-12
- * @since 
  */
 @Service
 public class SysUserRoleService {

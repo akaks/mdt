@@ -1,5 +1,4 @@
 
-var method="";//保存提交的方法名称 
 $(function(){
 
     var columns=[[
@@ -28,17 +27,10 @@ $(function(){
             return "<a href='#' onclick='edit("+row.id+")'>修改</a> <a href='#' onclick='dele("+row.id+")'>删除</a>";
         }}
     ]];
-	
-	if(typeof(listParam)=='undefined'){
-		listParam='';		
-	}
-	if(typeof(saveParam)=='undefined'){
-		saveParam='';		
-	}
-	
+
 	//表格数据初始化
 	$('#grid').datagrid({
-		url:baseUrl + '/patient/list'+listParam,
+		url:baseUrl + '/patient/list',
         loadFilter: function(data){
             return data.resultData;
         },
@@ -50,16 +42,14 @@ $(function(){
 			text:'增加',
 			handler: function(){
 
-                $("tr[id^='outpatient']").each(function () {
-                    $(this).show();
+                layer.open({
+                    type: 2,
+                    title: '患者信息',
+                    maxmin: true,
+                    shadeClose: true, //点击遮罩关闭层
+                    area : ['80%' , '80%'],
+                    content: 'patientEdit.html'
                 });
-                $("tr[id^='hospital']").each(function () {
-                    $(this).hide();
-                });
-
-                method="add";
-				$('#editWindow').window('open');
-				$('#editForm').form('clear');
 			}
 		}]
 
@@ -67,39 +57,8 @@ $(function(){
 	
 	//条件查询
 	$('#btnSearch').bind('click',function(){
-		var formdata=getFormData('searchForm');
-		$('#grid').datagrid('load',formdata);
+		doSearch();
 	});
-
-	//保存
-	$('#btnSave').bind('click',function(){
-
-		//判断：编辑表单的所有控件是否都通过验证
-		var isValidate= $('#editForm').form('validate');
-		if(isValidate==false){
-			return ;
-		}
-
-		var formdata=getFormData('editForm');
-
-		$.ajax({
-			url: baseUrl + '/patient/save',
-			data:formdata,
-			dataType:'json',
-			type:'post',
-			success:function(value){
-
-				if(value.type = 'success'){
-					$('#editWindow').window('close');
-					$('#grid').datagrid('reload');
-				}
-				$.messager.alert('提示',value.message);
-			}
-
-		});
-
-	});
-
 });
 
 /**
@@ -114,10 +73,10 @@ function dele(id){
                 url: baseUrl + '/patient/delete?id='+id,
 				dataType:'json',
 				success:function(value){
-					if(value.success){
-						$('#grid').datagrid('reload');
-					}
-					$.messager.alert('提示',value.message);
+                    if(value.type = 'success'){
+                        doSearch();
+                    }
+                    $.messager.alert('提示',value.message);
 				}
 			});		
 		}	
@@ -128,25 +87,20 @@ function dele(id){
  * 编辑
  */
 function edit(id){
-	method="update";
 
-    $.ajax({
-        url: baseUrl + '/patient/get?id='+id,
-        dataType:'json',
-        type:'post',
-        success:function(value){
-
-            if(value.type = 'success'){
-                $('#editForm').form('load', value.resultData.row);
-
-                changePatientType(value.resultData.row.patientType);
-
-                $('#editWindow').window('open');
-            }
-        }
+    layer.open({
+        type: 2,
+        title: '患者信息',
+        maxmin: true,
+        shadeClose: true, //点击遮罩关闭层
+        area : ['80%' , '80%'],
+        content: 'patientEdit.html?id=' + id
     });
+}
 
-	// $('#editForm').form('load', '/user/get?id='+id);
+function doSearch() {
+    var formdata=getFormData('searchForm');
+    $('#grid').datagrid('load',formdata);
 }
 
 function changePatientType(val) {

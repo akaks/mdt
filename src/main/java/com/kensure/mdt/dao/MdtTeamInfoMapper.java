@@ -1,12 +1,10 @@
 package com.kensure.mdt.dao;
-
 import co.kensure.annotation.MyBatisRepository;
-import com.kensure.mdt.entity.MdtTeamInfo;
 import org.apache.ibatis.annotations.Mapper;
-
-import java.util.Collection;
 import java.util.List;
+import java.util.Collection;
 import java.util.Map;
+import com.kensure.mdt.entity.MdtTeamInfo;
 
 /**
  * MDT团队基本信息表Dao接口类

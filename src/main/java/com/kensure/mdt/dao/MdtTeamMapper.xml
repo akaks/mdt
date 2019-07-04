@@ -9,7 +9,17 @@
 		date,
 		standard,
 		audit_status as auditStatus,
-		create_time as createTime
+		audit_result1 as auditResult1,
+		audit_opinion1 as auditOpinion1,
+		audit_result2 as auditResult2,
+		audit_opinion2 as auditOpinion2,
+		audit_result3 as auditResult3,
+		audit_opinion3 as auditOpinion3,
+		create_userid as createUserid,
+		create_dept as createDept,
+		is_delete as isDelete,
+		create_time as createTime,
+		update_time as updateTime
     </sql>
     
 	<sql id="insertFields">
@@ -19,10 +29,24 @@
 		date,
 		standard,
 		audit_status,
-		create_time
+		audit_result1,
+		audit_opinion1,
+		audit_result2,
+		audit_opinion2,
+		audit_result3,
+		audit_opinion3,
+		create_userid,
+		create_dept,
+		is_delete,
+		create_time,
+		update_time
     </sql>
 	
 	<insert id="insert" parameterType="com.kensure.mdt.entity.MdtTeam">
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+
 		insert into mdt_team (<include refid="insertFields"/>)
 		values (
 			#{id},
@@ -31,7 +55,17 @@
 			#{date},
 			#{standard},
 			#{auditStatus},
-			#{createTime}
+			#{auditResult1},
+			#{auditOpinion1},
+			#{auditResult2},
+			#{auditOpinion2},
+			#{auditResult3},
+			#{auditOpinion3},
+			#{createUserid},
+			#{createDept},
+			#{isDelete},
+			#{createTime},
+			#{updateTime}
 		)
 	</insert>	
 	
@@ -42,9 +76,6 @@
 		<if test="name != null">			
 			and name = #{name}			
 		</if>
-		<if test="nameLike != null">
-			and name like concat('%',#{nameLike},'%')
-		</if>
 		<if test="date != null">			
 			and date = #{date}			
 		</if>
@@ -54,8 +85,32 @@
 		<if test="auditStatus != null">			
 			and audit_status = #{auditStatus}			
 		</if>
+		<if test="auditResult1 != null">			
+			and audit_result1 = #{auditResult1}			
+		</if>
+		<if test="auditOpinion1 != null">			
+			and audit_opinion1 = #{auditOpinion1}			
+		</if>
+		<if test="auditResult2 != null">			
+			and audit_result2 = #{auditResult2}			
+		</if>
+		<if test="auditOpinion2 != null">			
+			and audit_opinion2 = #{auditOpinion2}			
+		</if>
+		<if test="auditResult3 != null">			
+			and audit_result3 = #{auditResult3}			
+		</if>
+		<if test="auditOpinion3 != null">			
+			and audit_opinion3 = #{auditOpinion3}			
+		</if>
+		<if test="isDelete != null">			
+			and is_delete = #{isDelete}			
+		</if>
 		<if test="createTime != null">			
 			and create_time = #{createTime}			
+		</if>
+		<if test="updateTime != null">			
+			and update_time = #{updateTime}			
 		</if>
 	</sql>
     
@@ -107,8 +162,32 @@
 		<if test="auditStatus != null">
 			audit_status = #{auditStatus},
 		</if>
+		<if test="auditResult1 != null">
+			audit_result1 = #{auditResult1},
+		</if>
+		<if test="auditOpinion1 != null">
+			audit_opinion1 = #{auditOpinion1},
+		</if>
+		<if test="auditResult2 != null">
+			audit_result2 = #{auditResult2},
+		</if>
+		<if test="auditOpinion2 != null">
+			audit_opinion2 = #{auditOpinion2},
+		</if>
+		<if test="auditResult3 != null">
+			audit_result3 = #{auditResult3},
+		</if>
+		<if test="auditOpinion3 != null">
+			audit_opinion3 = #{auditOpinion3},
+		</if>
+		<if test="isDelete != null">
+			is_delete = #{isDelete},
+		</if>
 		<if test="createTime != null">
-			create_time = #{createTime}
+			create_time = #{createTime},
+		</if>
+		<if test="updateTime != null">
+			update_time = #{updateTime}
 		</if>
 	</sql>
 	

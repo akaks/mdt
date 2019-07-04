@@ -19,7 +19,10 @@ public class SysUser implements Serializable{
 	private String number; 
 
 	/**姓名*/		
-	private String name; 
+	private String name;
+
+	/**password*/
+	private String password;
 
 	/**年龄*/		
 	private Long age; 
@@ -71,6 +74,15 @@ public class SysUser implements Serializable{
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
 	public Long getAge() {
 		return age;
 	}

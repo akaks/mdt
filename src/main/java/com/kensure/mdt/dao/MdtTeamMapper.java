@@ -1,12 +1,10 @@
 package com.kensure.mdt.dao;
-
-import co.kensure.annotation.MyBatisRepository;
-import com.kensure.mdt.entity.MdtTeam;
 import org.apache.ibatis.annotations.Mapper;
-
-import java.util.Collection;
+import co.kensure.annotation.MyBatisRepository;
 import java.util.List;
+import java.util.Collection;
 import java.util.Map;
+import com.kensure.mdt.entity.MdtTeam;
 
 /**
  * MDT团队表Dao接口类
@@ -27,7 +25,7 @@ public interface MdtTeamMapper {
 	public long selectCountByWhere(Map<String, Object> parameters);
 	
 	
-	public boolean insert(MdtTeam obj);	
+	public boolean insert(MdtTeam obj);
 	
 	
 	public boolean update(MdtTeam obj);

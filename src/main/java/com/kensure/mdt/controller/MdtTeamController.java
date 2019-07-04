@@ -8,8 +8,10 @@ import co.kensure.mem.PageInfo;
 import com.alibaba.fastjson.JSONObject;
 import com.kensure.mdt.entity.MdtTeam;
 import com.kensure.mdt.entity.MdtTeamInfo;
+import com.kensure.mdt.entity.MdtTeamObjective;
 import com.kensure.mdt.entity.query.MdtTeamQuery;
 import com.kensure.mdt.service.MdtTeamInfoService;
+import com.kensure.mdt.service.MdtTeamObjectiveService;
 import com.kensure.mdt.service.MdtTeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,17 +24,20 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
- * mdt 团队
+ * MDT团队管理
  */
 @Controller
 @RequestMapping(value = "mdtTeam")
-public class MdtTeamController {
+public class MdtTeamController extends BaseController {
 
 	@Autowired
 	private MdtTeamService mdtTeamService;
 
 	@Autowired
 	private MdtTeamInfoService mdtTeamInfoService;
+
+	@Autowired
+	private MdtTeamObjectiveService mdtTeamObjectiveService;
 
 	/**
 	 * 分页查询
@@ -65,7 +70,27 @@ public class MdtTeamController {
 
 		JSONObject json = RequestUtils.paramToJson(req);
 		MdtTeam team = JSONObject.parseObject(json.toJSONString(), MdtTeam.class);
-		mdtTeamService.save(team);
+
+		MdtTeamObjective teamObjective = JSONObject.parseObject(json.toJSONString(), MdtTeamObjective.class);
+
+		mdtTeamService.save(team, teamObjective, getCurrentUser(req));
+		return new ResultInfo();
+	}
+
+	/**
+	 * 审核
+	 * @param req
+	 * @param rep
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "audit", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
+	public ResultInfo audit(HttpServletRequest req, HttpServletResponse rep) {
+
+		JSONObject json = RequestUtils.paramToJson(req);
+		MdtTeam team = JSONObject.parseObject(json.toJSONString(), MdtTeam.class);
+
+		mdtTeamService.audit(team);
 		return new ResultInfo();
 	}
 
@@ -84,6 +109,35 @@ public class MdtTeamController {
 		return new ResultRowInfo(team);
 	}
 
+	/**
+	 * 删除MDT团队
+	 * @param req
+	 * @param rep
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "delete", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
+	public ResultInfo delete(HttpServletRequest req, HttpServletResponse rep) {
+
+		Long id = Long.parseLong(req.getParameter("id"));
+		mdtTeamService.delMdtTeam(id);
+		return new ResultInfo();
+	}
+
+	/**
+	 * 获取第一个设置的MDT团队目标
+	 * @param req
+	 * @param rep
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "getFirstByTeamId", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
+	public ResultInfo getFirstByTeamId(HttpServletRequest req, HttpServletResponse rep) {
+
+		Long teamId = Long.parseLong(req.getParameter("teamId"));
+		MdtTeamObjective obj = mdtTeamObjectiveService.getFirstByTeamId(teamId);
+		return new ResultRowInfo(obj);
+	}
 
 	/**
 	 * 查询所有  MDT团队基本信息（多人明细）
@@ -101,7 +155,6 @@ public class MdtTeamController {
 
 		return new ResultRowsInfo(list, cont);
 	}
-
 
 	/**
 	 * 保存  MDT团队基本信息（多人明细）
@@ -143,10 +196,24 @@ public class MdtTeamController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "delTeamInfo", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
-	public ResultInfo delete(HttpServletRequest req, HttpServletResponse rep) {
+	public ResultInfo delTeamInfo(HttpServletRequest req, HttpServletResponse rep) {
 
 		Long id = Long.parseLong(req.getParameter("id"));
 		mdtTeamInfoService.delete(id);
 		return new ResultInfo();
+	}
+
+	/**
+	 * 查询所有  MDT团队
+	 * @param req
+	 * @param rep
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "findAllMdtTeam", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
+	public ResultInfo findAllMdtTeam(HttpServletRequest req, HttpServletResponse rep) {
+
+		List<MdtTeam> list = mdtTeamService.findAllMdtTeam();
+		return new ResultRowsInfo(list);
 	}
 }

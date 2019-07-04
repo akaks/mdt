@@ -11,7 +11,22 @@ $(function(){
         },
         columns:[[
             {field:'id',title:'角色编号',width:100},
-            {field:'name',title:'角色名称',width:100}
+            {field:'name',title:'角色名称',width:100},
+            {field:'level',title:'角色数据权限级别',width:100,formatter:function(value,row,index) {
+                //
+                if (row.level == '1') {
+                    return "集团";
+                } else if (row.level == '2') {
+                    return "院区";
+                } else if (row.level == '3') {
+                    return "部门";
+                } else if (row.level == '4') {
+                    return "科室";
+                } else if (row.level == '5') {
+                    return "个人";
+                }
+                return '';
+            }},
         ]],
         singleSelect:true,
         onClickRow:clickRow

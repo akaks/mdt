@@ -6,6 +6,10 @@
 
 <!--  <link rel="shortcut icon" href="../css/css_default/img/favicon.ico">-->
 <link href="./login/login.css" rel="stylesheet" type="text/css">
+
+	<script type="text/javascript" src="ui/jquery.min.js"></script>
+	<script type="text/javascript" src="js/form.js"></script>
+
 <style type="text/css">
 <!--
 IMG   
@@ -21,13 +25,32 @@ IMG
 var checkState=true;
 function submitForm(){
   if(confirm()){
-     //将密码加密码传输
-     if(document.loginForm.password.value.length!=32){
-     document.loginForm.password.value=calcMD5(document.loginForm.password.value);
+//     //将密码加密码传输
+//     if(document.loginForm.password.value.length!=32){
+//     document.loginForm.password.value=calcMD5(document.loginForm.password.value);
+//
+//     }
+//     document.loginForm.actionType.value="login";
+//     document.loginForm.submit();
 
-     }
-     document.loginForm.actionType.value="login";
-     document.loginForm.submit();
+	  $.ajax({
+          url: '/mdt/auth/login',
+		  data:{
+              username: document.loginForm.username.value,
+              password: document.loginForm.password.value
+		  },
+		  dataType:'json',
+		  type:'post',
+          success: function (value) {
+              if (value.type == 'success') {
+                  location.href = "index.html";
+              } else {
+                  alert(value.message);
+              }
+		  }
+
+	  });
+
   }
 }
 function reset(){
@@ -58,17 +81,17 @@ function confirm(){
      document.loginForm.password.focus();
      return false;
   } 
-  if(document.loginForm.checkDigit.value==""){
-     alert("验证码不能为空！");
-     document.loginForm.checkDigit.focus();
-     return false;
-  } 
+//  if(document.loginForm.checkDigit.value==""){
+//     alert("验证码不能为空！");
+//     document.loginForm.checkDigit.focus();
+//     return false;
+//  }
   //判断验证是否通过
-  if(!checkState){
-  	alert("验证码输入不正确,请重新输入!");
-  	document.loginForm.checkDigit.focus();
-  	return checkState;
-  }
+//  if(!checkState){
+//  	alert("验证码输入不正确,请重新输入!");
+//  	document.loginForm.checkDigit.focus();
+//  	return checkState;
+//  }
   return true;
 }
 
@@ -171,14 +194,14 @@ var prefs = Components.classes['@mozilla.org/preferences-service;1'].getService(
 							用户:
 						</td>
 						<td>
-						<input class="input" type="text" value="" size="20" name="account" id="account">
+						<input class="input" type="text" value="普通用户" size="20" name="username" id="account">
 						</td>
 					
 						<td>
 							密码:
 						</td>
 						<td>
-							<input class="input" type="password" value="" size="20" name="password">
+							<input class="input" type="password" value="1" size="20" name="password">
 						</td>
 				
 						<td>

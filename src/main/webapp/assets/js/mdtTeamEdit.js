@@ -1,13 +1,40 @@
+var id;
+var audit = 0;  // 区分是否MDT团队是否需要审核  audit=1时是不需要审核的
 
 $(function(){
 
     var url = window.location.href;
     id = url.split("id=")[1];
+    audit = url.split("audit=")[1];
+
     if(id != undefined && id != null){
-        edit(id);
+        // 初始化数据
+        initData(id);
+
+        // 获取第一个设置的MDT团队目标
+        getFirstByTeamId(id);
+
+        // 初始化团队明细列表
+        initGrid1(id);
+    } else {
+
+        initGrid1("0");
     }
 
-    initGrid1(id)
+    // 无需审核的情况下，审核状态直接设置为3
+    if(audit != undefined && audit != null && audit == '1'){
+        $("#auditStatus").val("3");
+    }
+
+    $('#date').datebox({
+        onSelect: function(date){
+            setDate(date);
+        }
+    });
+
+    // var user = getUser();
+    // // 申请人
+    // $('#proposer').textbox('setText', user.name);
 });
 
 function initGrid1(teamId) {
@@ -89,10 +116,7 @@ function save() {
 /**
  * 编辑
  */
-function edit(id){
-	method="update";
-	$('#editWindow').window('open');
-
+function initData(id){
     $.ajax({
         url: baseUrl + '/mdtTeam/get?id='+id,
         dataType:'json',
@@ -100,10 +124,43 @@ function edit(id){
         success:function(value){
             if(value.type = 'success'){
                 $('#editForm').form('load', value.resultData.row);
+
+                setDate(new Date(value.resultData.row.date));
             }
         }
     });
 }
+
+/**
+ * 获取第一个设置的MDT团队目标
+ */
+function getFirstByTeamId(teamId){
+    $.ajax({
+        url: baseUrl + '/mdtTeam/getFirstByTeamId?teamId='+teamId,
+        dataType:'json',
+        type:'post',
+        success:function(value){
+            if(value.type = 'success'){
+                $('#editForm').form('load', value.resultData.row);
+
+                $("#id").val(id); // 防止id被重置
+            }
+        }
+    });
+}
+
+// 从申请日期的下个月开始，填写12个月的月份
+function setDate(date) {
+    var month = date.getMonth()+1;
+    for (var i = 1; i <= 12 ; i++) {
+        if (month == 12) {
+            month = 0;
+        }
+        $('#m' + i).textbox('setText', month + 1 + "月");
+        month++;
+    }
+}
+
 
 function addTeamInfo(teamId) {
     if (!teamId) {
@@ -150,6 +207,8 @@ function delTeamInfo(id) {
         }
     });
 }
+
+
 
 function doSearch() {
     $('#grid1').datagrid('reload');

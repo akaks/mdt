@@ -1,17 +1,19 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>患者信息管理</title>
-<link rel="stylesheet" type="text/css" href="ui17/themes/default/easyui.css">
-<link rel="stylesheet" type="text/css" href="ui17/themes/icon.css">
-<script type="text/javascript" src="ui17/jquery.min.js"></script>
-<script type="text/javascript" src="ui17/jquery.easyui.min.js"></script>
-<script type="text/javascript" src="ui17/locale/easyui-lang-zh_CN.js"></script>
-<script type="text/javascript" src="js/common.js"></script>
-<script type="text/javascript" src="js/form.js"></script>
-<script type="text/javascript" src="js/patient.js"></script>
-<script type="text/javascript">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>患者信息管理</title>
+	<link rel="stylesheet" type="text/css" href="ui17/themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="ui17/themes/icon.css">
+	<script type="text/javascript" src="ui17/jquery.min.js"></script>
+	<script type="text/javascript" src="ui17/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="ui17/locale/easyui-lang-zh_CN.js"></script>
+
+	<script src="layer/layer.js"></script>
+	<script type="text/javascript" src="js/common.js"></script>
+	<script type="text/javascript" src="js/form.js"></script>
+	<script type="text/javascript" src="js/patient.js"></script>
+	<script type="text/javascript">
 
 
 </script>
@@ -25,114 +27,6 @@
 </form>
 </div>
 <table id="grid"></table>
-
-<div id="editWindow" class="easyui-window" title="患者信息" data-options="closed:true">
-	<form id="editForm">
-		<input name="id" type="hidden">
-
-		<table>
-			<tr>
-				<td>患者类型:</td>
-				<td colspan="3">
-					<input type="radio" name="patientType" value="1" label="" onchange="changePatientType()">门诊病人
-					<input type="radio" name="patientType" value="2" label="" onchange="changePatientType()">住院病人
-				</td>
-			</tr>
-			<tr>
-				<td style="width: 10%">患者姓名:</td>
-				<td style="width: 40%"><input name="name" class="easyui-textbox" data-options="required: true"></td>
-				<td style="width: 10%">性别:</td>
-				<td style="width: 40%"><input name="gender" class="easyui-textbox"></td>
-			</tr>
-			<tr>
-				<td>身份证号:</td>
-				<td colspan="3"><input name="idcard" class="easyui-textbox"></td>
-			</tr>
-			<tr>
-				<td>年龄:</td><td><input name="age" class="easyui-numberspinner" data-options="min:0,max:120" style="width:80px;"> </td>
-				<td>生日:</td><td><input id="birthday" name="birthday" type="text" class="easyui-datebox" ></td>
-			</tr>
-			<tr id="outpatient1">
-				<td>门诊病历号:</td>
-				<td><input name="medicalNo" class="easyui-textbox"></td>
-				<td>门诊就诊号:</td>
-				<td><input name="treatmentNo" class="easyui-textbox"></td>
-			</tr>
-			<tr id="outpatient2">
-				<td>门诊病历名称:</td>
-				<td><input name="medicalName" class="easyui-textbox"></td>
-				<td>门诊病历状态:</td>
-				<td><input name="medicalStatus" class="easyui-textbox"></td>
-			</tr>
-			<tr id="outpatient3">
-				<td>主治医生:</td>
-				<td><input name="majorDoctor" class="easyui-textbox"></td>
-				<td>现在病史:</td>
-				<td><input name="medicalHistory" class="easyui-textbox"></td>
-			</tr>
-			<tr id="outpatient4">
-				<td>体检:</td>
-				<td><input name="medicalExam" class="easyui-textbox"></td>
-				<td>专科体检:</td>
-				<td><input name="specializedMedical" class="easyui-textbox"></td>
-			</tr>
-			<tr id="outpatient5">
-				<td>处理:</td>
-				<td><input name="dispose" class="easyui-textbox"></td>
-				<td>初步诊断:</td>
-				<td><input name="primaryDiagnosis" class="easyui-textbox"></td>
-			</tr>
-
-
-			<tr id="hospital1">
-				<td>住院号:</td>
-				<td><input name="inHospitalNo" class="easyui-textbox"></td>
-				<td>住院次:</td>
-				<td><input name="inHospitalNumber" class="easyui-textbox"></td>
-			</tr>
-			<tr id="hospital2">
-				<td>费别:</td>
-				<td><input name="feeType" class="easyui-textbox"></td>
-				<td>入院日期:</td>
-				<td><input id="inHospitalDate" name="inHospitalDate" type="text" class="easyui-datebox" ></td>
-			</tr>
-			<tr id="hospital3">
-				<td>经治医生:</td>
-				<td><input name="cureDoctor" class="easyui-textbox"></td>
-				<td>上级医师:</td>
-				<td><input name="superiorDoctor" class="easyui-textbox"></td>
-			</tr>
-			<tr id="hospital4">
-				<td>主任医师:</td>
-				<td><input name="seniorDoctor" class="easyui-textbox"></td>
-				<td>诊断:</td>
-				<td><input name="diagnosis" class="easyui-textbox"></td>
-			</tr>
-			<tr id="hospital5">
-				<td>出院日:</td>
-				<td><input name="inHospitalDays" class="easyui-textbox"></td>
-				<td>住院日期:</td>
-				<td><input name="outHospitalDate" class="easyui-textbox"></td>
-			</tr>
-			<tr id="hospital6">
-				<td>MDT前治疗方案:</td>
-				<td><input name="mdtBeforeProject" class="easyui-textbox"></td>
-				<td>MDT后治疗方案:</td>
-				<td><input name="mdtAfterProject" class="easyui-textbox"></td>
-			</tr>
-			<tr>
-				<td>创建时间:</td>
-				<td><input id="createTime" name="createTime" type="text" class="easyui-datetimebox" ></td>
-				<td>修改医生:</td>
-				<td><input name="updateDoctor" class="easyui-textbox"></td>
-			</tr>
-
-
-		</table><br/><br/>&nbsp;&nbsp;
-		<!--<button id="btnSave" type="button">保存</button>-->
-		<a id="btnSave" href="javascript:void(0)" class="easyui-linkbutton">保存</a>
-	</form>
-</div>
 
 </body>
 </html>

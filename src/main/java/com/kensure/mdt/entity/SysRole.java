@@ -15,7 +15,10 @@ public class SysRole implements Serializable{
 	private Long id; 
 
 	/**角色名称*/		
-	private String name; 
+	private String name;
+
+	/**数据权限级别*/
+	private String level;
 
 
 	public Long getId() {
@@ -31,5 +34,13 @@ public class SysRole implements Serializable{
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getLevel() {
+		return level;
+	}
+
+	public void setLevel(String level) {
+		this.level = level;
 	}
 }

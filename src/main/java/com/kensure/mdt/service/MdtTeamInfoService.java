@@ -9,8 +9,10 @@
  */
 package com.kensure.mdt.service;
 
+import co.kensure.exception.BusinessExceptionUtil;
 import co.kensure.mem.MapUtils;
 import com.kensure.mdt.dao.MdtTeamInfoMapper;
+import com.kensure.mdt.entity.MdtApplyDoctor;
 import com.kensure.mdt.entity.MdtTeamInfo;
 import com.kensure.mdt.entity.SysOrg;
 import org.springframework.stereotype.Service;
@@ -55,11 +57,14 @@ public class MdtTeamInfoService {
 	
 	
 	public boolean insert(MdtTeamInfo obj){
+		obj.setCreateTime(new Date());
+		obj.setUpdateTime(new Date());
 		return dao.insert(obj);
 	}
 	
 	
 	public boolean update(MdtTeamInfo obj){
+		obj.setUpdateTime(new Date());
 		return dao.update(obj);
 	}
     
@@ -85,12 +90,23 @@ public class MdtTeamInfoService {
 
     	if (teamInfo.getId() == null) {
 
-			teamInfo.setCreateTime(new Date());
+			List<MdtTeamInfo> list = selectByTeamIdAndUserId(teamInfo.getTeamId(), teamInfo.getUserId());
+			if (list.size() > 0) {
+				BusinessExceptionUtil.threwException("该专家已存在不可重复添加!");
+			}
+
 			insert(teamInfo);
 		} else {
 
     		update(teamInfo);
 		}
+	}
+
+	public List<MdtTeamInfo> selectByTeamIdAndUserId(Long teamId, Long userId) {
+
+		Map<String, Object> parameters = MapUtils.genMap("teamId", teamId, "userId", userId);
+		List<MdtTeamInfo> list = selectByWhere(parameters);
+		return list;
 	}
 
 	public List<MdtTeamInfo> selectList(Long teamId) {
@@ -114,4 +130,5 @@ public class MdtTeamInfoService {
 		Map<String, Object> parameters = MapUtils.genMap("teamId", teamId);
 		return selectCountByWhere(parameters);
 	}
+
 }

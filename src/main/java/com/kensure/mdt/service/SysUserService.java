@@ -1,19 +1,11 @@
-/*
- * ----------------------------------------------------------------------------------------------
- * 修改历史:
- * ----------------------------------------------------------------------------------------------
- * 修改原因: 新增
- * 修改人员: fankd
- * 修改日期: 2019-6-11
- * 修改内容: 
- */
 package com.kensure.mdt.service;
 
+import co.kensure.exception.BusinessExceptionUtil;
 import co.kensure.mem.MapUtils;
 import co.kensure.mem.PageInfo;
 import com.kensure.mdt.dao.SysUserMapper;
-import com.kensure.mdt.entity.SysOrg;
-import com.kensure.mdt.entity.SysUser;
+import com.kensure.mdt.entity.*;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -25,8 +17,6 @@ import java.util.Map;
 
 /**
  * 用户表服务实现类
- * @author fankd created on 2019-6-11
- * @since 
  */
 @Service
 public class SysUserService {
@@ -39,6 +29,9 @@ public class SysUserService {
 
 	@Resource
 	private SysUserRoleService sysUserRoleService;
+
+	@Resource
+	private SysRoleService sysrRoleService;
 
     public SysUser selectOne(Long id){
     	return dao.selectOne(id);
@@ -58,11 +51,14 @@ public class SysUserService {
 	
 	
 	public boolean insert(SysUser obj){
+		obj.setCreateTime(new Date());
+		obj.setUpdateTime(new Date());
 		return dao.insert(obj);
 	}
 	
 	
 	public boolean update(SysUser obj){
+		obj.setUpdateTime(new Date());
 		return dao.update(obj);
 	}
     
@@ -101,6 +97,13 @@ public class SysUserService {
 		return userList;
     }
 
+    public List<SysUser> selectList() {
+
+		Map<String, Object> parameters = MapUtils.genMap();
+		List<SysUser> userList = selectByWhere(parameters);
+		return userList;
+    }
+
     public long selectListCount(PageInfo page) {
 
 		Map<String, Object> parameters = MapUtils.genMap();
@@ -108,13 +111,16 @@ public class SysUserService {
 		return selectCountByWhere(parameters);
     }
 
+	/**
+	 * 保存
+	 * @param user
+	 */
 	public void save(SysUser user) {
-
-		user.setUpdateTime(new Date());
 
     	if (user.getId() == null) {
 
-			user.setCreateTime(new Date());
+    		user.setPassword("123456");
+
 			insert(user);
 		} else {
 
@@ -122,6 +128,11 @@ public class SysUserService {
 		}
 	}
 
+	/**
+	 * 保存用户角色
+	 * @param userId
+	 * @param checkedStr
+	 */
     public void saveRole(Long userId, String checkedStr) {
 
         sysUserRoleService.delete(userId);
@@ -134,5 +145,49 @@ public class SysUserService {
 
             sysUserRoleService.save(userId, roleId);
         }
+    }
+
+    /**
+     * 登录
+     * @param username
+     * @param password
+     * @return
+     */
+    public AuthUser login(String username, String password) {
+
+		Map<String, Object> parameters = MapUtils.genMap("name", username, "password", password);
+
+        List<SysUser> list = selectByWhere(parameters);
+
+        if (list.isEmpty()) {
+            BusinessExceptionUtil.threwException("账号或者密码错误");
+        }
+
+        SysUser sysUser = list.get(0);
+
+        AuthUser user = new AuthUser();
+        BeanUtils.copyProperties(sysUser, user);
+
+        List<SysUserRole> userRoles = sysUserRoleService.getSysUserRoleByUserId(user.getId());
+
+        String roleIds = "";  // 角色id取所有
+        String roleLevel = "100";  // 角色级别取最大
+
+        for (SysUserRole userRole : userRoles) {
+
+            SysRole sysRole = sysrRoleService.selectOne(userRole.getRoleId());
+
+            roleIds += sysRole.getId() + ",";
+
+            if (roleLevel.compareTo(sysRole.getLevel()) < 0) {
+                roleLevel = sysRole.getLevel();
+            }
+        }
+
+        user.setRoleIds(roleIds);
+        user.setRoleLevel(roleLevel);
+
+        return user;
+
     }
 }

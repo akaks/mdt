@@ -54,7 +54,7 @@ function showName(){
 function loginOut(){
 	
 	$.ajax({
-		url:'login_loginOut.action',
+		url:baseUrl + '/auth/logout',
 		success:function(value){
 			location.href="login.html";
 		}		

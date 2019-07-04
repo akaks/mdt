@@ -1,123 +1,230 @@
 
-var method="";//保存提交的方法名称
-
-function initGrid1() {
-
-    var columns=[[
-		/*{field:'id',title:'编号',width:100},*/
-        {field:'a1',title:'编号',width:100},
-        {field:'a2',title:'专家名称',width:100},
-        {field:'a3',title:'科室',width:200},
-        {field:'a4',title:'职称',width:200},
-        {field:'a5',title:'联系方式',width:200},
-        {field:'-',title:'操作',width:200,formatter:function(value,row,index) {
-            return "<a href='#' onclick='dele("+row.id+")'>删除</a>";
-        }}
-    ]];
-
-    //表格数据初始化
-    $('#grid1').datagrid({
-        title:'拟请MDT参加专家',
-        url:baseUrl + '/mdtApply/list4',
-        loadFilter: function(data){
-            return data.resultData;
-        },
-        columns:columns,
-        singleSelect:true,
-        toolbar: [{
-            iconCls: 'icon-add',
-            text:'添加专家',
-            handler: function(){
-                // method="add";
-                // $('#editWindow').window('open');
-                // $('#editForm').form('clear');
-            }
-        }]
-
-    });
-}
-
 $(function(){
-    initGrid1();
 
     var columns=[[
         /*{field:'id',title:'编号',width:100},*/
-        {field:'number',title:'患者类型',width:100},
-        {field:'name',title:'患者姓名',width:100},
-        {field:'name',title:'入院/首诊时间',width:100},
-        {field:'name',title:'MDT时间',width:100},
-        {field:'name',title:'MDT地点',width:100},
-        {field:'name',title:'审核状态',width:100},
+        {field:'patientType',title:'患者类型',width:70,formatter:function(value,row,index) {
+            if (row.patientType == '1') {
+                return "住院";
+            } else if (row.patientType == '2') {
+                return "门诊";
+            }
+            return '';
+        }},
+        {field:'name',title:'患者姓名',width:120},
+        {field:'gender',title:'性别',width:50,formatter:function(value,row,index) {
+            if (row.gender == '1') {
+                return "男";
+            } else if (row.gender == '2') {
+                return "女";
+            }
+            return '';
+        }},
+        {field:'diagnoseDate',title:'入院/首诊时间',width:120},
+        {field:'mdtDate',title:'MDT时间',width:120},
+        {field:'mdtLocation',title:'MDT地点',width:150},
+        {field:'applyStatus',title:'申请人状态',width:150,formatter:function(value,row,index) {
+            if (row.applyStatus == '0') {
+                return "申请人申请";
+            } else if (row.applyStatus == '1') {
+                return "科主任已审核";
+            } else if (row.applyStatus == '2') {
+                return "医务部主任已审核";
+            }
+            return '';
+        }},
 
-        {field:'-',title:'操作',width:200,formatter:function(value,row,index) {
-            return "<a href='#' onclick='edit("+row.id+")'>修改</a> <a href='#' onclick='dele("+row.id+")'>删除</a>";
+        {field:'-',title:'操作',width:500,formatter:function(value,row,index) {
+            var editBtn = "<a href='#' onclick='edit("+row.id+")'>修改</a> ";
+            var auditBtn = "<a href='#' onclick='auditFun("+row.id+")'>审核</a> ";
+            var feeBtn = "<a href='#' onclick='feeFun("+row.id+")'>打印缴纳单</a> ";
+            var msgBtn = "<a href='#' onclick='msgFun("+row.id+")'>短信通知</a> ";
+            var informBtn = "<a href='#' onclick='informFun("+row.id+")'>知情同意书</a> ";
+            var consultBtn = "<a href='#' onclick='consultFun("+row.id+")'>MDT会诊</a> ";
+            var expertGradeBtn = "<a href='#' onclick='expertGradeFun("+row.id+")'>专家打分</a> ";
+            var departmentGradeBtn = "<a href='#' onclick='departmentGradeFun("+row.id+")'>组织科室打分</a> ";
+            var deleBtn = "<a href='#' onclick='dele("+row.id+")'>删除</a> ";
+
+            var btn = "";
+            btn = btn + editBtn;
+
+            var roleIds = getUser().roleIds;
+
+            // 住院病人，需要审核
+            if (row.patientType == '1' && (row.applyStatus == '0' || row.applyStatus == '1') ) {
+
+                // 科室主任
+                if (roleIds.indexOf('5') != -1 && row.applyStatus == '0') {
+
+                    btn = btn + auditBtn;
+                }
+
+                // 医务部主任
+                if (roleIds.indexOf('3') != -1 && row.applyStatus == '1') {
+
+                    btn = btn + auditBtn;
+                }
+
+            }
+
+            // 住院病人
+            if (row.patientType == '1' && row.applyStatus == '2' ) {
+                if (row.isCharge == '1') {
+
+                    btn = btn + feeBtn;
+                }
+
+                btn = btn + informBtn + msgBtn;
+
+                // 专家
+                if (roleIds.indexOf('6') != -1) {
+
+                    btn = btn + expertGradeBtn;
+                }
+
+                // 组织科室
+                if (roleIds.indexOf('5') != -1 || roleIds.indexOf('7') != -1) {
+
+                    btn = btn + departmentGradeBtn;
+                }
+
+            }
+
+            // 门诊病人
+            if (row.patientType == '2' && row.applyStatus == '0' ) {
+                btn = btn + informBtn;
+            }
+
+            btn = btn + deleBtn;
+
+            return btn;
         }}
     ]];
-	
-	if(typeof(listParam)=='undefined'){
-		listParam='';		
-	}
-	if(typeof(saveParam)=='undefined'){
-		saveParam='';		
-	}
-	
+
+    var toolbar;
+    if (getUser().roleIds.indexOf('7') != -1) {
+
+        toolbar = [{
+            iconCls: 'icon-add',
+            text:'增加',
+            handler: function(){
+
+                layer.open({
+                    type: 2,
+                    title: 'MDT申请',
+                    maxmin: true,
+                    shadeClose: true, //点击遮罩关闭层
+                    area : ['80%' , '80%'],
+                    content: 'mdtApplyEdit.html'
+                });
+            }
+        }]
+    } else {
+        toolbar = []
+    }
+
 	//表格数据初始化
 	$('#grid').datagrid({
-		url:baseUrl + '/mdt/apply'+listParam,
+		url:baseUrl + '/mdtApply/findByPage',
         loadFilter: function(data){
             return data.resultData;
         },
 		columns:columns,
 		singleSelect:true,
 		pagination:true,
-		toolbar: [{
-			iconCls: 'icon-add',
-			text:'增加',
-			handler: function(){
-				method="add";
-				$('#editWindow').window('open');
-				$('#editForm').form('clear');
-			}
-		}]
+		toolbar: toolbar
 
 	});
 	
 	//条件查询
 	$('#btnSearch').bind('click',function(){
-		var formdata=getFormData('searchForm');
-		$('#grid').datagrid('load',formdata);
-	});
-
-	//保存
-	$('#btnSave').bind('click',function(){
-
-		//判断：编辑表单的所有控件是否都通过验证
-		var isValidate= $('#editForm').form('validate');
-		if(isValidate==false){
-			return ;
-		}
-
-		var formdata=getFormData('editForm');
-
-		$.ajax({
-			url: '/user/save',
-			data:formdata,
-			dataType:'json',
-			type:'post',
-			success:function(value){
-
-				if(value.type = 'success'){
-					$('#editWindow').window('close');
-					$('#grid').datagrid('reload');
-				}
-				$.messager.alert('提示',value.message);
-			}
-
-		});
-
+        doSearch();
 	});
 
 });
+
+// 审核
+function auditFun(id){
+
+    layer.open({
+        type: 2,
+        title: 'MDT申请审核',
+        maxmin: true,
+        shadeClose: true, //点击遮罩关闭层
+        area : ['80%' , '80%'],
+        content: 'mdtApplyAudit.html?id=' + id
+    });
+}
+
+// 打印缴纳单
+function feeFun(id) {
+
+    layer.open({
+        type: 2,
+        title: 'MDT缴费通知',
+        maxmin: true,
+        shadeClose: true, //点击遮罩关闭层
+        area : ['80%' , '80%'],
+        content: 'mdtApplyFee.html?id=' + id
+    });
+}
+
+// 短信通知
+function msgFun(id) {
+
+    layer.open({
+        type: 2,
+        title: 'MDT短信通知',
+        maxmin: true,
+        shadeClose: true, //点击遮罩关闭层
+        area : ['80%' , '80%'],
+        content: 'mdtApplyMsg.html?id=' + id
+    });
+}
+
+// 知情同意书
+function informFun(id) {
+
+    layer.open({
+        type: 2,
+        title: 'MDT知情同意书',
+        maxmin: true,
+        shadeClose: true, //点击遮罩关闭层
+        area : ['80%' , '80%'],
+        content: 'mdtApplyInform.html?id=' + id
+    });
+}
+
+// MDT会诊
+function consultFun() {
+
+}
+
+// MDT会诊
+function expertGradeFun(id) {
+
+    layer.open({
+        type: 2,
+        title: '专家打分',
+        maxmin: true,
+        shadeClose: true, //点击遮罩关闭层
+        area : ['80%' , '80%'],
+        content: 'mdtApplyExpertGrade.html?id=' + id
+    });
+}
+
+// MDT会诊
+function departmentGradeFun(id) {
+
+    layer.open({
+        type: 2,
+        title: '组织科室打分',
+        maxmin: true,
+        shadeClose: true, //点击遮罩关闭层
+        area : ['80%' , '80%'],
+        content: 'mdtApplyDeptGrade.html?id=' + id
+    });
+}
 
 /**
  * 删除 
@@ -145,20 +252,17 @@ function dele(id){
  * 编辑
  */
 function edit(id){
-	method="update";
-	$('#editWindow').window('open');
-
-    $.ajax({
-        url: '/user/get?id='+id,
-        dataType:'json',
-        type:'post',
-        success:function(value){
-
-            if(value.type = 'success'){
-                $('#editForm').form('load', value.resultData.row);
-            }
-        }
+    layer.open({
+        type: 2,
+        title: 'MDT申请',
+        maxmin: true,
+        shadeClose: true, //点击遮罩关闭层
+        area : ['80%' , '80%'],
+        content: 'mdtApplyEdit.html?id=' + id
     });
+}
 
-	// $('#editForm').form('load', '/user/get?id='+id);
+function doSearch() {
+    var formdata=getFormData('searchForm');
+    $('#grid').datagrid('load',formdata);
 }

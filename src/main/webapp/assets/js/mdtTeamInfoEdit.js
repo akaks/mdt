@@ -14,8 +14,56 @@ $(function() {
 
     setDepartment();
 
-
+    setUser();
 });
+
+
+// 设置科室下拉框
+function setUser() {
+
+    $('#userSelect').combobox({
+        url: baseUrl + "/user/listAll",
+        loadFilter: function(data){
+            return data.resultData.rows;
+        },
+        onSelect: function(param){
+            getUser(param.id)
+        },
+        valueField:'id',
+        textField:'name'
+    });
+}
+
+function getUser(id) {
+    $.ajax({
+        url: baseUrl + '/user/get?id='+id,
+        dataType:'json',
+        type:'post',
+        success:function(value){
+
+            if(value.type = 'success'){
+                setTeamInfoFrom(value.resultData.row);
+            } else {
+                $.messager.alert('提示',value.message);
+            }
+        }
+    });
+}
+
+function setTeamInfoFrom(user) {
+    var myObject = {};
+    myObject.userId = user.id;
+    myObject.name = user.name;
+    myObject.department = user.department;
+    myObject.phone = user.phone;
+    myObject.phoneCornet = user.phoneCornet;
+    myObject.title = user.title;
+
+    console.log(myObject)
+
+    $('#editForm').form('load', myObject);
+}
+
 
 // 设置科室下拉框
 function setDepartment() {

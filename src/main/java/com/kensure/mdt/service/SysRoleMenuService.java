@@ -1,12 +1,3 @@
-/*
- * ----------------------------------------------------------------------------------------------
- * 修改历史:
- * ----------------------------------------------------------------------------------------------
- * 修改原因: 新增
- * 修改人员: fankd
- * 修改日期: 2019-6-10
- * 修改内容: 
- */
 package com.kensure.mdt.service;
 
 import co.kensure.mem.MapUtils;
@@ -25,8 +16,6 @@ import org.springframework.stereotype.Service;
 
 /**
  * 角色权限表服务实现类
- * @author fankd created on 2019-6-10
- * @since 
  */
 @Service
 public class SysRoleMenuService {

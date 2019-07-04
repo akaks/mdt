@@ -1,0 +1,408 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kensure.mdt.dao.MdtApplyMapper"><!--dsName="" saasAspect=""-->
+	<!-- <cache readOnly="true"/> -->
+    <sql id="allFields">
+		id,
+		patient_type as patientType,
+		name,
+		gender,
+		birthday,
+		phone,
+		diagnose_date as diagnoseDate,
+		number,
+		picture,
+		overview,
+		survey_report as surveyReport,
+		inspection_report as inspectionReport,
+		mdt_date as mdtDate,
+		mdt_location as mdtLocation,
+		disease_name as diseaseName,
+		other_disease_name as otherDiseaseName,
+		mdt_purpose as mdtPurpose,
+		other_mdt_purpose as otherMdtPurpose,
+		difficulty,
+		is_charge as isCharge,
+		apply_person as applyPerson,
+		apply_createtime as applyCreatetime,
+		apply_phone as applyPhone,
+		apply_status as applyStatus,
+		audit_result1 as auditResult1,
+		audit_opinion1 as auditOpinion1,
+		audit_person1 as auditPerson1,
+		audit_time1 as auditTime1,
+		audit_result2 as auditResult2,
+		audit_opinion2 as auditOpinion2,
+		audit_person2 as auditPerson2,
+		audit_time2 as auditTime2,
+		create_person as createPerson,
+		create_org as createOrg,
+		create_time as createTime,
+		update_time as updateTime
+    </sql>
+    
+	<sql id="insertFields">
+		id,
+		patient_type,
+		name,
+		gender,
+		birthday,
+		phone,
+		diagnose_date,
+		number,
+		picture,
+		overview,
+		survey_report,
+		inspection_report,
+		mdt_date,
+		mdt_location,
+		disease_name,
+		other_disease_name,
+		mdt_purpose,
+		other_mdt_purpose,
+		difficulty,
+		is_charge,
+		apply_person,
+		apply_createtime,
+		apply_phone,
+		apply_status,
+		audit_result1,
+		audit_opinion1,
+		audit_person1,
+		audit_time1,
+		audit_result2,
+		audit_opinion2,
+		audit_person2,
+		audit_time2,
+		create_person,
+		create_org,
+		create_time,
+		update_time
+    </sql>
+	
+	<insert id="insert" parameterType="com.kensure.mdt.entity.MdtApply">
+		insert into mdt_apply (<include refid="insertFields"/>)
+		values (
+			#{id},
+			#{patientType},
+			#{name},
+			#{gender},
+			#{birthday},
+			#{phone},
+			#{diagnoseDate},
+			#{number},
+			#{picture},
+			#{overview},
+			#{surveyReport},
+			#{inspectionReport},
+			#{mdtDate},
+			#{mdtLocation},
+			#{diseaseName},
+			#{otherDiseaseName},
+			#{mdtPurpose},
+			#{otherMdtPurpose},
+			#{difficulty},
+			#{isCharge},
+			#{applyPerson},
+			#{applyCreatetime},
+			#{applyPhone},
+			#{applyStatus},
+			#{auditResult1},
+			#{auditOpinion1},
+			#{auditPerson1},
+			#{auditTime1},
+			#{auditResult2},
+			#{auditOpinion2},
+			#{auditPerson2},
+			#{auditTime2},
+			#{createPerson},
+			#{createOrg},
+			#{createTime},
+			#{updateTime}
+		)
+	</insert>	
+	
+    <sql id="whereClause">
+		<if test="patientType != null">			
+			patient_type = #{patientType}			
+		</if>
+		<if test="name != null">			
+			and name = #{name}			
+		</if>
+		<if test="gender != null">			
+			and gender = #{gender}			
+		</if>
+		<if test="birthday != null">			
+			and birthday = #{birthday}			
+		</if>
+		<if test="phone != null">			
+			and phone = #{phone}			
+		</if>
+		<if test="diagnoseDate != null">			
+			and diagnose_date = #{diagnoseDate}			
+		</if>
+		<if test="number != null">			
+			and number = #{number}			
+		</if>
+		<if test="picture != null">			
+			and picture = #{picture}			
+		</if>
+		<if test="overview != null">			
+			and overview = #{overview}			
+		</if>
+		<if test="surveyReport != null">			
+			and survey_report = #{surveyReport}			
+		</if>
+		<if test="inspectionReport != null">			
+			and inspection_report = #{inspectionReport}			
+		</if>
+		<if test="mdtDate != null">			
+			and mdt_date = #{mdtDate}			
+		</if>
+		<if test="mdtLocation != null">			
+			and mdt_location = #{mdtLocation}			
+		</if>
+		<if test="diseaseName != null">			
+			and disease_name = #{diseaseName}			
+		</if>
+		<if test="otherDiseaseName != null">			
+			and other_disease_name = #{otherDiseaseName}			
+		</if>
+		<if test="mdtPurpose != null">			
+			and mdt_purpose = #{mdtPurpose}			
+		</if>
+		<if test="otherMdtPurpose != null">			
+			and other_mdt_purpose = #{otherMdtPurpose}			
+		</if>
+		<if test="difficulty != null">			
+			and difficulty = #{difficulty}			
+		</if>
+		<if test="isCharge != null">			
+			and is_charge = #{isCharge}			
+		</if>
+		<if test="applyPerson != null">			
+			and apply_person = #{applyPerson}			
+		</if>
+		<if test="applyCreatetime != null">			
+			and apply_createtime = #{applyCreatetime}			
+		</if>
+		<if test="applyPhone != null">			
+			and apply_phone = #{applyPhone}			
+		</if>
+		<if test="applyStatus != null">			
+			and apply_status = #{applyStatus}			
+		</if>
+		<if test="auditResult1 != null">			
+			and audit_result1 = #{auditResult1}			
+		</if>
+		<if test="auditOpinion1 != null">			
+			and audit_opinion1 = #{auditOpinion1}			
+		</if>
+		<if test="auditPerson1 != null">			
+			and audit_person1 = #{auditPerson1}			
+		</if>
+		<if test="auditTime1 != null">			
+			and audit_time1 = #{auditTime1}			
+		</if>
+		<if test="auditResult2 != null">			
+			and audit_result2 = #{auditResult2}			
+		</if>
+		<if test="auditOpinion2 != null">			
+			and audit_opinion2 = #{auditOpinion2}			
+		</if>
+		<if test="auditPerson2 != null">			
+			and audit_person2 = #{auditPerson2}			
+		</if>
+		<if test="auditTime2 != null">			
+			and audit_time2 = #{auditTime2}			
+		</if>
+		<if test="createPerson != null">			
+			and create_person = #{createPerson}			
+		</if>
+		<if test="createOrg != null">			
+			and create_org = #{createOrg}			
+		</if>
+		<if test="createTime != null">			
+			and create_time = #{createTime}			
+		</if>
+		<if test="updateTime != null">			
+			and update_time = #{updateTime}			
+		</if>
+	</sql>
+    
+	<select id="selectOne" resultType="com.kensure.mdt.entity.MdtApply" parameterType="Long" >
+		select <include refid="allFields"/> 
+		  from mdt_apply 
+		 where id = #{id} 
+	</select>
+	
+	<select id="selectByIds" parameterType="List" resultType="com.kensure.mdt.entity.MdtApply">
+		select <include refid="allFields"/> from mdt_apply 
+		where id in
+		<foreach collection="list" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</select>
+	
+	<select id="selectCountByWhere" parameterType="Map" resultType="Long">
+		select count(*) from mdt_apply 
+		<where>
+		    <include refid="whereClause"/>
+		</where>
+	</select>
+
+	<select id="selectByWhere" parameterType="Map" resultType="com.kensure.mdt.entity.MdtApply">
+		select <include refid="allFields"/>
+		from mdt_apply 
+		<where>
+		    <include refid="whereClause"/>
+		</where>				
+		<if test="orderby != null">
+			ORDER BY ${orderby}
+		</if>
+	</select>
+	
+	<sql id="setComn">		
+		<if test="patientType != null">
+			patient_type = #{patientType},
+		</if>
+		<if test="name != null">
+			name = #{name},
+		</if>
+		<if test="gender != null">
+			gender = #{gender},
+		</if>
+		<if test="birthday != null">
+			birthday = #{birthday},
+		</if>
+		<if test="phone != null">
+			phone = #{phone},
+		</if>
+		<if test="diagnoseDate != null">
+			diagnose_date = #{diagnoseDate},
+		</if>
+		<if test="number != null">
+			number = #{number},
+		</if>
+		<if test="picture != null">
+			picture = #{picture},
+		</if>
+		<if test="overview != null">
+			overview = #{overview},
+		</if>
+		<if test="surveyReport != null">
+			survey_report = #{surveyReport},
+		</if>
+		<if test="inspectionReport != null">
+			inspection_report = #{inspectionReport},
+		</if>
+		<if test="mdtDate != null">
+			mdt_date = #{mdtDate},
+		</if>
+		<if test="mdtLocation != null">
+			mdt_location = #{mdtLocation},
+		</if>
+		<if test="diseaseName != null">
+			disease_name = #{diseaseName},
+		</if>
+		<if test="otherDiseaseName != null">
+			other_disease_name = #{otherDiseaseName},
+		</if>
+		<if test="mdtPurpose != null">
+			mdt_purpose = #{mdtPurpose},
+		</if>
+		<if test="otherMdtPurpose != null">
+			other_mdt_purpose = #{otherMdtPurpose},
+		</if>
+		<if test="difficulty != null">
+			difficulty = #{difficulty},
+		</if>
+		<if test="isCharge != null">
+			is_charge = #{isCharge},
+		</if>
+		<if test="applyPerson != null">
+			apply_person = #{applyPerson},
+		</if>
+		<if test="applyCreatetime != null">
+			apply_createtime = #{applyCreatetime},
+		</if>
+		<if test="applyPhone != null">
+			apply_phone = #{applyPhone},
+		</if>
+		<if test="applyStatus != null">
+			apply_status = #{applyStatus},
+		</if>
+		<if test="auditResult1 != null">
+			audit_result1 = #{auditResult1},
+		</if>
+		<if test="auditOpinion1 != null">
+			audit_opinion1 = #{auditOpinion1},
+		</if>
+		<if test="auditPerson1 != null">
+			audit_person1 = #{auditPerson1},
+		</if>
+		<if test="auditTime1 != null">
+			audit_time1 = #{auditTime1},
+		</if>
+		<if test="auditResult2 != null">
+			audit_result2 = #{auditResult2},
+		</if>
+		<if test="auditOpinion2 != null">
+			audit_opinion2 = #{auditOpinion2},
+		</if>
+		<if test="auditPerson2 != null">
+			audit_person2 = #{auditPerson2},
+		</if>
+		<if test="auditTime2 != null">
+			audit_time2 = #{auditTime2},
+		</if>
+		<if test="createPerson != null">
+			create_person = #{createPerson},
+		</if>
+		<if test="createOrg != null">
+			create_org = #{createOrg},
+		</if>
+		<if test="createTime != null">
+			create_time = #{createTime},
+		</if>
+		<if test="updateTime != null">
+			update_time = #{updateTime}
+		</if>
+	</sql>
+	
+	<update id="update" parameterType="com.kensure.mdt.entity.MdtApply">
+		 update mdt_apply 
+		    <set>
+		    	<include refid="setComn"/>
+			</set>
+		  where id = #{id}
+	</update>
+	
+	<update id="updateByMap" parameterType="Map">
+		 update mdt_apply 
+		    <set>
+		    	<include refid="setComn"/>
+			</set>
+		  where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from mdt_apply where id = #{id}
+	</delete>
+	
+	<delete id="deleteMulti" parameterType="List">
+		delete from mdt_apply
+		where id in
+		<foreach collection="list" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<delete id="deleteByWhere" parameterType="Map">
+		delete from mdt_apply 
+		<where>
+		    <include refid="whereClause"/>
+		</where>
+	</delete>	
+
+</mapper>    
