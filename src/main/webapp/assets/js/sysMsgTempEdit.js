@@ -15,7 +15,7 @@ $(function(){
  */
 function initData(id){
     $.ajax({
-        url: baseUrl + '/set/getSysFee?id='+id,
+        url: baseUrl + '/set/getSysMsgTemp?id='+id,
         dataType:'json',
         type:'post',
         success:function(value){
@@ -37,7 +37,7 @@ function save() {
     var formdata=getFormData('editForm');
 
     $.ajax({
-        url: baseUrl + '/set/saveSysFee',
+        url: baseUrl + '/set/saveSysMsgTemp',
         data:formdata,
         dataType:'json',
         type:'post',

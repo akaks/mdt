@@ -50,7 +50,7 @@ function initData(id){
         dataType:'json',
         type:'post',
         success:function(value){
-            if(value.type = 'success'){
+            if(value.type == 'success'){
                 $('#editForm').form('load', value.resultData.row);
             }
         }
@@ -85,7 +85,7 @@ function sendMsg() {
         dataType:'json',
         type:'post',
         success:function(value){
-            if(value.type = 'success') {
+            if(value.type == 'success') {
 
                 $.messager.alert('提示', "发送成功");
             } else {

@@ -58,7 +58,7 @@ function dele(id){
 				url: baseUrl + '/set/delSysFee?id='+id,
 				dataType:'json',
 				success:function(value){
-                    if(value.type = 'success'){
+                    if(value.type == 'success'){
                         doSearch();
                     }
                     $.messager.alert('提示',value.message);

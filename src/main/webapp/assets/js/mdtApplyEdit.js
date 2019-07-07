@@ -79,7 +79,7 @@ function save(){
         dataType:'json',
         type:'post',
         success:function(value){
-            if(value.type = 'success'){
+            if(value.type == 'success'){
                 var mylay = parent.layer.getFrameIndex(window.name);
                 parent.layer.close(mylay);
 
@@ -104,7 +104,7 @@ function delApplyDoctor(id){
                 url: baseUrl + '/mdtApply/delApplyDoctorById?id='+id,
 				dataType:'json',
 				success:function(value){
-                    if(value.type = 'success'){
+                    if(value.type == 'success'){
                         doSearch();
 					} else {
                         $.messager.alert('提示',value.message);
@@ -124,7 +124,7 @@ function edit(id){
         dataType:'json',
         type:'post',
         success:function(value){
-            if(value.type = 'success'){
+            if(value.type == 'success'){
                 $('#editForm').form('load', value.resultData.row);
             }
         }

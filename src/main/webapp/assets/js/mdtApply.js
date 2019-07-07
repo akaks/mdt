@@ -43,6 +43,7 @@ $(function(){
             var consultBtn = "<a href='#' onclick='consultFun("+row.id+")'>MDT会诊</a> ";
             var expertGradeBtn = "<a href='#' onclick='expertGradeFun("+row.id+")'>专家打分</a> ";
             var departmentGradeBtn = "<a href='#' onclick='departmentGradeFun("+row.id+")'>组织科室打分</a> ";
+            var feedbackBtn = "<a href='#' onclick='feedbackFun("+row.id+")'>反馈</a> ";
             var deleBtn = "<a href='#' onclick='dele("+row.id+")'>删除</a> ";
 
             var btn = "";
@@ -88,11 +89,13 @@ $(function(){
                     btn = btn + departmentGradeBtn;
                 }
 
+                btn += feedbackBtn;
+
             }
 
             // 门诊病人
             if (row.patientType == '2' && row.applyStatus == '0' ) {
-                btn = btn + informBtn;
+                btn = btn + informBtn + msgBtn + feedbackBtn;
             }
 
             btn = btn + deleBtn;
@@ -223,6 +226,19 @@ function departmentGradeFun(id) {
         shadeClose: true, //点击遮罩关闭层
         area : ['80%' , '80%'],
         content: 'mdtApplyDeptGrade.html?id=' + id
+    });
+}
+
+// 反馈
+function feedbackFun(id) {
+
+    layer.open({
+        type: 2,
+        title: '反馈',
+        maxmin: true,
+        shadeClose: true, //点击遮罩关闭层
+        area : ['80%' , '80%'],
+        content: 'mdtApplyFeedback.html?id=' + id
     });
 }
 

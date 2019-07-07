@@ -121,7 +121,7 @@ $(function(){
 			type:'post',
 			success:function(value){
 
-				if(value.type = 'success'){
+				if(value.type == 'success'){
 					$('#editWindow').window('close');
 					$('#grid').datagrid('reload');
 				}
@@ -169,7 +169,7 @@ function edit(id){
         type:'post',
         success:function(value){
 
-            if(value.type = 'success'){
+            if(value.type == 'success'){
                 $('#editForm').form('load', value.resultData.row);
             }
         }

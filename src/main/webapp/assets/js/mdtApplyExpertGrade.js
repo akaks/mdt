@@ -23,7 +23,7 @@ function initData(id) {
         dataType:'json',
         type:'post',
         success:function(value){
-            if(value.type = 'success'){
+            if(value.type == 'success'){
                 $('#editForm').form('load', value.resultData.row);
             }
         }
@@ -39,7 +39,7 @@ function getExpertGradeItem(){
         dataType:'json',
         type:'post',
         success:function(value){
-            if(value.type = 'success'){
+            if(value.type == 'success'){
                 genItem(value.resultData.rows)
             }
         }

@@ -8,9 +8,11 @@ import co.kensure.mem.PageInfo;
 import com.alibaba.fastjson.JSONObject;
 import com.kensure.mdt.entity.SysFee;
 import com.kensure.mdt.entity.SysGrade;
+import com.kensure.mdt.entity.SysMsgTemplate;
 import com.kensure.mdt.entity.SysOrg;
 import com.kensure.mdt.service.SysFeeService;
 import com.kensure.mdt.service.SysGradeService;
+import com.kensure.mdt.service.SysMsgTemplateService;
 import com.kensure.mdt.service.SysOrgService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,6 +36,9 @@ public class SysSetController {
 
 	@Autowired
 	private SysGradeService sysGradeService;
+
+	@Autowired
+	private SysMsgTemplateService sysMsgTemplateService;
 
 	/**
 	 * 查询收费情况设置
@@ -157,6 +162,70 @@ public class SysSetController {
 
         Long id =Long.parseLong( req.getParameter("id"));
         sysGradeService.delete(id);
+
+        return new ResultInfo();
+    }
+
+
+    /**
+     * 查询短信模板
+     * @param req
+     * @param rep
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "selectSysMsgTemp", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
+    public ResultInfo selectSysMsgTemp(HttpServletRequest req, HttpServletResponse rep) {
+        List<SysMsgTemplate> list = sysMsgTemplateService.selectList();
+
+        return new ResultRowsInfo(list, list.size());
+    }
+
+
+    /**
+     查看短信模板
+     * @param req
+     * @param rep
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "getSysMsgTemp", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
+    public ResultInfo getSysMsgTemp(HttpServletRequest req, HttpServletResponse rep) {
+
+        Long id =Long.parseLong( req.getParameter("id"));
+        SysMsgTemplate sysMsgTemplate = sysMsgTemplateService.selectOne(id);
+
+        return new ResultRowInfo(sysMsgTemplate);
+    }
+
+    /**
+     * 保存短信模板
+     * @param req
+     * @param rep
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "saveSysMsgTemp", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
+    public ResultInfo saveSysMsgTemp(HttpServletRequest req, HttpServletResponse rep) {
+
+        JSONObject json = RequestUtils.paramToJson(req);
+        SysMsgTemplate sysMsgTemplate = JSONObject.parseObject(json.toJSONString(), SysMsgTemplate.class);
+        sysMsgTemplateService.save(sysMsgTemplate);
+        return new ResultInfo();
+    }
+
+    /**
+     * 删除短信模板
+     * @param req
+     * @param rep
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "delSysMsgTemp", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
+    public ResultInfo delSysMsgTemp(HttpServletRequest req, HttpServletResponse rep) {
+
+        Long id =Long.parseLong( req.getParameter("id"));
+        sysMsgTemplateService.delete(id);
 
         return new ResultInfo();
     }

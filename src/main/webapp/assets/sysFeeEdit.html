@@ -10,7 +10,7 @@
 <script type="text/javascript" src="ui17/locale/easyui-lang-zh_CN.js"></script>
 <script type="text/javascript" src="js/common.js"></script>
 <script type="text/javascript" src="js/form.js"></script>
-<script type="text/javascript" src="js/sysGradeEdit.js"></script>
+<script type="text/javascript" src="js/sysFeeEdit.js"></script>
 <script type="text/javascript">
 
 
@@ -23,31 +23,23 @@
 
 		<table>
 			<tr>
-				<td>类型:</td>
-				<td>
-					<input type="radio" name="type" value="1" label="" >专家评分
-					<input type="radio" name="type" value="2" label="" >组织科室评分
-				</td>
-				<td>
-					评分项说明:</td>
-				<td>
-					<input name="description" class="easyui-textbox">
-				</td>
-			</tr>
-			<tr>
-				<td style="width: 10%">最小分数:</td>
+				<td style="width: 10%">科室数(>=):</td>
 				<td style="width: 40%">
-					<input name="minValue" class="easyui-numberspinner" data-options="min:1,max:120,required: true"
+					<input name="min" class="easyui-numberspinner" data-options="min:1,max:120,required: true"
 						   style="width:80px;">
 
 				</td>
-				<td style="width: 10%">最大分数:</td>
+				<td style="width: 10%">科室数(<=):</td>
 				<td style="width: 40%">
-					<input name="maxValue" class="easyui-numberspinner"
+					<input name="max" class="easyui-numberspinner"
 											  data-options="min:1,max:120" style="width:80px;">
 				</td>
 			</tr>
-
+			<tr>
+				<td>挂号费用（元）:</td><td>
+				<input name="price" class="easyui-numberspinner" data-options="min:0,max:10000,required: true" style="width:80px;">
+			</td>
+			</tr>
 
 
 		</table><br/><br/>&nbsp;&nbsp;

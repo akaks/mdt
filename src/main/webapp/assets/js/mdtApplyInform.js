@@ -17,7 +17,7 @@ function initData(id){
         dataType:'json',
         type:'post',
         success:function(value){
-            if(value.type = 'success'){
+            if(value.type == 'success'){
 
                 var data = value.resultData.row;
                 $("#name").html("" + data.name + "");

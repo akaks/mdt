@@ -42,6 +42,7 @@ public class SysAuthController {
         AuthUser user = sysUserService.login(username, password);
 
         req.getSession().setAttribute("user", user);
+        req.getSession().setMaxInactiveInterval(60 * 60 * 24);
 
         return new ResultInfo();
 	}

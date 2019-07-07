@@ -102,7 +102,7 @@ function save() {
         type:'post',
         success:function(value){
 
-            if(value.type = 'success'){
+            if(value.type == 'success'){
                 var mylay = parent.layer.getFrameIndex(window.name);
                 parent.layer.close(mylay);
 
@@ -122,7 +122,7 @@ function initData(id){
         dataType:'json',
         type:'post',
         success:function(value){
-            if(value.type = 'success'){
+            if(value.type == 'success'){
                 $('#editForm').form('load', value.resultData.row);
 
                 setDate(new Date(value.resultData.row.date));
@@ -140,7 +140,7 @@ function getFirstByTeamId(teamId){
         dataType:'json',
         type:'post',
         success:function(value){
-            if(value.type = 'success'){
+            if(value.type == 'success'){
                 $('#editForm').form('load', value.resultData.row);
 
                 $("#id").val(id); // 防止id被重置
@@ -199,7 +199,7 @@ function delTeamInfo(id) {
                 url: baseUrl + '/mdtTeam/delTeamInfo?id='+id,
                 dataType:'json',
                 success:function(value){
-                    if(value.type = 'success'){
+                    if(value.type == 'success'){
                         doSearch();
                     }
                 }

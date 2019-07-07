@@ -41,7 +41,7 @@ function getUser(id) {
         type:'post',
         success:function(value){
 
-            if(value.type = 'success'){
+            if(value.type == 'success'){
                 setTeamInfoFrom(value.resultData.row);
             } else {
                 $.messager.alert('提示',value.message);
@@ -133,7 +133,7 @@ function edit(id){
         type:'post',
         success:function(value){
 
-            if(value.type = 'success'){
+            if(value.type == 'success'){
                 $('#editForm').form('load', value.resultData.row);
             } else {
                 $.messager.alert('提示',value.message);

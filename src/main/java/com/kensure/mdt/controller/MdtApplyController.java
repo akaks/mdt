@@ -41,6 +41,9 @@ public class MdtApplyController {
 	@Autowired
 	private MdtGradeItemService mdtGradeItemService;
 
+	@Autowired
+	private MdtApplyFeedbackService mdtApplyFeedbackService;
+
 	/**
 	 * 分页查询
 	 * @param req
@@ -267,6 +270,73 @@ public class MdtApplyController {
         Long price = mdtApplyService.calculateFee(applyId);
 
         return new ResultRowInfo(price);
+	}
+
+	/**
+	 * 查询反馈
+	 * @param req
+	 * @param rep
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "selectFeedbackList", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
+	public ResultInfo selectFeedbackList(HttpServletRequest req, HttpServletResponse rep, MdtGradeReq mdtGradeReq) {
+
+		Long applyId = Long.parseLong(req.getParameter("applyId"));
+		List<MdtApplyFeedback> list = mdtApplyFeedbackService.selectList(applyId);
+
+		return new ResultRowsInfo(list, list.size());
+	}
+
+	/**
+	 * 保存反馈
+	 * @param req
+	 * @param rep
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "saveFeedback", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
+	public ResultInfo saveFeedback(HttpServletRequest req, HttpServletResponse rep, MdtGradeReq mdtGradeReq) {
+
+
+		JSONObject json = RequestUtils.paramToJson(req);
+		MdtApplyFeedback obj = JSONObject.parseObject(json.toJSONString(), MdtApplyFeedback.class);
+
+		mdtApplyFeedbackService.save(obj);
+
+		return new ResultInfo();
+	}
+
+	/**
+	 * 查看反馈
+	 * @param req
+	 * @param rep
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "getFeedback", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
+	public ResultInfo getFeedback(HttpServletRequest req, HttpServletResponse rep, MdtGradeReq mdtGradeReq) {
+
+		Long id = Long.parseLong(req.getParameter("id"));
+		MdtApplyFeedback mdtApplyFeedback = mdtApplyFeedbackService.selectOne(id);
+
+		return new ResultRowInfo(mdtApplyFeedback);
+	}
+
+	/**
+	 * 删除反馈
+	 * @param req
+	 * @param rep
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "delFeedback", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
+	public ResultInfo delFeedback(HttpServletRequest req, HttpServletResponse rep, MdtGradeReq mdtGradeReq) {
+
+		Long id = Long.parseLong(req.getParameter("id"));
+		mdtApplyFeedbackService.delete(id);
+
+		return new ResultInfo();
 	}
 
 

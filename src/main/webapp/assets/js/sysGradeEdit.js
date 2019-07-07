@@ -20,7 +20,7 @@ function initData(id){
         type:'post',
         success:function(value){
 
-            if(value.type = 'success'){
+            if(value.type == 'success'){
                 $('#editForm').form('load', value.resultData.row);
             }
         }
@@ -43,7 +43,7 @@ function save() {
         type:'post',
         success:function(value){
 
-            if(value.type = 'success'){
+            if(value.type == 'success'){
                 var mylay = parent.layer.getFrameIndex(window.name);
                 parent.layer.close(mylay);
 
