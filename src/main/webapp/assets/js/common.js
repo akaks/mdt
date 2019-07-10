@@ -2,7 +2,7 @@ var baseUrl = "/mdt";
 
 $(function(){
 
-    getUser();
+    // getUser();
 });
 
 function getQueryVariable(variable) {

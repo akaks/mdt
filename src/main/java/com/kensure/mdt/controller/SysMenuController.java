@@ -21,7 +21,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping(value = "menu")
-public class SysMenuController {
+public class SysMenuController  extends BaseController {
 
 	@Autowired
 	private SysMenuService sysMenuService;

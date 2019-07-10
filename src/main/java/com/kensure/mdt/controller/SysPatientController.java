@@ -20,7 +20,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping(value = "patient")
-public class SysPatientController {
+public class SysPatientController  extends BaseController  {
 
 	@Autowired
 	private SysPatientService sysPatientService;

@@ -13,6 +13,7 @@
 		visit_name as visitName,
 		visit_phone as visitPhone,
 		visit_time as visitTime,
+		share as share,
 		create_time as createTime,
 		update_time as updateTime
     </sql>
@@ -28,6 +29,7 @@
 		visit_name,
 		visit_phone,
 		visit_time,
+		share,
 		create_time,
 		update_time
     </sql>
@@ -45,6 +47,7 @@
 			#{visitName},
 			#{visitPhone},
 			#{visitTime},
+			#{share},
 			#{createTime},
 			#{updateTime}
 		)
@@ -77,6 +80,9 @@
 		</if>
 		<if test="visitTime != null">			
 			and visit_time = #{visitTime}			
+		</if>
+		<if test="share != null">
+			and share = #{share}
 		</if>
 		<if test="createTime != null">			
 			and create_time = #{createTime}			
@@ -145,6 +151,9 @@
 		</if>
 		<if test="visitTime != null">
 			visit_time = #{visitTime},
+		</if>
+		<if test="share != null">
+			share = #{share},
 		</if>
 		<if test="createTime != null">
 			create_time = #{createTime},

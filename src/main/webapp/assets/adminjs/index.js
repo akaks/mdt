@@ -9,7 +9,7 @@ var _menus;
 
 
 	
-$(function(){	
+$(function(){
 	
 	$.ajax({
 		url: baseUrl + '/menu/aaa',
@@ -20,6 +20,8 @@ $(function(){
 		}
 		
 	});
+
+	getUser();
 	
 	
 	tabClose();

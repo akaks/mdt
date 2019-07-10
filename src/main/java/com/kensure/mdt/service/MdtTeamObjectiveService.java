@@ -16,6 +16,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 /**
@@ -26,6 +27,9 @@ public class MdtTeamObjectiveService {
 	
 	@Resource
 	private MdtTeamObjectiveMapper dao;
+
+	@Resource
+	private MdtTeamService mdtTeamService;
     
     
     public MdtTeamObjective selectOne(Long id){
@@ -74,12 +78,14 @@ public class MdtTeamObjectiveService {
 		return dao.deleteByWhere(parameters);
 	}
 
-
+	@Transactional
 	public void save(MdtTeamObjective teamObjective) {
 
 		if (teamObjective.getId() == null) {
 
 			insert(teamObjective);
+
+			mdtTeamService.toAuditAnnualAssess(teamObjective.getTeamId());
 		} else {
 
 			update(teamObjective);
@@ -93,7 +99,7 @@ public class MdtTeamObjectiveService {
 	 */
 	public MdtTeamObjective getFirstByTeamId(Long teamId) {
 
-		Map<String, Object> parameters = MapUtils.genMap("teamId", teamId, "orderby", "id");
+		Map<String, Object> parameters = MapUtils.genMap("teamId", teamId, "flag", "1");
 		List<MdtTeamObjective> list = selectByWhere(parameters);
 
 		if (list.size() > 0) {
@@ -101,6 +107,16 @@ public class MdtTeamObjectiveService {
 		}
 		return null;
 	}
-  
 
+
+	public MdtTeamObjective getTeamObjective(Long teamId) {
+
+		Map<String, Object> parameters = MapUtils.genMap("teamId", teamId, "flag", "2");
+		List<MdtTeamObjective> list = selectByWhere(parameters);
+
+		if (list.size() > 0) {
+			return list.get(0);
+		}
+		return null;
+	}
 }

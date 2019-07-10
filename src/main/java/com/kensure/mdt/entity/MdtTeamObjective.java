@@ -28,7 +28,13 @@ public class MdtTeamObjective implements Serializable{
 	private Long papersNum; 
 
 	/**其他*/		
-	private String other; 
+	private String other;
+
+	/**flag*/
+	private String flag;
+
+	/**年度总结*/
+	private String summary;
 
 	/**月度目标指标1*/		
 	private Long month1; 
@@ -103,6 +109,22 @@ public class MdtTeamObjective implements Serializable{
 	}
 	public Long getPapersNum() {
 		return papersNum;
+	}
+
+	public String getFlag() {
+		return flag;
+	}
+
+	public void setFlag(String flag) {
+		this.flag = flag;
+	}
+
+	public String getSummary() {
+		return summary;
+	}
+
+	public void setSummary(String summary) {
+		this.summary = summary;
 	}
 
 	public void setPapersNum(Long papersNum) {

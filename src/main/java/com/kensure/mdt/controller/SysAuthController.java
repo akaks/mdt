@@ -21,7 +21,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping(value = "auth")
-public class SysAuthController {
+public class SysAuthController  extends BaseController  {
 
 	@Autowired
 	private SysUserService sysUserService;

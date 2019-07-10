@@ -23,6 +23,7 @@
 
 	<form id="editForm">
 		<input id="id" name="id" type="hidden">
+		<input id="applyStatus" name="applyStatus" type="hidden">
 
 		<table border="0" cellspacing="0">
 			<tr>
@@ -100,13 +101,18 @@
 			<tr>
 				<td colspan="4">
 					<table id="grid1"></table>
+					<br>
+					<br>
 				</td>
 
 			</tr>
 			<tr>
 				<td>MDT目的:</td>
-				<td colspan="3">
-					<input name="mdtPurpose" class="easyui-textbox" data-options="multiline:true" style="width:300px;height:50px"/>
+				<td colspan="3" id="mdtPurposeTd">
+					<!--<input name="mdtPurpose" class="easyui-textbox" data-options="multiline:true" style="width:300px;height:50px"/>
+-->					<span id="mdtPurposeSpan"></span>
+					<input id="mdtPurpose" name="mdtPurpose" type="hidden">
+					<input name="otherMdtPurpose" class="easyui-textbox"/>
 				</td>
 			</tr>
 			<tr>
@@ -136,7 +142,7 @@
 					<input name="applyPhone" class="easyui-textbox"/>
 				</td>
 			</tr>
-			<tr style="background-color: rgba(61,82,42,0.2); display: none">
+			<!--<tr style="background-color: rgba(61,82,42,0.2); display: none">
 				<td colspan="4">1、科主任审核</td>
 			</tr>
 			<tr style="display: none">
@@ -174,37 +180,72 @@
 				<td>审核时间:</td>
 				<td>
 					<input id="auditTimeTwo" name="auditTimeTwo" type="text" class="easyui-datebox" >
+			</tr>-->
+
+		</table>
+
+		<br/><br/>&nbsp;&nbsp;
+
+		<a id="btn1" style="display: none" onclick="save()" class="easyui-linkbutton">保存</a>
+		<a id="btn2" style="display: none" onclick="commintAudit()" class="easyui-linkbutton">保存并提交审核</a>
+		<a id="btn3" style="display: none" onclick="saveAudit()" class="easyui-linkbutton">审核</a>
+	</form>
+
+	<form id="editForm2">
+		<input id="id2" name="id" type="hidden">
+
+		<table border="0" cellspacing="0">
+
+			<tr id="audit1" style="display: none;">
+				<td style="width: 10%">科主任审核:</td>
+				<td style="width: 40%">
+					<input type="radio" name="auditResult1" value="1" label="">通过
+					<input type="radio" name="auditResult1" value="2" label="">不通过
+				</td>
+				<td style="width: 10%">审核意见:</td>
+				<td style="width: 40%">
+					<input name="auditOpinion1" class="easyui-textbox" data-options="multiline:true" style="width:300px;height:50px"/>
+				</td>
+			</tr>
+			<tr id="audit2" style="display: none">
+				<td style="width: 10%">科主任名称:</td>
+				<td style="width: 40%">
+					<input name="auditPerson1" class="easyui-textbox"/>
+				</td>
+				<td style="width: 10%">审核时间:</td>
+				<td style="width: 40%">
+					<input id="auditTime1" name="auditTime1" type="text" class="easyui-datebox" >
+				</td>
+			</tr>
+
+			<tr id="audit3" style="display: none;">
+				<td style="width: 10%">医务部主任审核:</td>
+				<td style="width: 40%">
+					<input type="radio" name="auditResult2" value="1" label="">通过
+					<input type="radio" name="auditResult2" value="2" label="">不通过
+				</td>
+				<td style="width: 10%">审核意见:</td>
+				<td style="width: 40%">
+					<input name="auditOpinion2" class="easyui-textbox" data-options="multiline:true" style="width:300px;height:50px"/>
+				</td>
+			</tr>
+			<tr id="audit4" style="display: none">
+				<td style="width: 10%">医务部主任名称:</td>
+				<td style="width: 40%">
+					<input name="auditPerson2" class="easyui-textbox"/>
+				</td>
+				<td style="width: 10%">审核时间:</td>
+				<td style="width: 40%">
+					<input id="auditTime2" name="auditTime2" type="text" class="easyui-datebox" >
+				</td>
 			</tr>
 
 		</table>
 
-		<!--<table border="1">
-			&lt;!&ndash;<caption style="background-color: #d6f1fa">拟请MDT参加专家（1、可输入专家名字的拼音首字符，然后从用户库中选择。2、选择MDT团队后，自动带出MDT团队的成员，供申请人勾选参加的专家。专家为多人）</caption>
-			&ndash;&gt;<tr>
-				<td style="width: 50%">11</td>
-				<td style="width: 50%">11</td>
-			</tr>
-		</table>-->
-<!--
-		<table border="0" cellspacing="0">
-			<tr>
-				<td>患者类型:</td>
-				<td colspan="3">
-					<input type="radio" name="personType" value="1" label="">住院病人
-					<input type="radio" name="personType" value="2" label="">门诊病人
-				</td>
-			</tr>
-			<tr>
-				<td style="width: 10%">患者姓名:</td>
-				<td style="width: 40%"><input name="name" class="easyui-textbox"></td>
-				<td style="width: 10%">性别:</td>
-				<td style="width: 40%"><input name="gender" class="easyui-textbox"></td>
-			</tr>
-		</table>-->
 
 		<br/><br/>&nbsp;&nbsp;
 		<!--<button id="btnSave" type="button">保存</button>-->
-		<a id="btnSave" onclick="save()" class="easyui-linkbutton">保存</a>
+		<a id="btn4" style="display: none" onclick="auditSave()" class="easyui-linkbutton">保存</a>
 	</form>
 
 </body>

@@ -26,7 +26,9 @@ public class MdtTeam implements Serializable{
 	private Date date; 
 
 	/**MDT病种纳入标准和诊疗规范（指南）*/		
-	private String standard; 
+	private String standard;
+
+	private String annualStatus;
 
 	/**审核状态 (0:未审核 1:科主任审核 2:医务部主任审核 3:分管院长审核)*/		
 	private String auditStatus;
@@ -100,6 +102,15 @@ public class MdtTeam implements Serializable{
 	public void setStandard(String standard) {
 		this.standard = standard;
 	}
+
+	public String getAnnualStatus() {
+		return annualStatus;
+	}
+
+	public void setAnnualStatus(String annualStatus) {
+		this.annualStatus = annualStatus;
+	}
+
 	public String getAuditStatus() {
 		return auditStatus;
 	}

@@ -1,4 +1,3 @@
-
 $(function(){
 
     var columns=[[
@@ -25,16 +24,19 @@ $(function(){
         {field:'mdtLocation',title:'MDT地点',width:150},
         {field:'applyStatus',title:'申请人状态',width:150,formatter:function(value,row,index) {
             if (row.applyStatus == '0') {
-                return "申请人申请";
+                return "未提交";
             } else if (row.applyStatus == '1') {
+                return "已提交未审核";
+            }  else if (row.applyStatus == '2') {
                 return "科主任已审核";
-            } else if (row.applyStatus == '2') {
+            } else if (row.applyStatus == '3') {
                 return "医务部主任已审核";
             }
             return '';
         }},
 
         {field:'-',title:'操作',width:500,formatter:function(value,row,index) {
+            var viewBtn = "<a href='#' onclick='view("+row.id+")'>查看</a> ";
             var editBtn = "<a href='#' onclick='edit("+row.id+")'>修改</a> ";
             var auditBtn = "<a href='#' onclick='auditFun("+row.id+")'>审核</a> ";
             var feeBtn = "<a href='#' onclick='feeFun("+row.id+")'>打印缴纳单</a> ";
@@ -47,21 +49,27 @@ $(function(){
             var deleBtn = "<a href='#' onclick='dele("+row.id+")'>删除</a> ";
 
             var btn = "";
-            btn = btn + editBtn;
+            btn = btn + viewBtn;
 
             var roleIds = getUser().roleIds;
 
+            // 普通用户
+            if (roleIds.indexOf('7') != -1) {
+
+                btn = btn + editBtn;
+            }
+
             // 住院病人，需要审核
-            if (row.patientType == '1' && (row.applyStatus == '0' || row.applyStatus == '1') ) {
+            if (row.patientType == '1' && (row.applyStatus == '1' || row.applyStatus == '2') ) {
 
                 // 科室主任
-                if (roleIds.indexOf('5') != -1 && row.applyStatus == '0') {
+                if (roleIds.indexOf('5') != -1 && row.applyStatus == '1') {
 
                     btn = btn + auditBtn;
                 }
 
                 // 医务部主任
-                if (roleIds.indexOf('3') != -1 && row.applyStatus == '1') {
+                if (roleIds.indexOf('3') != -1 && row.applyStatus == '2') {
 
                     btn = btn + auditBtn;
                 }
@@ -69,18 +77,18 @@ $(function(){
             }
 
             // 住院病人
-            if (row.patientType == '1' && row.applyStatus == '2' ) {
-                if (row.isCharge == '1') {
+            if (row.patientType == '1' && row.applyStatus == '3' ) {
 
-                    btn = btn + feeBtn;
-                }
+                // 普通用户
+                if (roleIds.indexOf('7') != -1) {
 
-                btn = btn + informBtn + msgBtn;
+                    if (row.isCharge == '1') {
 
-                // 专家
-                if (roleIds.indexOf('6') != -1) {
+                        btn = btn + feeBtn;
+                    }
 
-                    btn = btn + expertGradeBtn;
+                    btn = btn + informBtn + msgBtn;
+
                 }
 
                 // 组织科室
@@ -89,16 +97,30 @@ $(function(){
                     btn = btn + departmentGradeBtn;
                 }
 
-                btn += feedbackBtn;
+                // 专家
+                if (roleIds.indexOf('6') != -1) {
+
+                    btn = btn + expertGradeBtn;
+                }
+
+                // 普通用户
+                if (roleIds.indexOf('7') != -1) {
+
+                    btn += feedbackBtn;
+                }
 
             }
 
             // 门诊病人
-            if (row.patientType == '2' && row.applyStatus == '0' ) {
+            if (row.patientType == '2' && row.applyStatus == '0' && roleIds.indexOf('7') != -1) {
                 btn = btn + informBtn + msgBtn + feedbackBtn;
             }
 
-            btn = btn + deleBtn;
+            // 普通用户
+            if (roleIds.indexOf('7') != -1) {
+
+                btn = btn + deleBtn;
+            }
 
             return btn;
         }}
@@ -118,7 +140,7 @@ $(function(){
                     maxmin: true,
                     shadeClose: true, //点击遮罩关闭层
                     area : ['80%' , '80%'],
-                    content: 'mdtApplyEdit.html'
+                    content: 'mdtApplyEdit.html?type=add'
                 });
             }
         }]
@@ -155,7 +177,7 @@ function auditFun(id){
         maxmin: true,
         shadeClose: true, //点击遮罩关闭层
         area : ['80%' , '80%'],
-        content: 'mdtApplyAudit.html?id=' + id
+        content: 'mdtApplyEdit.html?type=audit&id=' + id
     });
 }
 
@@ -274,7 +296,18 @@ function edit(id){
         maxmin: true,
         shadeClose: true, //点击遮罩关闭层
         area : ['80%' , '80%'],
-        content: 'mdtApplyEdit.html?id=' + id
+        content: 'mdtApplyEdit.html?type=edit&id=' + id
+    });
+}
+
+function view(id){
+    layer.open({
+        type: 2,
+        title: 'MDT申请',
+        maxmin: true,
+        shadeClose: true, //点击遮罩关闭层
+        area : ['80%' , '80%'],
+        content: 'mdtApplyEdit.html?type=view&id=' + id
     });
 }
 

@@ -6,14 +6,8 @@ import co.kensure.frame.ResultRowsInfo;
 import co.kensure.http.RequestUtils;
 import co.kensure.mem.PageInfo;
 import com.alibaba.fastjson.JSONObject;
-import com.kensure.mdt.entity.SysFee;
-import com.kensure.mdt.entity.SysGrade;
-import com.kensure.mdt.entity.SysMsgTemplate;
-import com.kensure.mdt.entity.SysOrg;
-import com.kensure.mdt.service.SysFeeService;
-import com.kensure.mdt.service.SysGradeService;
-import com.kensure.mdt.service.SysMsgTemplateService;
-import com.kensure.mdt.service.SysOrgService;
+import com.kensure.mdt.entity.*;
+import com.kensure.mdt.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +23,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping(value = "set")
-public class SysSetController {
+public class SysSetController  extends BaseController {
 
 	@Autowired
 	private SysFeeService sysFeeService;
@@ -39,6 +33,9 @@ public class SysSetController {
 
 	@Autowired
 	private SysMsgTemplateService sysMsgTemplateService;
+
+	@Autowired
+	private SysCodeService sysCodeService;
 
 	/**
 	 * 查询收费情况设置
@@ -199,6 +196,22 @@ public class SysSetController {
     }
 
     /**
+     查看短信模板
+     * @param req
+     * @param rep
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "getSysMsgTempByType", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
+    public ResultInfo getSysMsgTempByType(HttpServletRequest req, HttpServletResponse rep) {
+
+        String type = req.getParameter("type");
+        SysMsgTemplate sysMsgTemplate = sysMsgTemplateService.getSysMsgTempByType(type);
+
+        return new ResultRowInfo(sysMsgTemplate);
+    }
+
+    /**
      * 保存短信模板
      * @param req
      * @param rep
@@ -228,6 +241,16 @@ public class SysSetController {
         sysMsgTemplateService.delete(id);
 
         return new ResultInfo();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "getCodeByType", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
+    public ResultInfo getCodeByType(HttpServletRequest req, HttpServletResponse rep) {
+
+        String type = req.getParameter("type");
+        List<SysCode> list = sysCodeService.getCodeByType(type);
+
+        return new ResultRowsInfo(list);
     }
 
 }

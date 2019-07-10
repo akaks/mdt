@@ -12,8 +12,8 @@ public class MdtTeamQuery implements Serializable{
 	/**MDT名称*/		
 	private String nameLike;
 
-	/**审核状态 (0:未审核 1:科主任审核 2:医务部主任审核 3:分管院长审核)*/		
-	private Integer auditStatus;
+	/**审核状态 (0:未审核 2:科主任审核 3:医务部主任审核 4:分管院长审核)*/
+	private String auditStatus;
 
 
 	public String getProposer() {
@@ -32,11 +32,11 @@ public class MdtTeamQuery implements Serializable{
 		this.nameLike = nameLike;
 	}
 
-	public Integer getAuditStatus() {
+	public String getAuditStatus() {
 		return auditStatus;
 	}
 
-	public void setAuditStatus(Integer auditStatus) {
+	public void setAuditStatus(String auditStatus) {
 		this.auditStatus = auditStatus;
 	}
 }

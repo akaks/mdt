@@ -35,8 +35,10 @@
 		audit_opinion2 as auditOpinion2,
 		audit_person2 as auditPerson2,
 		audit_time2 as auditTime2,
-		create_person as createPerson,
-		create_org as createOrg,
+		share as share,
+		create_userid as createUserid,
+		create_dept as createDept,
+		is_delete as isDelete,
 		create_time as createTime,
 		update_time as updateTime
     </sql>
@@ -74,8 +76,10 @@
 		audit_opinion2,
 		audit_person2,
 		audit_time2,
-		create_person,
-		create_org,
+		share,
+		create_userid,
+		create_dept,
+		is_delete,
 		create_time,
 		update_time
     </sql>
@@ -115,8 +119,10 @@
 			#{auditOpinion2},
 			#{auditPerson2},
 			#{auditTime2},
-			#{createPerson},
-			#{createOrg},
+			#{share},
+			#{createUserid},
+			#{createDept},
+			#{isDelete},
 			#{createTime},
 			#{updateTime}
 		)
@@ -216,11 +222,17 @@
 		<if test="auditTime2 != null">			
 			and audit_time2 = #{auditTime2}			
 		</if>
-		<if test="createPerson != null">			
-			and create_person = #{createPerson}			
+		<if test="share != null">
+			and share = #{share}
 		</if>
-		<if test="createOrg != null">			
-			and create_org = #{createOrg}			
+		<if test="createUserid != null">
+			and create_userid = #{createUserid}
+		</if>
+		<if test="createDept != null">
+			and create_dept = #{createDept}
+		</if>
+		<if test="isDelete != null">
+			and is_delete = #{isDelete}
 		</if>
 		<if test="createTime != null">			
 			and create_time = #{createTime}			
@@ -356,11 +368,17 @@
 		<if test="auditTime2 != null">
 			audit_time2 = #{auditTime2},
 		</if>
-		<if test="createPerson != null">
-			create_person = #{createPerson},
+		<if test="share != null">
+			share = #{share},
 		</if>
-		<if test="createOrg != null">
-			create_org = #{createOrg},
+		<if test="createUserid != null">
+			create_userid = #{createUserid},
+		</if>
+		<if test="createDept != null">
+			create_dept = #{createDept},
+		</if>
+		<if test="isDelete != null">
+			is_delete = #{isDelete},
 		</if>
 		<if test="createTime != null">
 			create_time = #{createTime},

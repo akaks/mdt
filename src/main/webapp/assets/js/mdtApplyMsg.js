@@ -5,6 +5,8 @@ $(function(){
     id = url.split("id=")[1];
     if(id != undefined && id != null){
         initData(id);
+
+        getSysMsgTemp();
     }
 
     initGrid1(id);
@@ -49,6 +51,20 @@ function initData(id){
         success:function(value){
             if(value.type == 'success'){
                 $('#editForm').form('load', value.resultData.row);
+            }
+        }
+    });
+}
+
+function getSysMsgTemp(){
+    $.ajax({
+        url: baseUrl + '/set/getSysMsgTempByType?type=1',
+        dataType:'json',
+        type:'post',
+        success:function(value){
+
+            if(value.type == 'success'){
+                $("#msgTd").html(value.resultData.row.content)
             }
         }
     });

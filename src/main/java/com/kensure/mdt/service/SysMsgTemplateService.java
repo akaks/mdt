@@ -108,4 +108,16 @@ public class SysMsgTemplateService {
 		}
 
 	}
+
+    public SysMsgTemplate getSysMsgTempByType(String type) {
+
+		Map<String, Object> parameters = MapUtils.genMap("type", type);
+		List<SysMsgTemplate> list = selectByWhere(parameters);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+    }
 }

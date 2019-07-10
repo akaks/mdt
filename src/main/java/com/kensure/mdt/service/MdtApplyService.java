@@ -96,14 +96,18 @@ public class MdtApplyService {
 	}
 
 
-	public void save(MdtApply apply) {
+	public void save(MdtApply apply, AuthUser user) {
 
-		if (apply.getId() == null) {
+        MdtApply obj = selectOne(apply.getId());
+
+        if (obj == null) {
 
 			apply.setApplyStatus("0");  // "申请人申请" 状态
+			apply.setShare("0");  // "分享" 状态
+			apply.setIsDelete("0");
 
-			apply.setCreateOrg("1101");
-			apply.setCreatePerson("test");
+			apply.setCreateDept(user.getDepartment());
+			apply.setCreateUserid(user.getId());
 
 			insert(apply);
 		} else {
@@ -158,7 +162,7 @@ public class MdtApplyService {
 
 			if ("1".equals(apply.getAuditResult1())) {
 
-				obj.setApplyStatus("1");
+				obj.setApplyStatus("2");
 			} else {
 
 				obj.setApplyStatus("9");
@@ -175,7 +179,7 @@ public class MdtApplyService {
 
 			if ("1".equals(apply.getAuditResult2())) {
 
-				obj.setApplyStatus("2");
+				obj.setApplyStatus("3");
 			} else {
 
 				obj.setApplyStatus("9");
@@ -239,4 +243,17 @@ public class MdtApplyService {
         return price;
 
     }
+
+	/**
+	 * 开启分享病例
+	 * @param applyId
+	 */
+	public void share(Long applyId) {
+
+		MdtApply apply = new MdtApply();
+		apply.setId(applyId);
+		apply.setShare("1");
+
+		update(apply);
+	}
 }

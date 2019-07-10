@@ -20,7 +20,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping(value = "user")
-public class SysUserController {
+public class SysUserController  extends BaseController {
 
 	@Autowired
 	private SysUserService sysUserService;

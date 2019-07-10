@@ -22,6 +22,5 @@ function getFormData(form) {
     formValues = formValues.replace(/\+/g," ");   // g表示对整个字符串中符合条件的都进行替换  
     var temp =  decodeURIComponent(JSON.stringify(conveterParamsToJson(formValues)));  
     var queryParam = JSON.parse(temp);
-    console.log(queryParam)
-    return queryParam;  
+    return queryParam;
 }  

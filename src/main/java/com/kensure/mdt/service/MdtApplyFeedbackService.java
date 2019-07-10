@@ -16,6 +16,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 /**
@@ -26,6 +27,9 @@ public class MdtApplyFeedbackService {
 	
 	@Resource
 	private MdtApplyFeedbackMapper dao;
+
+	@Resource
+	private MdtApplyService mdtApplyService;
     
     
     public MdtApplyFeedback selectOne(Long id){
@@ -88,12 +92,14 @@ public class MdtApplyFeedbackService {
 		return list;
 	}
 
-
+	@Transactional
 	public void save(MdtApplyFeedback obj) {
 
 		if (obj.getId() == null) {
 
 			insert(obj);
+
+			mdtApplyService.share(obj.getApplyId());
 		} else {
 
 			update(obj);

@@ -6,13 +6,10 @@ import co.kensure.frame.ResultRowsInfo;
 import co.kensure.http.RequestUtils;
 import co.kensure.mem.PageInfo;
 import com.alibaba.fastjson.JSONObject;
-import com.kensure.mdt.entity.MdtTeam;
-import com.kensure.mdt.entity.MdtTeamInfo;
-import com.kensure.mdt.entity.MdtTeamObjective;
+import com.kensure.basekey.BaseKeyService;
+import com.kensure.mdt.entity.*;
 import com.kensure.mdt.entity.query.MdtTeamQuery;
-import com.kensure.mdt.service.MdtTeamInfoService;
-import com.kensure.mdt.service.MdtTeamObjectiveService;
-import com.kensure.mdt.service.MdtTeamService;
+import com.kensure.mdt.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +35,18 @@ public class MdtTeamController extends BaseController {
 
 	@Autowired
 	private MdtTeamObjectiveService mdtTeamObjectiveService;
+
+	@Autowired
+	private MdtTeamAssessService mdtTeamAssessService;
+
+	@Autowired
+	private MdtTeamPaperService mdtTeamPaperService;
+
+	@Autowired
+	private MdtTeamIssueService mdtTeamIssueService;
+
+	@Autowired
+	private BaseKeyService baseKeyService;
 
 	/**
 	 * 分页查询
@@ -215,5 +224,261 @@ public class MdtTeamController extends BaseController {
 
 		List<MdtTeam> list = mdtTeamService.findAllMdtTeam();
 		return new ResultRowsInfo(list);
+	}
+
+	/**
+	 * 保存 年度评估 团队目标建设
+	 * @param req
+	 * @param rep
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "saveTeamObjective", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
+	public ResultInfo saveTeamObjective(HttpServletRequest req, HttpServletResponse rep) {
+
+		JSONObject json = RequestUtils.paramToJson(req);
+		MdtTeamObjective teamObjective = JSONObject.parseObject(json.toJSONString(), MdtTeamObjective.class);
+
+		mdtTeamObjectiveService.save(teamObjective);
+		return new ResultInfo();
+	}
+
+	/**
+	 * 通过teamId查看团队目标建设
+	 * @param req
+	 * @param rep
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "getTeamObjective", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
+	public ResultInfo getTeamObjective(HttpServletRequest req, HttpServletResponse rep) {
+
+
+		Long teamId = Long.parseLong(req.getParameter("teamId"));
+
+		MdtTeamObjective teamObjective = mdtTeamObjectiveService.getTeamObjective(teamId);
+		return new ResultRowInfo(teamObjective);
+	}
+
+	/**
+	 * 查询MDT团队年度评估
+	 * @param req
+	 * @param rep
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "selectAnnualTeam", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
+	public ResultInfo selectAnnualTeam(HttpServletRequest req, HttpServletResponse rep) {
+		JSONObject json = RequestUtils.paramToJson(req);
+		PageInfo page = JSONObject.parseObject(json.toJSONString(), PageInfo.class);
+		MdtTeamQuery query = JSONObject.parseObject(json.toJSONString(), MdtTeamQuery.class);
+
+		List<MdtTeam> list = mdtTeamService.selectAnnualTeamList(page, query);
+		long cont = mdtTeamService.selectAnnualTeamCount(query);
+
+		return new ResultRowsInfo(list, cont);
+	}
+
+	/**
+	 * 发起MDT团队年度评估
+	 * @param req
+	 * @param rep
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "launchAnnualAssess", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
+	public ResultInfo launchAnnualAssess(HttpServletRequest req, HttpServletResponse rep) {
+
+		Long teamId = Long.parseLong(req.getParameter("teamId"));
+
+		mdtTeamService.launchAnnualAssess(teamId);
+		return new ResultInfo();
+	}
+
+
+	/**
+	 * 保存 团队建设期满2年评估
+	 * @param req
+	 * @param rep
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "saveTeamAssess", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
+	public ResultInfo saveTeamAssess(HttpServletRequest req, HttpServletResponse rep) {
+
+
+		JSONObject json = RequestUtils.paramToJson(req);
+		MdtTeamAssess obj = JSONObject.parseObject(json.toJSONString(), MdtTeamAssess.class);
+
+		mdtTeamAssessService.save(obj);
+		return new ResultRowInfo(obj);
+	}
+
+	/**
+	 * 通过teamId查看团队建设期满2年评估
+	 * @param req
+	 * @param rep
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "getTeamAssess", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
+	public ResultInfo getTeamAssess(HttpServletRequest req, HttpServletResponse rep) {
+
+		Long teamId = Long.parseLong(req.getParameter("teamId"));
+
+		MdtTeamAssess obj = mdtTeamAssessService.getTeamAssess(teamId);
+		return new ResultRowInfo(obj);
+	}
+
+
+	/**
+	 * 查询 建期两年MDT病种研究方向发表的论文
+	 * @param req
+	 * @param rep
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "selectTeamPaper", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
+	public ResultInfo selectTeamPaper(HttpServletRequest req, HttpServletResponse rep) {
+
+		Long teamId = Long.parseLong(req.getParameter("teamId"));
+
+		List<MdtTeamPaper> list = mdtTeamPaperService.selectList(teamId);
+
+		return new ResultRowsInfo(list, list.size());
+	}
+
+	/**
+	 * 查看 建期两年MDT病种研究方向发表的论文
+	 * @param req
+	 * @param rep
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "getTeamPaper", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
+	public ResultInfo getTeamPaper(HttpServletRequest req, HttpServletResponse rep) {
+
+		Long id = Long.parseLong(req.getParameter("id"));
+
+		MdtTeamPaper obj = mdtTeamPaperService.selectOne(id);
+
+		return new ResultRowInfo(obj);
+	}
+
+	/**
+	 * 保存 建期两年MDT病种研究方向发表的论文
+	 * @param req
+	 * @param rep
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "saveTeamPaper", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
+	public ResultInfo saveTeamPaper(HttpServletRequest req, HttpServletResponse rep) {
+
+		JSONObject json = RequestUtils.paramToJson(req);
+		MdtTeamPaper obj = JSONObject.parseObject(json.toJSONString(), MdtTeamPaper.class);
+
+		mdtTeamPaperService.save(obj);
+		return new ResultInfo();
+	}
+
+	/**
+	 * 删除 建期两年MDT病种研究方向发表的论文
+	 * @param req
+	 * @param rep
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "delTeamPaper", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
+	public ResultInfo delTeamPaper(HttpServletRequest req, HttpServletResponse rep) {
+
+		Long id = Long.parseLong(req.getParameter("id"));
+
+		mdtTeamPaperService.delete(id);
+
+		return new ResultInfo();
+	}
+
+	/**
+	 * 查询 建期两年MDT病种研究方向开展的课题探究
+	 * @param req
+	 * @param rep
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "selectTeamIssue", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
+	public ResultInfo selectTeamIssue(HttpServletRequest req, HttpServletResponse rep) {
+
+		Long teamId = Long.parseLong(req.getParameter("teamId"));
+
+		List<MdtTeamIssue> list = mdtTeamIssueService.selectList(teamId);
+
+		return new ResultRowsInfo(list, list.size());
+	}
+
+
+	/**
+	 * 查看 建期两年MDT病种研究方向开展的课题探究
+	 * @param req
+	 * @param rep
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "getTeamIssue", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
+	public ResultInfo getTeamIssue(HttpServletRequest req, HttpServletResponse rep) {
+
+		Long id = Long.parseLong(req.getParameter("id"));
+
+		MdtTeamIssue obj = mdtTeamIssueService.selectOne(id);
+
+		return new ResultRowInfo(obj);
+	}
+
+	/**
+	 * 保存 建期两年MDT病种研究方向开展的课题探究
+	 * @param req
+	 * @param rep
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "saveTeamIssue", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
+	public ResultInfo saveTeamIssue(HttpServletRequest req, HttpServletResponse rep) {
+
+		JSONObject json = RequestUtils.paramToJson(req);
+		MdtTeamIssue obj = JSONObject.parseObject(json.toJSONString(), MdtTeamIssue.class);
+
+		mdtTeamIssueService.save(obj);
+		return new ResultInfo();
+	}
+
+	/**
+	 * 删除 建期两年MDT病种研究方向开展的课题探究
+	 * @param req
+	 * @param rep
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "delTeamIssue", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
+	public ResultInfo delTeamIssue(HttpServletRequest req, HttpServletResponse rep) {
+
+		Long id = Long.parseLong(req.getParameter("id"));
+
+		mdtTeamIssueService.delete(id);
+
+		return new ResultInfo();
+	}
+
+	/**
+	 * 获取MdtTeam主键
+	 * @param req
+	 * @param rep
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "getMdtTeamKey", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
+	public ResultInfo getMdtTeamKey(HttpServletRequest req, HttpServletResponse rep) {
+
+		Long key = baseKeyService.getKey("mdt_team");
+		return new ResultRowInfo(key);
 	}
 }

@@ -1,11 +1,12 @@
 var id;
 var audit = 0;  // 区分是否MDT团队是否需要审核  audit=1时是不需要审核的
+var type;  // 类型 区分 新增、编辑、审核等
 
 $(function(){
 
-    var url = window.location.href;
-    id = url.split("id=")[1];
-    audit = url.split("audit=")[1];
+    id = getQueryVariable("id");
+    audit = getQueryVariable("audit");
+    type = getQueryVariable("type");
 
     if(id != undefined && id != null){
         // 初始化数据
@@ -18,13 +19,34 @@ $(function(){
         initGrid1(id);
     } else {
 
-        initGrid1("0");
+        getMdtTeamKey();
+    }
+
+
+    if(type != undefined && type != null){
+        if (type == 'add') {
+
+            $("#btn1").show();
+            $("#btn2").show();
+        }
+        if (type == 'edit') {
+
+            $("#btn1").show();
+        }
+        if (type == 'view') {
+
+            $("#audit1").show();
+            $("#audit2").show();
+            $("#audit3").show();
+        }
     }
 
     // 无需审核的情况下，审核状态直接设置为3
     if(audit != undefined && audit != null && audit == '1'){
         $("#auditStatus").val("3");
+        $("#btn2").hide();
     }
+
 
     $('#date').datebox({
         onSelect: function(date){
@@ -38,6 +60,19 @@ $(function(){
 });
 
 function initGrid1(teamId) {
+
+    var toolbar ;
+    if (type == 'edit' || type == 'add') {
+        toolbar = [{
+            iconCls: 'icon-add',
+            text:'添加专家',
+            handler: function(){
+                addTeamInfo(id)
+            }
+        }];
+    } else {
+        toolbar = [];
+    }
 
     var columns=[[
 		/*{field:'id',title:'编号',width:100},*/
@@ -57,9 +92,9 @@ function initGrid1(teamId) {
             }
             return '';
         }},
-        {field:'-',title:'操作',width:200,formatter:function(value,row,index) {
+        {field:'-',title:'操作',width:200,hidden: (type != 'add' && type != 'edit'),formatter:function(value,row,index) {
             return "<a href='#' onclick='editTeamInfo("+row.id+")'>编辑</a>&nbsp;&nbsp;&nbsp;" +
-                "<a href='#' onclick='delTeamInfo("+row.id+")'>删除</a>";
+                    "<a href='#' onclick='delTeamInfo("+row.id+")'>删除</a>";
         }}
     ]];
 
@@ -73,14 +108,26 @@ function initGrid1(teamId) {
         columns:columns,
         singleSelect:true,
         rownumbers:true,
-        toolbar: [{
-            iconCls: 'icon-add',
-            text:'添加专家',
-            handler: function(){
-                addTeamInfo(id)
-            }
-        }]
+        toolbar: toolbar
+    });
+}
 
+// 获取主键
+function getMdtTeamKey() {
+    $.ajax({
+        url: baseUrl + '/mdtTeam/getMdtTeamKey',
+        data:{},
+        dataType:'json',
+        type:'post',
+        success:function(value){
+
+            if(value.type == 'success'){
+                id = value.resultData.row;
+                $("#id").val(id);
+
+                initGrid1(id);
+            }
+        }
     });
 }
 
@@ -113,6 +160,40 @@ function save() {
     });
 }
 
+function auditSave() {
+
+    //判断：编辑表单的所有控件是否都通过验证
+    var isValidate= $('#editForm2').form('validate');
+    if(isValidate==false){
+        return ;
+    }
+
+    var formdata=getFormData('editForm2');
+
+    $.ajax({
+        url: baseUrl + '/mdtTeam/audit',
+        data:formdata,
+        dataType:'json',
+        type:'post',
+        success:function(value){
+
+            if(value.type == 'success'){
+                var mylay = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(mylay);
+
+                window.parent.doSearch();
+            }
+            $.messager.alert('提示',value.message);
+        }
+    });
+}
+
+function commintAudit() {
+    $("#auditStatus").val('1');
+
+    save();
+}
+
 /**
  * 编辑
  */
@@ -124,8 +205,26 @@ function initData(id){
         success:function(value){
             if(value.type == 'success'){
                 $('#editForm').form('load', value.resultData.row);
+                $('#editForm2').form('load', value.resultData.row);
 
                 setDate(new Date(value.resultData.row.date));
+
+                if (type == 'edit' && $("#auditStatus").val() == '0') {
+                    $("#btn2").show();
+                }
+
+                if (type == 'audit') {
+                    if ($("#auditStatus").val() == '1') {
+                        $("#audit1").show();
+                    } else if ($("#auditStatus").val() == '2') {
+                        $("#audit2").show();
+                    } else if ($("#auditStatus").val() == '3') {
+                        $("#audit3").show();
+                    }
+                    $("#btn4").show();
+                }
+
+                $("#id2").val(value.resultData.row.id);
             }
         }
     });

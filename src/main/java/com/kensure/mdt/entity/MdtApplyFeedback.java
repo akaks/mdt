@@ -37,7 +37,10 @@ public class MdtApplyFeedback implements Serializable{
 	private String visitName; 
 
 	/**随访人电话*/		
-	private String visitPhone; 
+	private String visitPhone;
+
+	/**是否分享病例*/
+	private String share;
 
 	/**随访日期*/
 	@JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", timezone="GMT+8")
@@ -115,6 +118,14 @@ public class MdtApplyFeedback implements Serializable{
 	}
 	public Date getVisitTime() {
 		return visitTime;
+	}
+
+	public String getShare() {
+		return share;
+	}
+
+	public void setShare(String share) {
+		this.share = share;
 	}
 
 	public void setVisitTime(Date visitTime) {

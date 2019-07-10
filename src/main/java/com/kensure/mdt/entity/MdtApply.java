@@ -115,10 +115,16 @@ public class MdtApply implements Serializable{
 	private Date auditTime2; 
 
 	/**创建人*/		
-	private String createPerson; 
+	private Long createUserid;
 
 	/**创建人科室*/		
-	private String createOrg; 
+	private String createDept;
+
+	/***/
+	private String share;
+
+	/***/
+	private String isDelete;
 
 	/**创建时间*/
 	@JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", timezone="GMT+8")
@@ -353,19 +359,35 @@ public class MdtApply implements Serializable{
 	public void setAuditTime2(Date auditTime2) {
 		this.auditTime2 = auditTime2;
 	}
-	public String getCreatePerson() {
-		return createPerson;
+	public Long getCreateUserid() {
+		return createUserid;
 	}
 
-	public void setCreatePerson(String createPerson) {
-		this.createPerson = createPerson;
+	public void setCreateUserid(Long createUserid) {
+		this.createUserid = createUserid;
 	}
-	public String getCreateOrg() {
-		return createOrg;
+	public String getCreateDept() {
+		return createDept;
 	}
 
-	public void setCreateOrg(String createOrg) {
-		this.createOrg = createOrg;
+	public String getShare() {
+		return share;
+	}
+
+	public void setShare(String share) {
+		this.share = share;
+	}
+
+	public String getIsDelete() {
+		return isDelete;
+	}
+
+	public void setIsDelete(String isDelete) {
+		this.isDelete = isDelete;
+	}
+
+	public void setCreateDept(String createDept) {
+		this.createDept = createDept;
 	}
 	public Date getCreateTime() {
 		return createTime;

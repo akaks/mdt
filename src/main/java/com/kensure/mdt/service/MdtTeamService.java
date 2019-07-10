@@ -88,9 +88,12 @@ public class MdtTeamService {
 	@Transactional
 	public void save(MdtTeam team, MdtTeamObjective mdtTeamObjective, AuthUser user) {
 
-    	if (team.getId() == null) {
+        MdtTeam obj = selectOne(team.getId());
 
-    	    if (!"3".equals(team.getAuditStatus())) {
+        // 新增
+        if (obj == null) {
+
+    	    if (team.getAuditStatus() == null) {
 			    team.setAuditStatus("0");  // 未审核
             }
 			team.setIsDelete("0");  // 未删除
@@ -99,9 +102,14 @@ public class MdtTeamService {
 
 			insert(team);
 
+			mdtTeamObjective.setId(null);
 			mdtTeamObjective.setTeamId(team.getId());
+            mdtTeamObjective.setFlag("1");  // 第一年
 			mdtTeamObjectiveService.save(mdtTeamObjective);
-		} else {
+
+		}
+		// 修改
+		else {
 
     		update(team);
 
@@ -126,6 +134,7 @@ public class MdtTeamService {
 		MapUtils.putPageInfo(parameters, page);
 
 		parameters.put("nameLike", query.getNameLike());
+		parameters.put("auditStatus", query.getAuditStatus());
 		parameters.put("isDelete", "0");
 
 		List<MdtTeam> list = selectByWhere(parameters);
@@ -150,7 +159,7 @@ public class MdtTeamService {
      */
 	public List<MdtTeam> findAllMdtTeam() {
 
-		Map<String, Object> parameters = MapUtils.genMap("auditStatus", "3");
+		Map<String, Object> parameters = MapUtils.genMap("auditStatus", "4");
 		List<MdtTeam> list = selectByWhere(parameters);
 		return list;
 	}
@@ -186,7 +195,7 @@ public class MdtTeamService {
 
             if ("1".equals(team.getAuditResult1())) {
 
-                obj.setAuditStatus("1");
+                obj.setAuditStatus("2");
             } else {
 
                 obj.setAuditStatus("9");
@@ -201,7 +210,7 @@ public class MdtTeamService {
 
             if ("1".equals(team.getAuditResult2())) {
 
-                obj.setAuditStatus("2");
+                obj.setAuditStatus("3");
             } else {
 
                 obj.setAuditStatus("9");
@@ -216,7 +225,7 @@ public class MdtTeamService {
 
             if ("1".equals(team.getAuditResult3())) {
 
-                obj.setAuditStatus("3");
+                obj.setAuditStatus("4");
             } else {
 
                 obj.setAuditStatus("9");
@@ -225,4 +234,62 @@ public class MdtTeamService {
 
         update(obj);
     }
+
+
+	/**
+	 * 条件分页查询
+	 * @param page
+	 * @param query
+	 * @return
+	 */
+	public List<MdtTeam> selectAnnualTeamList(PageInfo page, MdtTeamQuery query) {
+
+		Map<String, Object> parameters = MapUtils.genMap();
+		MapUtils.putPageInfo(parameters, page);
+
+		parameters.put("nameLike", query.getNameLike());
+		parameters.put("annualStatusIn", "1,2,3");
+		parameters.put("isDelete", "0");
+
+		List<MdtTeam> list = selectByWhere(parameters);
+		return list;
+	}
+
+	/**
+	 * 条件分页查询
+	 * @param query
+	 * @return
+	 */
+	public long selectAnnualTeamCount(MdtTeamQuery query) {
+
+		Map<String, Object> parameters = MapUtils.genMap(
+				"isDelete", "0", "annualStatusIn", "1,2,3", "nameLike", query.getNameLike());
+		return selectCountByWhere(parameters);
+	}
+
+	/**
+	 * 发起MDT团队年度评估
+	 * @param teamId
+	 */
+	public void launchAnnualAssess(Long teamId) {
+
+		MdtTeam team = new MdtTeam();
+		team.setId(teamId);
+		team.setAnnualStatus("1");
+
+		update(team);
+	}
+
+	/**
+	 * 待审核 MDT团队年度评估
+	 * @param teamId
+	 */
+	public void toAuditAnnualAssess(Long teamId) {
+
+		MdtTeam team = new MdtTeam();
+		team.setId(teamId);
+		team.setAnnualStatus("2");
+
+		update(team);
+	}
 }

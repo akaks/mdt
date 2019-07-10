@@ -1,4 +1,5 @@
 var audit = 0;  // 区分是否MDT团队是否需要审核  audit=1时是不需要审核的
+var param = "";
 
 $(function(){
 
@@ -6,6 +7,8 @@ $(function(){
     audit = url.split("audit=")[1];
     if(audit != undefined && audit != null){
         audit = 1;
+        $("#auditStatus").val('4');
+        param = '?auditStatus=4';
     } else {
         audit = 0;
     }
@@ -18,25 +21,32 @@ $(function(){
         {field:'proposer',title:'申请人',width:100},
         {field:'name',title:'MDT名称',width:200},
         {field:'date',title:'申请日期',width:100},
-        {field:'auditStatus',title:'审核状态',width:200,formatter:function(value,row,index) {
+        {field:'auditStatus',title:'审核状态',width:200, hidden: (audit=='1'), formatter:function(value,row,index) {
             // 0:未审核 1:科主任审核 2:医务部主任审核 3:分管院长审核
             if (row.auditStatus == '0') {
-                return "未审核";
+                return "未提交";
             } else if (row.auditStatus == '1') {
+                return "已提交未审核";
+            }  else if (row.auditStatus == '2') {
                 return "科主任已审核";
-            } else if (row.auditStatus == '2') {
-                return "医务部主任已审核";
             } else if (row.auditStatus == '3') {
-                return "分管院长已审核";
+                return "医务部主任已审核";
+            } else if (row.auditStatus == '4') {
+                return "已审核完成";
             } else if (row.auditStatus == '9') {
                 return "审核不通过";
             }
             return '';
         }},
         {field:'-',title:'操作',width:200,formatter:function(value,row,index) {
+            var viewBtn = "<a href='#' onclick='view("+row.id+")'>查看</a> ";
             var editBtn = "<a href='#' onclick='edit("+row.id+")'>修改</a> ";
             var auditBtn = "<a href='#' onclick='auditFun("+row.id+")'>审核</a> ";
             var deleBtn = "<a href='#' onclick='dele("+row.id+")'>删除</a> ";
+
+            var btn = '' ;
+
+            btn += viewBtn;
 
             // 不需要审核时，去除审核按钮
             if (audit == '1') {
@@ -45,28 +55,37 @@ $(function(){
 
             var roleIds = getUser().roleIds;
 
-            if (roleIds.indexOf('5') != -1 && row.auditStatus == '0') {
+            // 普通用户
+            if (roleIds.indexOf('7') != -1) {
 
-                return editBtn + auditBtn + deleBtn;
+                btn += editBtn + deleBtn;
             }
 
-            if (roleIds.indexOf('3') != -1 && row.auditStatus == '1') {
+            // 科室主任
+            if (roleIds.indexOf('5') != -1 && row.auditStatus == '1') {
 
-                return editBtn + auditBtn + deleBtn;
+                btn += auditBtn;
             }
 
-            if (roleIds.indexOf('2') != -1 && row.auditStatus == '2') {
+            // 医务部主任
+            if (roleIds.indexOf('3') != -1 && row.auditStatus == '2') {
 
-                return editBtn + auditBtn + deleBtn;
+                btn += auditBtn;
             }
 
-            return editBtn + deleBtn;
+            // 分管院长
+            if (roleIds.indexOf('2') != -1 && row.auditStatus == '3') {
+
+                btn += auditBtn;
+            }
+
+            return btn;
         }}
     ]];
 	
 	//表格数据初始化
 	$('#grid').datagrid({
-		url:baseUrl + '/mdtTeam/findByPage',
+		url:baseUrl + '/mdtTeam/findByPage' + param,
         loadFilter: function(data){
             return data.resultData;
         },
@@ -84,7 +103,7 @@ $(function(){
                     maxmin: true,
                     shadeClose: true, //点击遮罩关闭层
                     area : ['80%' , '80%'],
-                    content: 'mdtTeamEdit.html?audit=' + audit
+                    content: 'mdtTeamEdit.html?type=add&audit=' + audit
                 });
 
 			}
@@ -111,7 +130,7 @@ function auditFun(id){
         maxmin: true,
         shadeClose: true, //点击遮罩关闭层
         area : ['80%' , '80%'],
-        content: 'mdtTeamAudit.html?id=' + id
+        content: 'mdtTeamEdit.html?type=audit&id=' + id
     });
 }
 
@@ -140,6 +159,20 @@ function dele(id){
 /**
  * 编辑
  */
+function view(id){
+    layer.open({
+        type: 2,
+        title: 'MDT团队',
+        maxmin: true,
+        shadeClose: true, //点击遮罩关闭层
+        area : ['80%' , '80%'],
+        content: 'mdtTeamEdit.html?type=view&id=' + id
+    });
+}
+
+/**
+ * 编辑
+ */
 function edit(id){
     layer.open({
         type: 2,
@@ -147,7 +180,7 @@ function edit(id){
         maxmin: true,
         shadeClose: true, //点击遮罩关闭层
         area : ['80%' , '80%'],
-        content: 'mdtTeamEdit.html?id=' + id
+        content: 'mdtTeamEdit.html?type=edit&id=' + id
     });
 }
 

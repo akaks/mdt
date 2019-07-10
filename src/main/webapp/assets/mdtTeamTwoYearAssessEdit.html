@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>MDT团队年度评估</title>
+	<link rel="stylesheet" type="text/css" href="ui17/themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="ui17/themes/icon.css">
+	<script type="text/javascript" src="ui17/jquery.min.js"></script>
+	<script type="text/javascript" src="ui17/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="ui17/locale/easyui-lang-zh_CN.js"></script>
+
+	<script src="layer/layer.js"></script>
+
+	<script type="text/javascript" src="js/common.js"></script>
+	<script type="text/javascript" src="js/form.js"></script>
+	<script type="text/javascript" src="js/mdtTeamTwoYearAssessEdit.js"></script>
+</head>
+<body>
+
+	<form id="editForm">
+		<input id="id" name="id" type="hidden">
+		<input id="teamId" name="teamId" type="hidden">
+		<input id="auditStatus" name="auditStatus" type="hidden">
+		<input id="flag" name="flag" type="hidden" value="2">
+
+		<table border="0" cellspacing="0">
+			<tr>
+				<td>纳入MDT讨论病种例数：:</td>
+				<td colspan="3">
+					<input name="caseSum" class="easyui-textbox" />
+				</td>
+			</tr>
+
+			<tr>
+				<td style="width: 10%">年度:</td>
+				<td style="width: 40%">
+					<input name="year1" class="easyui-numberbox">
+				</td>
+				<td style="width: 10%">例数:</td>
+				<td style="width: 40%">
+					<input name="caseNum1" class="easyui-numberbox">
+				</td>
+			</tr>
+			<tr>
+				<td>年度:</td>
+				<td>
+					<input name="year2" class="easyui-numberbox">
+				</td>
+				<td>例数:</td>
+				<td>
+					<input name="caseNum2" class="easyui-numberbox">
+				</td>
+			</tr>
+			<tr>
+				<td colspan="4">
+					<table id="grid1"></table>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="4">
+					<table id="grid2"></table>
+				</td>
+			</tr>
+			<tr>
+				<td>建期两年教学情况:</td>
+				<td colspan="3">
+					<input name="teachingSituation" class="easyui-textbox" data-options="multiline:true" style="width:500px;height:200px"/>
+				</td>
+			</tr>
+			<tr>
+				<td>培养研究生:</td>
+				<td colspan="3">
+					<input name="trainNum" class="easyui-numberbox">
+				</td>
+			</tr>
+			<tr>
+				<td>住院医生:</td>
+				<td>
+					<input name="hospitalNum" class="easyui-numberbox">
+				</td>
+				<td>主治医生:</td>
+				<td>
+					<input name="majorNum" class="easyui-numberbox">
+				</td>
+			</tr>
+			<tr>
+				<td>副主任医生:</td>
+				<td>
+					<input name="assistantMajorNum" class="easyui-numberbox">
+				</td>
+				<td>主任医生:</td>
+				<td>
+					<input name="directorNum" class="easyui-numberbox">
+				</td>
+			</tr>
+
+		</table>
+
+		<br/><br/>&nbsp;&nbsp;
+		<!--<button id="btnSave" type="button">保存</button>-->
+		<a id="btnSave" onclick="save()" class="easyui-linkbutton">保存</a>
+	</form>
+
+</body>
+</html>

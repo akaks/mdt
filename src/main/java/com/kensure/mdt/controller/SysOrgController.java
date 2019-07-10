@@ -23,7 +23,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping(value = "org")
-public class SysOrgController {
+public class SysOrgController  extends BaseController {
 
 	@Autowired
 	private SysOrgService sysOrgService;

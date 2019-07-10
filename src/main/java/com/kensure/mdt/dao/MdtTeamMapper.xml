@@ -8,6 +8,7 @@
 		name,
 		date,
 		standard,
+		annual_status as annualStatus,
 		audit_status as auditStatus,
 		audit_result1 as auditResult1,
 		audit_opinion1 as auditOpinion1,
@@ -28,6 +29,7 @@
 		name,
 		date,
 		standard,
+		annual_status,
 		audit_status,
 		audit_result1,
 		audit_opinion1,
@@ -43,10 +45,6 @@
     </sql>
 	
 	<insert id="insert" parameterType="com.kensure.mdt.entity.MdtTeam">
-		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
-			SELECT LAST_INSERT_ID()
-		</selectKey>
-
 		insert into mdt_team (<include refid="insertFields"/>)
 		values (
 			#{id},
@@ -54,6 +52,7 @@
 			#{name},
 			#{date},
 			#{standard},
+			#{annualStatus},
 			#{auditStatus},
 			#{auditResult1},
 			#{auditOpinion1},
@@ -81,6 +80,12 @@
 		</if>
 		<if test="standard != null">			
 			and standard = #{standard}			
+		</if>
+		<if test="annualStatus != null">
+			and annual_status = #{annualStatus}
+		</if>
+		<if test="annualStatusIn != null">
+			annual_status in ( #{annualStatusIn} ) ,
 		</if>
 		<if test="auditStatus != null">			
 			and audit_status = #{auditStatus}			
@@ -158,6 +163,9 @@
 		</if>
 		<if test="standard != null">
 			standard = #{standard},
+		</if>
+		<if test="annualStatus != null">
+			annual_status = #{annualStatus},
 		</if>
 		<if test="auditStatus != null">
 			audit_status = #{auditStatus},
