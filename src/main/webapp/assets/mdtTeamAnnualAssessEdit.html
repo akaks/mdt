@@ -28,16 +28,17 @@
 				<td>年度总结(建设期第一年):</td>
 				<td colspan="3">
 					<input name="summary" class="easyui-textbox" data-options="multiline:true" style="width:500px;height:200px"/>
+					<br>
 				</td>
 			</tr>
 
-			<tr>
+			<!--<tr>
 				<td colspan="4" style="background-color: #8D8D8D">
 					<br>
 					团队建设责任目标
 					<br>
 				</td>
-			</tr>
+			</tr>-->
 			<tr>
 				<td>年度:</td>
 				<td>
@@ -89,7 +90,8 @@
 
 		<br/><br/>&nbsp;&nbsp;
 		<!--<button id="btnSave" type="button">保存</button>-->
-		<a id="btnSave" onclick="save()" class="easyui-linkbutton">保存</a>
+		<a id="btn1" style="display: none" onclick="save()" class="easyui-linkbutton">保存</a>
+		<a id="btn2" style="display: none" onclick="auditSave()" class="easyui-linkbutton">审核</a>
 	</form>
 
 </body>

@@ -9,6 +9,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.kensure.basekey.BaseKeyService;
 import com.kensure.mdt.entity.*;
 import com.kensure.mdt.entity.bo.MdtGradeReq;
+import com.kensure.mdt.entity.resp.ExpertGradeList;
 import com.kensure.mdt.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -176,6 +177,23 @@ public class MdtApplyController extends BaseController {
 		Long applyId = Long.parseLong(req.getParameter("applyId"));
 
 		List<MdtApplyDoctor> list = mdtApplyDoctorService.selectList(applyId);
+		return new ResultRowsInfo(list, list.size());
+	}
+
+
+	/**
+	 *
+	 * @param req
+	 * @param rep
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "listExpertGradeByApplyId", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
+	public ResultInfo listExpertGradeByApplyId(HttpServletRequest req, HttpServletResponse rep) {
+
+		Long applyId = Long.parseLong(req.getParameter("applyId"));
+
+		List<ExpertGradeList> list = mdtApplyDoctorService.listExpertGrade(applyId);
 		return new ResultRowsInfo(list, list.size());
 	}
 

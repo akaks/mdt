@@ -4,19 +4,15 @@ import co.kensure.exception.BusinessExceptionUtil;
 import co.kensure.mem.MapUtils;
 import co.kensure.mem.PageInfo;
 import com.kensure.mdt.dao.MdtApplyDoctorMapper;
-import com.kensure.mdt.entity.MdtApply;
-import com.kensure.mdt.entity.MdtApplyDoctor;
-import com.kensure.mdt.entity.MdtTeamInfo;
-import com.kensure.mdt.entity.SysOrg;
+import com.kensure.mdt.entity.*;
+import com.kensure.mdt.entity.resp.ExpertGradeList;
 import com.kensure.mdt.service.MdtApplyDoctorService;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.annotation.Resource;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 
@@ -31,6 +27,9 @@ public class MdtApplyDoctorService {
 
 	@Resource
 	private SysOrgService sysOrgService;
+
+	@Resource
+	private MdtGradeItemService mdtGradeItemService;
     
     
     public MdtApplyDoctor selectOne(Long id){
@@ -148,4 +147,37 @@ public class MdtApplyDoctorService {
 		return list;
 	}
 
+    public List<ExpertGradeList> listExpertGrade(Long applyId) {
+
+		Map<String, Object> parameters = MapUtils.genMap("applyId", applyId);
+
+		List<MdtApplyDoctor> list = selectByWhere(parameters);
+
+        List<ExpertGradeList> expertGradeLists = new ArrayList<>();
+
+        for (MdtApplyDoctor mdtApplyDoctor : list) {
+			SysOrg org = sysOrgService.selectOne(mdtApplyDoctor.getDepartment());
+			if (org != null) {
+				mdtApplyDoctor.setDepartment(org.getName());
+			}
+
+			ExpertGradeList expertGrade = new ExpertGradeList();
+			BeanUtils.copyProperties(mdtApplyDoctor, expertGrade);
+
+
+            List<MdtGradeItem> gradeItemList = mdtGradeItemService.getMdtGradeItem("1", applyId, expertGrade.getUserId());
+            expertGrade.setList(gradeItemList);
+
+            if (!gradeItemList.isEmpty()) {
+                expertGrade.setReply("已回复");
+                expertGrade.setReplyTime(gradeItemList.get(0).getCreateTime());
+            } else {
+                expertGrade.setReply("未回复");
+            }
+
+            expertGradeLists.add(expertGrade);
+        }
+
+		return expertGradeLists;
+    }
 }

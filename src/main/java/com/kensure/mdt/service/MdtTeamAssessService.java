@@ -15,6 +15,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 /**
@@ -25,6 +26,9 @@ public class MdtTeamAssessService {
 	
 	@Resource
 	private MdtTeamAssessMapper dao;
+
+	@Resource
+	private MdtTeamService mdtTeamService;
     
     
     public MdtTeamAssess selectOne(Long id){
@@ -85,11 +89,14 @@ public class MdtTeamAssessService {
 		return null;
 	}
 
+	@Transactional
 	public void save(MdtTeamAssess obj) {
 
 		if (obj.getId() == null) {
 
 			insert(obj);
+
+			mdtTeamService.toAuditTwoYearAssess(obj.getTeamId());
 		} else {
 
 			update(obj);

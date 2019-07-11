@@ -295,6 +295,22 @@ public class MdtTeamController extends BaseController {
 		return new ResultInfo();
 	}
 
+	/**
+	 * 审核 MDT团队年度评估
+	 * @param req
+	 * @param rep
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "auditAnnualAssess", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
+	public ResultInfo auditAnnualAssess(HttpServletRequest req, HttpServletResponse rep) {
+
+		Long teamId = Long.parseLong(req.getParameter("teamId"));
+
+		mdtTeamService.auditAnnualAssess(teamId);
+		return new ResultInfo();
+	}
+
 
 	/**
 	 * 保存 团队建设期满2年评估
@@ -328,6 +344,23 @@ public class MdtTeamController extends BaseController {
 
 		MdtTeamAssess obj = mdtTeamAssessService.getTeamAssess(teamId);
 		return new ResultRowInfo(obj);
+	}
+
+
+	/**
+	 * 发起 MDT团队建设期满2年评估
+	 * @param req
+	 * @param rep
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "launchTwoYearAssess", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
+	public ResultInfo launchTwoYearAssess(HttpServletRequest req, HttpServletResponse rep) {
+
+		Long teamId = Long.parseLong(req.getParameter("teamId"));
+
+		mdtTeamService.launchTwoYearAssess(teamId);
+		return new ResultInfo();
 	}
 
 
@@ -480,5 +513,25 @@ public class MdtTeamController extends BaseController {
 
 		Long key = baseKeyService.getKey("mdt_team");
 		return new ResultRowInfo(key);
+	}
+
+
+
+	/**
+	 * 审核 团队建设期满2年评估
+	 * @param req
+	 * @param rep
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "auditTwoYearAssess", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
+	public ResultInfo auditTwoYearAssess(HttpServletRequest req, HttpServletResponse rep) {
+
+
+		Long teamId = Long.parseLong(req.getParameter("teamId"));
+		String result = req.getParameter("result");
+
+		mdtTeamService.auditTwoYearAssess(teamId, result);
+		return new ResultInfo();
 	}
 }

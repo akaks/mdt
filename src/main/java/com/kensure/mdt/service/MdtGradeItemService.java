@@ -4,6 +4,7 @@ package com.kensure.mdt.service;
 import co.kensure.mem.MapUtils;
 import com.kensure.mdt.dao.MdtGradeItemMapper;
 import com.kensure.mdt.entity.MdtGradeItem;
+import com.kensure.mdt.entity.MdtTeam;
 import com.kensure.mdt.entity.bo.MdtGradeReq;
 import com.kensure.mdt.entity.bo.MdtGradeItemReq;
 
@@ -145,5 +146,17 @@ public class MdtGradeItemService {
 		Map<String, Object> parameters = MapUtils.genMap("type", type, "applyId", applyId, "userId", userId);
 
 		deleteByWhere(parameters);
+	}
+
+
+
+	public List<MdtGradeItem> getMdtGradeItem(String type, Long applyId, Long userId) {
+
+		Map<String, Object> parameters = MapUtils.genMap("type", type,
+				"applyId", applyId, "userId", userId, "orderby", "sys_grade_id");
+
+		List<MdtGradeItem> list = selectByWhere(parameters);
+		return list;
+
 	}
 }

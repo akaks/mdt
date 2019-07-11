@@ -6,32 +6,46 @@ $(function(){
         {field:'proposer',title:'申请人',width:100},
         {field:'name',title:'MDT名称',width:200},
         {field:'date',title:'申请日期',width:100},
-        {field:'annualStatus',title:'年度评估状态',width:100,formatter:function(value,row,index) {
-            if (row.annualStatus == '0') {
+        {field:'twoYearStatus',title:'评估状态',width:100,formatter:function(value,row,index) {
+            if (row.twoYearStatus == '0') {
                 return "未发起";
-            } else if (row.annualStatus == '1') {
+            } else if (row.twoYearStatus == '1') {
                 return "已发起";
-            } else if (row.annualStatus == '2') {
+            } else if (row.twoYearStatus == '2') {
                 return "已填写待审核";
-            } else if (row.annualStatus == '3') {
+            } else if (row.twoYearStatus == '3') {
                 return "已审核";
+            } else if (row.twoYearStatus == '4') {
+                return "审核不通过";
             }
             return '';
         }},
         {field:'-',title:'操作',width:500,formatter:function(value,row,index) {
-            var launchBtn = "<a href='#' onclick='launch("+row.id+")'>发起两年度评估</a> ";
+            var launchBtn = "<a href='#' onclick='launch("+row.id+")'>发起年度评估</a> ";
+            var viewBtn = "<a href='#' onclick='view("+row.id+")'>查看</a> ";
             var editBtn = "<a href='#' onclick='edit("+row.id+")'>MDT团队首席专家填写</a> ";
-            var deleBtn = "<a href='#' onclick='dele("+row.id+")'>删除</a> ";
-            var auditBtn = "<a href='#' onclick='auditFun("+row.id+")'>待审核</a> ";
+            var auditBtn = "<a href='#' onclick='auditFun("+row.id+")'>审核</a> ";
+
+            var roleIds = getUser().roleIds;
 
             var btn = '';
-            if (row.annualStatus == '0') {
+
+            if (row.twoYearStatus == '3') {
+                btn += viewBtn;
+            }
+
+            // 医务部主任
+            if (roleIds.indexOf('3') != -1 && row.twoYearStatus == '0') {
                 btn += launchBtn;
             }
-            if (row.annualStatus == '1') {
+
+            // 专家
+            if (roleIds.indexOf('6') != -1 && row.twoYearStatus != '0') {
                 btn += editBtn;
             }
-            if (row.annualStatus == '2') {
+
+            // 医务部主任
+            if (roleIds.indexOf('3') != -1 && row.twoYearStatus == '2') {
                 btn += auditBtn;
             }
 
@@ -57,32 +71,30 @@ $(function(){
 
 });
 
-/**
- * 审核
- */
-function auditFun(id){
 
+function launch(teamId) {
     layer.open({
         type: 2,
-        title: 'MDT团队审核',
+        title: 'MDT团队',
         maxmin: true,
         shadeClose: true, //点击遮罩关闭层
         area : ['80%' , '80%'],
-        content: 'a.html?id=' + id
+        content: 'mdtTeamEdit.html?type=launch2&id=' + teamId
     });
 }
 
-function launch(teamId) {
-    $.ajax({
-        url: baseUrl + '/mdtTeam/launchAnnualAssess?teamId='+teamId,
-        dataType:'json',
-        type:'post',
-        success:function(value){
-            $.messager.alert('提示',value.message);
-            if(value.type == 'success'){
-                doSearch();
-            }
-        }
+
+/**
+ * 编辑
+ */
+function view(id){
+    layer.open({
+        type: 2,
+        title: 'MDT团队建设期满2年评估',
+        maxmin: true,
+        shadeClose: true, //点击遮罩关闭层
+        area : ['80%' , '80%'],
+        content: 'mdtTeamTwoYearAssessEdit.html?type=view&teamId=' + id
     });
 }
 
@@ -92,11 +104,25 @@ function launch(teamId) {
 function edit(id){
     layer.open({
         type: 2,
-        title: 'MDT团队',
+        title: 'MDT团队建设期满2年评估',
         maxmin: true,
         shadeClose: true, //点击遮罩关闭层
         area : ['80%' , '80%'],
-        content: 'mdtTeamTwoYearAssessEdit.html?teamId=' + id
+        content: 'mdtTeamTwoYearAssessEdit.html?type=edit&teamId=' + id
+    });
+}
+
+/**
+ * 审核
+ */
+function auditFun(id){
+    layer.open({
+        type: 2,
+        title: 'MDT团队建设期满2年评估',
+        maxmin: true,
+        shadeClose: true, //点击遮罩关闭层
+        area : ['80%' , '80%'],
+        content: 'mdtTeamTwoYearAssessEdit.html?type=audit&teamId=' + id
     });
 }
 

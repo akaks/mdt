@@ -39,6 +39,15 @@ $(function(){
             $("#audit2").show();
             $("#audit3").show();
         }
+
+        if (type == 'launch') {
+
+            $("#btn5").show();
+        }
+        if (type == 'launch2') {
+
+            $("#btn6").show();
+        }
     }
 
     // 无需审核的情况下，审核状态直接设置为3
@@ -321,4 +330,39 @@ function delTeamInfo(id) {
 
 function doSearch() {
     $('#grid1').datagrid('reload');
+}
+
+
+function launch() {
+    $.ajax({
+        url: baseUrl + '/mdtTeam/launchAnnualAssess?teamId='+$("#id").val(),
+        dataType:'json',
+        type:'post',
+        success:function(value){
+            $.messager.alert('提示',value.message);
+            if(value.type == 'success'){
+                var mylay = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(mylay);
+
+                window.parent.doSearch();
+            }
+        }
+    });
+}
+
+function launch2() {
+    $.ajax({
+        url: baseUrl + '/mdtTeam/launchTwoYearAssess?teamId='+$("#id").val(),
+        dataType:'json',
+        type:'post',
+        success:function(value){
+            $.messager.alert('提示',value.message);
+            if(value.type == 'success'){
+                var mylay = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(mylay);
+
+                window.parent.doSearch();
+            }
+        }
+    });
 }

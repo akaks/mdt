@@ -1,8 +1,10 @@
 var teamId;
+var type;  // 类型 区分 新增、编辑、审核等
 
 $(function(){
 
     teamId = getQueryVariable("teamId");
+    type = getQueryVariable("type");
 
     $("#teamId").val(teamId);
 
@@ -12,6 +14,20 @@ $(function(){
         initGrid1(teamId);
 
         initGrid2(teamId);
+    }
+
+
+    if(type != undefined && type != null){
+        if (type == 'edit') {
+
+            $("#btn1").show();
+        }
+        if (type == 'audit') {
+
+            $("#btn2").show();
+            $("#btn3").show();
+        }
+
     }
 
 });
@@ -184,4 +200,20 @@ function delTeamIssue(id) {
 function doSearch() {
     $('#grid1').datagrid('load');
     $('#grid2').datagrid('load');
+}
+
+function sauditSave(val) {
+
+    $.ajax({
+        url: baseUrl + '/mdtTeam/auditTwoYearAssess?teamId=' + teamId + '&result=' + val,
+        dataType:'json',
+        success:function(value){
+            if(value.type == 'success'){
+                var mylay = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(mylay);
+
+                window.parent.doSearch();
+            }
+        }
+    });
 }

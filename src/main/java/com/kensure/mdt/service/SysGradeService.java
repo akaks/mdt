@@ -86,9 +86,9 @@ public class SysGradeService {
 	}
 
 
-	public List<SysGrade> selectList() {
+	public List<SysGrade> selectList(String type) {
 
-		Map<String, Object> parameters = MapUtils.genMap();
+		Map<String, Object> parameters = MapUtils.genMap("type", type);
 		List<SysGrade> list = selectByWhere(parameters);
 
 		return list;

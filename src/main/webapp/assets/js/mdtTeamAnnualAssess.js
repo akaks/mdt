@@ -20,18 +20,30 @@ $(function(){
         }},
         {field:'-',title:'操作',width:500,formatter:function(value,row,index) {
             var launchBtn = "<a href='#' onclick='launch("+row.id+")'>发起年度评估</a> ";
+            var viewBtn = "<a href='#' onclick='view("+row.id+")'>查看</a> ";
             var editBtn = "<a href='#' onclick='edit("+row.id+")'>MDT团队首席专家填写</a> ";
-            var deleBtn = "<a href='#' onclick='dele("+row.id+")'>删除</a> ";
-            var auditBtn = "<a href='#' onclick='auditFun("+row.id+")'>待审核</a> ";
+            var auditBtn = "<a href='#' onclick='auditFun("+row.id+")'>审核</a> ";
+
+            var roleIds = getUser().roleIds;
 
             var btn = '';
-            if (row.annualStatus == '0') {
+
+            if (row.annualStatus == '3') {
+                btn += viewBtn;
+            }
+
+            // 医务部主任
+            if (roleIds.indexOf('3') != -1 && row.annualStatus == '0') {
                 btn += launchBtn;
             }
-            if (row.annualStatus == '1') {
+
+            // 专家
+            if (roleIds.indexOf('6') != -1 && row.annualStatus != '0') {
                 btn += editBtn;
             }
-            if (row.annualStatus == '2') {
+
+            // 医务部主任
+            if (roleIds.indexOf('3') != -1 && row.annualStatus == '2') {
                 btn += auditBtn;
             }
 
@@ -77,29 +89,42 @@ $(function(){
 /**
  * 审核
  */
-function auditFun(id){
+function auditFun(teamId){
 
     layer.open({
         type: 2,
-        title: 'MDT团队审核',
+        title: '审核',
         maxmin: true,
         shadeClose: true, //点击遮罩关闭层
         area : ['80%' , '80%'],
-        content: 'a.html?id=' + id
+        content: 'mdtTeamAnnualAssessEdit.html?type=audit&teamId=' + teamId
     });
 }
 
 function launch(teamId) {
-    $.ajax({
-        url: baseUrl + '/mdtTeam/launchAnnualAssess?teamId='+teamId,
-        dataType:'json',
-        type:'post',
-        success:function(value){
-            $.messager.alert('提示',value.message);
-            if(value.type == 'success'){
-                doSearch();
-            }
-        }
+
+
+    layer.open({
+        type: 2,
+        title: 'MDT团队',
+        maxmin: true,
+        shadeClose: true, //点击遮罩关闭层
+        area : ['80%' , '80%'],
+        content: 'mdtTeamEdit.html?type=launch&id=' + teamId
+    });
+}
+
+/**
+ * 编辑
+ */
+function view(id){
+    layer.open({
+        type: 2,
+        title: 'MDT团队',
+        maxmin: true,
+        shadeClose: true, //点击遮罩关闭层
+        area : ['80%' , '80%'],
+        content: 'mdtTeamAnnualAssessEdit.html?type=view&teamId=' + id
     });
 }
 
@@ -113,7 +138,7 @@ function edit(id){
         maxmin: true,
         shadeClose: true, //点击遮罩关闭层
         area : ['80%' , '80%'],
-        content: 'mdtTeamAnnualAssessEdit.html?teamId=' + id
+        content: 'mdtTeamAnnualAssessEdit.html?type=edit&teamId=' + id
     });
 }
 

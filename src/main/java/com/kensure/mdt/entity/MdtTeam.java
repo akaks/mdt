@@ -30,6 +30,8 @@ public class MdtTeam implements Serializable{
 
 	private String annualStatus;
 
+	private String twoYearStatus;
+
 	/**审核状态 (0:未审核 1:科主任审核 2:医务部主任审核 3:分管院长审核)*/		
 	private String auditStatus;
 
@@ -109,6 +111,14 @@ public class MdtTeam implements Serializable{
 
 	public void setAnnualStatus(String annualStatus) {
 		this.annualStatus = annualStatus;
+	}
+
+	public String getTwoYearStatus() {
+		return twoYearStatus;
+	}
+
+	public void setTwoYearStatus(String twoYearStatus) {
+		this.twoYearStatus = twoYearStatus;
 	}
 
 	public String getAuditStatus() {

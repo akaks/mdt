@@ -10,7 +10,7 @@
 		sys_grade_id as sysGradeId,
 		grade,
 		min_value as minValue,
-		max_value as maxValue,
+		max_value as 'maxValue',
 		description,
 		create_time as createTime,
 		update_time as updateTime

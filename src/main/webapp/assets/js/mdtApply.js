@@ -35,7 +35,7 @@ $(function(){
             return '';
         }},
 
-        {field:'-',title:'操作',width:500,formatter:function(value,row,index) {
+        {field:'-',title:'操作',width:700,formatter:function(value,row,index) {
             var viewBtn = "<a href='#' onclick='view("+row.id+")'>查看</a> ";
             var editBtn = "<a href='#' onclick='edit("+row.id+")'>修改</a> ";
             var auditBtn = "<a href='#' onclick='auditFun("+row.id+")'>审核</a> ";
@@ -44,6 +44,7 @@ $(function(){
             var informBtn = "<a href='#' onclick='informFun("+row.id+")'>知情同意书</a> ";
             var consultBtn = "<a href='#' onclick='consultFun("+row.id+")'>MDT会诊</a> ";
             var expertGradeBtn = "<a href='#' onclick='expertGradeFun("+row.id+")'>专家打分</a> ";
+            var viewExpertGradeBtn = "<a href='#' onclick='viewExpertGradeFun("+row.id+")'>查看专家打分</a> ";
             var departmentGradeBtn = "<a href='#' onclick='departmentGradeFun("+row.id+")'>组织科室打分</a> ";
             var feedbackBtn = "<a href='#' onclick='feedbackFun("+row.id+")'>反馈</a> ";
             var deleBtn = "<a href='#' onclick='dele("+row.id+")'>删除</a> ";
@@ -94,7 +95,7 @@ $(function(){
                 // 组织科室
                 if (roleIds.indexOf('5') != -1 || roleIds.indexOf('7') != -1) {
 
-                    btn = btn + departmentGradeBtn;
+                    btn = btn + departmentGradeBtn + viewExpertGradeBtn;
                 }
 
                 // 专家
@@ -235,6 +236,19 @@ function expertGradeFun(id) {
         shadeClose: true, //点击遮罩关闭层
         area : ['80%' , '80%'],
         content: 'mdtApplyExpertGrade.html?id=' + id
+    });
+}
+
+// MDT会诊
+function viewExpertGradeFun(id) {
+
+    layer.open({
+        type: 2,
+        title: '专家打分',
+        maxmin: true,
+        shadeClose: true, //点击遮罩关闭层
+        area : ['80%' , '80%'],
+        content: 'mdtApplyViewExpertGrade.html?id=' + id
     });
 }
 

@@ -292,4 +292,61 @@ public class MdtTeamService {
 
 		update(team);
 	}
+
+	/**
+	 * 审核 MDT团队年度评估
+	 * @param teamId
+	 */
+	public void auditAnnualAssess(Long teamId) {
+
+		MdtTeam team = new MdtTeam();
+		team.setId(teamId);
+		team.setAnnualStatus("3");
+
+		update(team);
+	}
+
+	/**
+	 * 发起 MDT团队建设期满2年评估
+	 * @param teamId
+	 */
+	public void launchTwoYearAssess(Long teamId) {
+		MdtTeam team = new MdtTeam();
+		team.setId(teamId);
+		team.setTwoYearStatus("1");
+
+		update(team);
+	}
+
+	/**
+	 * 待审核 MDT团队建设期满2年评估
+	 * @param teamId
+	 */
+	public void toAuditTwoYearAssess(Long teamId) {
+		MdtTeam team = new MdtTeam();
+		team.setId(teamId);
+		team.setTwoYearStatus("2");
+
+		update(team);
+	}
+
+	/**
+	 * 审核 MDT团队建设期满2年评估
+	 * @param teamId
+	 * @param result
+	 */
+	public void auditTwoYearAssess(Long teamId, String result) {
+		MdtTeam team = new MdtTeam();
+		team.setId(teamId);
+
+		if ("1".equals(result)) {
+
+			team.setTwoYearStatus("3");
+		} else if ("0".equals(result)) {
+
+			team.setTwoYearStatus("4");
+		}
+
+		update(team);
+	}
 }

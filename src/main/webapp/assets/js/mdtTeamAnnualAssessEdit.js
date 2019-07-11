@@ -1,14 +1,28 @@
 var teamId;
+var type;  // 类型 区分 新增、编辑、审核等
 
 $(function(){
 
     teamId = getQueryVariable("teamId");
+    type = getQueryVariable("type");
 
     $("#teamId").val(teamId);
 
     if(teamId != undefined && teamId != null){
         initData(teamId);
         initData2(teamId);
+    }
+
+    if(type != undefined && type != null){
+        if (type == 'edit') {
+
+            $("#btn1").show();
+        }
+        if (type == 'audit') {
+
+            $("#btn2").show();
+        }
+
     }
 
     // var user = getUser();
@@ -89,4 +103,21 @@ function setDate(date) {
         $('#m' + i).textbox('setText', month + 1 + "月");
         month++;
     }
+}
+
+function auditSave() {
+
+
+    $.ajax({
+        url: baseUrl + '/mdtTeam/auditAnnualAssess?teamId=' + teamId ,
+        dataType:'json',
+        success:function(value){
+            if(value.type == 'success'){
+                var mylay = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(mylay);
+
+                window.parent.doSearch();
+            }
+        }
+    });
 }

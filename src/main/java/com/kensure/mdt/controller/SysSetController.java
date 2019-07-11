@@ -109,7 +109,10 @@ public class SysSetController  extends BaseController {
     @ResponseBody
     @RequestMapping(value = "selectSysGrade", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
     public ResultInfo selectSysGrade(HttpServletRequest req, HttpServletResponse rep) {
-        List<SysGrade> list = sysGradeService.selectList();
+
+        String type = req.getParameter("type");
+
+        List<SysGrade> list = sysGradeService.selectList(type);
 
         return new ResultRowsInfo(list, list.size());
     }

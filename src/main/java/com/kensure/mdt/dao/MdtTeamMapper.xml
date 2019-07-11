@@ -9,6 +9,7 @@
 		date,
 		standard,
 		annual_status as annualStatus,
+		two_year_status as twoYearStatus,
 		audit_status as auditStatus,
 		audit_result1 as auditResult1,
 		audit_opinion1 as auditOpinion1,
@@ -30,6 +31,7 @@
 		date,
 		standard,
 		annual_status,
+		two_year_status,
 		audit_status,
 		audit_result1,
 		audit_opinion1,
@@ -53,6 +55,7 @@
 			#{date},
 			#{standard},
 			#{annualStatus},
+			#{twoYearStatus},
 			#{auditStatus},
 			#{auditResult1},
 			#{auditOpinion1},
@@ -83,6 +86,9 @@
 		</if>
 		<if test="annualStatus != null">
 			and annual_status = #{annualStatus}
+		</if>
+		<if test="twoYearStatus != null">
+			and two_year_status = #{twoYearStatus}
 		</if>
 		<if test="annualStatusIn != null">
 			annual_status in ( #{annualStatusIn} ) ,
@@ -166,6 +172,9 @@
 		</if>
 		<if test="annualStatus != null">
 			annual_status = #{annualStatus},
+		</if>
+		<if test="twoYearStatus != null">
+			two_year_status = #{twoYearStatus},
 		</if>
 		<if test="auditStatus != null">
 			audit_status = #{auditStatus},
