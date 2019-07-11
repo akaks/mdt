@@ -225,9 +225,19 @@ function initData(id){
                 }
 
                 $("#id2").val(value.resultData.row.id);
+                showLiuCheng(parseInt(value.resultData.row.auditStatus)+1);
             }
         }
     });
+}
+/*
+* 设置流程状态
+*/
+function showLiuCheng(status){
+  var data = [{id:"1001",name:"开始"},{id:"1003",name:"申请人申请"},{id:"1005",name:"科主任审核"},{id:"1100",name:"医务部主任审核"},{id:"1105",name:"分管院长审核"},{id:"1200",name:"结束"}];
+  var obj = new createLiucheng("liucheng",status);
+  obj.data = data;
+  obj.init();
 }
 
 /**
