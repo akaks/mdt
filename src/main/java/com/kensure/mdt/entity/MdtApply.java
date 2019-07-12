@@ -124,6 +124,9 @@ public class MdtApply implements Serializable{
 	private String share;
 
 	/***/
+	private String summary;
+
+	/***/
 	private String isDelete;
 
 	/**创建时间*/
@@ -376,6 +379,14 @@ public class MdtApply implements Serializable{
 
 	public void setShare(String share) {
 		this.share = share;
+	}
+
+	public String getSummary() {
+		return summary;
+	}
+
+	public void setSummary(String summary) {
+		this.summary = summary;
 	}
 
 	public String getIsDelete() {

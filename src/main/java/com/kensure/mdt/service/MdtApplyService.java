@@ -256,4 +256,9 @@ public class MdtApplyService {
 
 		update(apply);
 	}
+
+	public void saveApplySummary(MdtApply obj) {
+
+		update(obj);
+	}
 }

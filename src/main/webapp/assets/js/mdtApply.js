@@ -44,7 +44,8 @@ $(function(){
             var informBtn = "<a href='#' onclick='informFun("+row.id+")'>知情同意书</a> ";
             var consultBtn = "<a href='#' onclick='consultFun("+row.id+")'>MDT会诊</a> ";
             var expertGradeBtn = "<a href='#' onclick='expertGradeFun("+row.id+")'>专家打分</a> ";
-            var viewExpertGradeBtn = "<a href='#' onclick='viewExpertGradeFun("+row.id+")'>查看专家打分</a> ";
+            var viewExpertGradeBtn = "<a href='#' onclick='viewExpertGradeFun("+row.id+")'>查看状态</a> ";
+            var summaryBtn = "<a href='#' onclick='summaryFun("+row.id+")'>申请小结</a> ";
             var departmentGradeBtn = "<a href='#' onclick='departmentGradeFun("+row.id+")'>组织科室打分</a> ";
             var feedbackBtn = "<a href='#' onclick='feedbackFun("+row.id+")'>反馈</a> ";
             var deleBtn = "<a href='#' onclick='dele("+row.id+")'>删除</a> ";
@@ -95,7 +96,7 @@ $(function(){
                 // 组织科室
                 if (roleIds.indexOf('5') != -1 || roleIds.indexOf('7') != -1) {
 
-                    btn = btn + departmentGradeBtn + viewExpertGradeBtn;
+                    btn = btn + departmentGradeBtn + viewExpertGradeBtn + summaryBtn;
                 }
 
                 // 专家
@@ -249,6 +250,19 @@ function viewExpertGradeFun(id) {
         shadeClose: true, //点击遮罩关闭层
         area : ['80%' , '80%'],
         content: 'mdtApplyViewExpertGrade.html?id=' + id
+    });
+}
+
+// 申请小结
+function summaryFun(id) {
+
+    layer.open({
+        type: 2,
+        title: '申请小结',
+        maxmin: true,
+        shadeClose: true, //点击遮罩关闭层
+        area : ['80%' , '80%'],
+        content: 'mdtApplySummary.html?id=' + id
     });
 }
 

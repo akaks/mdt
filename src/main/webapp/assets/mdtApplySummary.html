@@ -13,7 +13,7 @@
 
 	<script type="text/javascript" src="js/common.js"></script>
 	<script type="text/javascript" src="js/form.js"></script>
-	<script type="text/javascript" src="js/mdtApplyViewExpertGrade.js"></script>
+	<script type="text/javascript" src="js/mdtApplySummary.js"></script>
 	<script type="text/javascript">
 
 
@@ -21,36 +21,25 @@
 </head>
 <body>
 
-<table id="grid1"></table>
+	<form id="editForm">
+		<input id="id" name="id" type="hidden">
 
-<table id="table" border="1" cellspacing="0">
-	<tr>
-
-	</tr>
-	<tr>
-		<td style="width: 20%">MDT各专家建议:</td>
-		<td id="tr1" style="width: 80%">
-		<!--	<input id="summary" name="summary" class="easyui-textbox" data-options="multiline:true" style="width:600px;height:300px"/>
-
-			-->
-			<textarea id="summary" rows="10" cols="100"></textarea>
-		</td>
-	</tr>
-	<tr>
-
-	</tr>
-	<tr>
-		<td>申请小结:</td>
-		<td id="tr2">
-			<textarea id="content" rows="10" cols="100"></textarea>
-		<!--	<input name="summary" class="easyui-textbox" data-options="multiline:true" style="width:600px;height:300px"/>
-			-->
-		</td>
-	</tr>
+		<table id="table" border="0" cellspacing="0">
+			<tr>
+				<td>申请小结</td>
+				<td>
+					<input name="summary" class="easyui-textbox" data-options="multiline:true" style="width:600px;height:300px"/>
+				</td>
+			</tr>
 
 
 
-</table>
+		</table>
+
+		<br/><br/>&nbsp;&nbsp;
+		<!--<button id="btnSave" type="button">保存</button>-->
+		<a id="btnSave" onclick="save()" class="easyui-linkbutton">保存</a>
+	</form>
 
 </body>
 </html>

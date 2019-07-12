@@ -36,6 +36,7 @@
 		audit_person2 as auditPerson2,
 		audit_time2 as auditTime2,
 		share as share,
+		summary,
 		create_userid as createUserid,
 		create_dept as createDept,
 		is_delete as isDelete,
@@ -77,6 +78,7 @@
 		audit_person2,
 		audit_time2,
 		share,
+		summary,
 		create_userid,
 		create_dept,
 		is_delete,
@@ -120,6 +122,7 @@
 			#{auditPerson2},
 			#{auditTime2},
 			#{share},
+			#{summary},
 			#{createUserid},
 			#{createDept},
 			#{isDelete},
@@ -370,6 +373,9 @@
 		</if>
 		<if test="share != null">
 			share = #{share},
+		</if>
+		<if test="summary != null">
+			summary = #{summary},
 		</if>
 		<if test="createUserid != null">
 			create_userid = #{createUserid},

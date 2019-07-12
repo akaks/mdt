@@ -47,6 +47,9 @@ public class MdtApplyController extends BaseController {
 	private MdtApplyFeedbackService mdtApplyFeedbackService;
 
 	@Autowired
+	private MdtApplyOpinionService mdtApplyOpinionService;
+
+	@Autowired
 	private BaseKeyService baseKeyService;
 
 	/**
@@ -373,6 +376,78 @@ public class MdtApplyController extends BaseController {
 
 		Long key = baseKeyService.getKey("mdt_apply");
 		return new ResultRowInfo(key);
+	}
+
+	/**
+	 * 保存专家意见
+	 * @param req
+	 * @param rep
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "saveApplyOpinion", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
+	public ResultInfo saveApplyOpinion(HttpServletRequest req, HttpServletResponse rep) {
+
+		JSONObject json = RequestUtils.paramToJson(req);
+		MdtApplyOpinion obj = JSONObject.parseObject(json.toJSONString(), MdtApplyOpinion.class);
+
+		mdtApplyOpinionService.save(obj);
+
+		return new ResultInfo();
+	}
+
+	/**
+	 * 查看专家意见
+	 * @param req
+	 * @param rep
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "getApplyOpinion", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
+	public ResultInfo getApplyOpinion(HttpServletRequest req, HttpServletResponse rep) {
+
+		Long applyId = Long.parseLong(req.getParameter("applyId"));
+		Long userId = Long.parseLong(req.getParameter("userId"));
+
+		MdtApplyOpinion obj = mdtApplyOpinionService.getApplyOpinion(applyId, userId);
+
+		return new ResultRowInfo(obj);
+	}
+
+	/**
+	 * 查询专家意见
+	 * @param req
+	 * @param rep
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "getAllApplyOpinion", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
+	public ResultInfo getAllApplyOpinion(HttpServletRequest req, HttpServletResponse rep) {
+
+		Long applyId = Long.parseLong(req.getParameter("applyId"));
+
+		List<MdtApplyOpinion> obj = mdtApplyOpinionService.getApplyOpinion(applyId);
+
+		return new ResultRowsInfo(obj);
+	}
+
+
+	/**
+	 * 保存申请小结
+	 * @param req
+	 * @param rep
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "saveApplySummary", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
+	public ResultInfo saveApplySummary(HttpServletRequest req, HttpServletResponse rep) {
+
+		JSONObject json = RequestUtils.paramToJson(req);
+		MdtApply obj = JSONObject.parseObject(json.toJSONString(), MdtApply.class);
+
+		mdtApplyService.saveApplySummary(obj);
+
+		return new ResultInfo();
 	}
 
 
