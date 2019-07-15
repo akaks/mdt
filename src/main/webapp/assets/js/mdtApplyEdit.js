@@ -10,11 +10,11 @@ $(function(){
         initData(id);
 
         initGrid1(id);
-
-        getMdtPurpose();
     } else {
 
         getMdtApplyKey();
+
+        getMdtPurpose();
     }
 
 
@@ -251,6 +251,12 @@ function initData(id){
                         $("#audit4").show();
                     }
                     $("#btn4").show();
+                }
+
+                if (type == 'edit') {
+                    if (data.applyStatus == '9') {
+                        $("#btn2").show();
+                    }
                 }
 
                 $("#id").val(data.id);

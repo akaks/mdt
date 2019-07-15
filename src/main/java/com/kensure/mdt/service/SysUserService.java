@@ -9,10 +9,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -31,7 +28,13 @@ public class SysUserService {
 	private SysUserRoleService sysUserRoleService;
 
 	@Resource
+	private SysRoleMenuService sysRoleMenuService;
+
+	@Resource
 	private SysRoleService sysrRoleService;
+
+	@Resource
+	private SysMenuService sysMenuService;
 
     public SysUser selectOne(Long id){
     	return dao.selectOne(id);
@@ -189,5 +192,64 @@ public class SysUserService {
 
         return user;
 
+    }
+
+    /**
+     * 获取用户的菜单Tree
+     * @param user
+     * @return
+     */
+    public SysMenu getTree(AuthUser user) {
+
+		List<Long> roleIds = sysUserRoleService.getRoleIdByUserId(user.getId());
+
+		Set<Long> menus = new HashSet<>();
+
+		for (Long roleId : roleIds) {
+
+            List<Long> menuIdByRoleId = sysRoleMenuService.getMenuIdByRoleId(roleId);
+            for (Long aLong : menuIdByRoleId) {
+                menus.add(aLong);
+            }
+        }
+
+		SysMenu sysMenu = sysMenuService.selectOne(0L);
+
+		List<SysMenu> menuList = sysMenuService.getSysMenuByPid(sysMenu.getId());
+
+//        List<SysMenu> menus1 = new ArrayList<>();
+//        for (SysMenu menu : menuList) {
+//
+////            if (menus.contains(menu.getId())) {
+//                menus1.add(menu);
+////            }
+//        }
+
+		for (SysMenu menu : menuList) {
+			List<SysMenu> menuList2 = sysMenuService.getSysMenuByPid(menu.getId());
+
+            List<SysMenu> menus2 = new ArrayList<>();
+            for (SysMenu men : menuList2) {
+
+                if (menus.contains(men.getId())) {
+                    menus2.add(men);
+                }
+            }
+
+            menu.setMenus(menus2);
+		}
+
+        Iterator<SysMenu> it = menuList.iterator();
+        while (it.hasNext()) {
+            SysMenu x = it.next();
+            if (x.getMenus() == null || x.getMenus().isEmpty()) {
+                it.remove();
+            }
+        }
+
+
+        sysMenu.setMenus(menuList);
+
+		return sysMenu;
     }
 }

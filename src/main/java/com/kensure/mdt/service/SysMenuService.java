@@ -87,7 +87,7 @@ public class SysMenuService {
         return sysMenu;
 	}
 
-	private List<SysMenu> getSysMenuByPid(Long pid) {
+	public List<SysMenu> getSysMenuByPid(Long pid) {
 
 		Map<String, Object> parameters = MapUtils.genMap("pid", pid);
 

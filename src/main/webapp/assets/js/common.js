@@ -12,7 +12,7 @@ function getQueryVariable(variable) {
         var pair = vars[i].split("=");
         if(pair[0] == variable){return pair[1];}
     }
-    return(false);
+    return null;
 }
 
 function getUser() {
@@ -43,4 +43,15 @@ function getUser() {
     });
 
     return user;
+}
+
+function layerOpen(title, content) {
+    layer.open({
+        type: 2,
+        title: title,
+        maxmin: true,
+        shadeClose: true, //点击遮罩关闭层
+        area : ['80%' , '80%'],
+        content: content
+    });
 }

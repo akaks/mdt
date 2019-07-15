@@ -232,6 +232,11 @@ function initData(id){
                     }
                     $("#btn4").show();
                 }
+                if (type == 'edit') {
+                    if ($("#auditStatus").val() == '9') {
+                        $("#btn2").show();
+                    }
+                }
 
                 $("#id2").val(value.resultData.row.id);
                 showLiuCheng(parseInt(value.resultData.row.auditStatus)+1);

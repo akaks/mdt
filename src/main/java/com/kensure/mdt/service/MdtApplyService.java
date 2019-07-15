@@ -13,16 +13,12 @@ import co.kensure.mem.MapUtils;
 import co.kensure.mem.PageInfo;
 import com.kensure.mdt.dao.MdtApplyMapper;
 import com.kensure.mdt.entity.*;
-import com.kensure.mdt.entity.query.MdtTeamQuery;
-import com.kensure.mdt.service.MdtApplyService;
-
-import java.text.SimpleDateFormat;
-import java.util.*;
-
-import javax.annotation.Resource;
-
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 
 /**
@@ -102,7 +98,9 @@ public class MdtApplyService {
 
         if (obj == null) {
 
-			apply.setApplyStatus("0");  // "申请人申请" 状态
+        	if (apply.getApplyStatus() == null) {
+				apply.setApplyStatus("0");  // "申请人申请" 状态
+			}
 			apply.setShare("0");  // "分享" 状态
 			apply.setIsDelete("0");
 
@@ -260,5 +258,32 @@ public class MdtApplyService {
 	public void saveApplySummary(MdtApply obj) {
 
 		update(obj);
+	}
+
+
+
+	/**
+	 * 代办审核的
+	 * @return
+	 */
+	public List<MdtApply> doSth(AuthUser user) {
+
+		Map<String, Object> parameters = MapUtils.genMap();
+
+		String applyStatus = "";
+
+		if (user.getRoleIds().contains("5")) {
+			applyStatus = "1";
+		} else if (user.getRoleIds().contains("3")) {
+			applyStatus = "2";
+		} else if (user.getRoleIds().contains("7")) {
+			applyStatus = "9";
+		}
+
+		parameters.put("applyStatus", applyStatus);
+		parameters.put("isDelete", "0");
+
+		List<MdtApply> list = selectByWhere(parameters);
+		return list;
 	}
 }

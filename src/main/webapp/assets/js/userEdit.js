@@ -76,6 +76,8 @@ function intDepartment() {
                 text = "----" + text;
             } else if (value.length == 4) {
                 text = "--------" + text;
+            } else if (value.length == 6) {
+                text = "------------" + text;
             }
             return text;
         },

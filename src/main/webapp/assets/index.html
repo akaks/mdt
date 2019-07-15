@@ -9,6 +9,8 @@
     <script type="text/javascript" src="ui17/jquery.easyui.min.js"></script>
     <script type="text/javascript" src="ui17/locale/easyui-lang-zh_CN.js"></script>
 
+    <script src="layer/layer.js"></script>
+
     <script src="http://echarts.baidu.com/build/dist/echarts.js"></script>
 
     <link href="css/default.css" rel="stylesheet" type="text/css" />
@@ -20,124 +22,124 @@
 	<script type="text/javascript" src='adminjs/index.js'> </script>
 
     <script type="text/javascript">
-        // 路径配置
-        require.config({
-            paths: {
-                echarts: 'http://echarts.baidu.com/build/dist'
-            }
-        });
-
-        // 使用
-        require(
-            [
-                'echarts',
-                'echarts/chart/bar', // 使用柱状图就加载bar模块，按需加载
-                'echarts/chart/pie'
-            ],
-            function (ec) {
-                // 基于准备好的dom，初始化echarts图表
-                var myChart = ec.init(document.getElementById('main'));
-
-                var option = {
-                    tooltip: {
-                        show: true
-                    },
-                    legend: {
-                        data:['人数']
-                    },
-                    xAxis : [
-                        {
-                            type : 'category',
-                            data : ["医务部未审核","医务部审核未通过","医务部审核已通过"]
-                        }
-                    ],
-                    yAxis : [
-                        {
-                            type : 'value'
-                        }
-                    ],
-                    series : [
-                        {
-                            "name":"销量",
-                            "type":"bar",
-                            "data":[5, 6, 10],
-                            "barWidth" : 30
-                        }
-                    ]
-                };
-
-                // 为echarts对象加载数据
-                myChart.setOption(option);
-
-                // 基于准备好的dom，初始化echarts图表
-                var myChart2 = ec.init(document.getElementById('main2'));
-
-                var data =  {
-                    "legendData":[
-                        "医务部未审核",
-                        "医务部审核未通过",
-                        "医务部审核已通过"
-                    ],
-                    "seriesData":[
-                        {
-                            "name":"医务部未审核",
-                            "value":5
-                        },
-                        {
-                            "name":"医务部审核未通过",
-                            "value":6
-                        },
-                        {
-                            "name":"医务部审核已通过",
-                            "value":10
-                        }
-                    ],
-                    "selected":{
-                    }
-                }
-
-                var option = {
-                    title : {
-                        text: '',
-                        subtext: '',
-                        x:'center'
-                    },
-                    tooltip : {
-                        trigger: 'item',
-                        formatter: "{a} <br/>{b} : {c} ({d}%)"
-                    },
-                    legend: {
-                        type: 'scroll',
-                        orient: 'vertical',
-                        right: 10,
-                        top: 20,
-                        bottom: 20,
-                        data: data.legendData,
-
-                        selected: data.selected
-                    },
-                    series : [
-                        {
-                            name: '姓名',
-                            type: 'pie',
-                            radius : '55%',
-                            center: ['40%', '50%'],
-                            data: data.seriesData,
-                            itemStyle: {
-                                emphasis: {
-                                    shadowBlur: 10,
-                                    shadowOffsetX: 0,
-                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
-                                }
-                            }
-                        }
-                    ]
-                };
-
-                // 为echarts对象加载数据
-                myChart2.setOption(option);
-            }
-        );
+//        // 路径配置
+//        require.config({
+//            paths: {
+//                echarts: 'http://echarts.baidu.com/build/dist'
+//            }
+//        });
+//
+//        // 使用
+//        require(
+//            [
+//                'echarts',
+//                'echarts/chart/bar', // 使用柱状图就加载bar模块，按需加载
+//                'echarts/chart/pie'
+//            ],
+//            function (ec) {
+//                // 基于准备好的dom，初始化echarts图表
+//                var myChart = ec.init(document.getElementById('main'));
+//
+//                var option = {
+//                    tooltip: {
+//                        show: true
+//                    },
+//                    legend: {
+//                        data:['人数']
+//                    },
+//                    xAxis : [
+//                        {
+//                            type : 'category',
+//                            data : ["医务部未审核","医务部审核未通过","医务部审核已通过"]
+//                        }
+//                    ],
+//                    yAxis : [
+//                        {
+//                            type : 'value'
+//                        }
+//                    ],
+//                    series : [
+//                        {
+//                            "name":"销量",
+//                            "type":"bar",
+//                            "data":[5, 6, 10],
+//                            "barWidth" : 30
+//                        }
+//                    ]
+//                };
+//
+//                // 为echarts对象加载数据
+//                myChart.setOption(option);
+//
+//                // 基于准备好的dom，初始化echarts图表
+//                var myChart2 = ec.init(document.getElementById('main2'));
+//
+//                var data =  {
+//                    "legendData":[
+//                        "医务部未审核",
+//                        "医务部审核未通过",
+//                        "医务部审核已通过"
+//                    ],
+//                    "seriesData":[
+//                        {
+//                            "name":"医务部未审核",
+//                            "value":5
+//                        },
+//                        {
+//                            "name":"医务部审核未通过",
+//                            "value":6
+//                        },
+//                        {
+//                            "name":"医务部审核已通过",
+//                            "value":10
+//                        }
+//                    ],
+//                    "selected":{
+//                    }
+//                }
+//
+//                var option = {
+//                    title : {
+//                        text: '',
+//                        subtext: '',
+//                        x:'center'
+//                    },
+//                    tooltip : {
+//                        trigger: 'item',
+//                        formatter: "{a} <br/>{b} : {c} ({d}%)"
+//                    },
+//                    legend: {
+//                        type: 'scroll',
+//                        orient: 'vertical',
+//                        right: 10,
+//                        top: 20,
+//                        bottom: 20,
+//                        data: data.legendData,
+//
+//                        selected: data.selected
+//                    },
+//                    series : [
+//                        {
+//                            name: '姓名',
+//                            type: 'pie',
+//                            radius : '55%',
+//                            center: ['40%', '50%'],
+//                            data: data.seriesData,
+//                            itemStyle: {
+//                                emphasis: {
+//                                    shadowBlur: 10,
+//                                    shadowOffsetX: 0,
+//                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+//                                }
+//                            }
+//                        }
+//                    ]
+//                };
+//
+//                // 为echarts对象加载数据
+//                myChart2.setOption(option);
+//            }
+//        );
 
     </script>
 
@@ -176,7 +178,9 @@
                 <h1 style="font-size:24px;"></h1>
                 <h1 style="font-size:24px;"></h1>
 				<h1 style="font-size:24px;"></h1>-->
-                <table id="grid1"></table>
+
+                <table id="grid"></table>
+                <!--<table id="grid1"></table>
                 <br/><br/><br/>
                 <table id="grid2"></table>
                 <br/><br/><br/>
@@ -185,7 +189,7 @@
                 <div id="main" style="height:400px; float: left; width: 49%"></div>
                 <br/><br/><br/>
                 <div id="main2" style="height:400px; float: left; width: 49%"></div>
-                <br/><br/><br/>
+                <br/><br/><br/>-->
 			</div>
 		</div>
     </div>

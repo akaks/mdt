@@ -22,7 +22,7 @@ $(function(){
         {field:'diagnoseDate',title:'入院/首诊时间',width:120},
         {field:'mdtDate',title:'MDT时间',width:120},
         {field:'mdtLocation',title:'MDT地点',width:150},
-        {field:'applyStatus',title:'申请人状态',width:150,formatter:function(value,row,index) {
+        {field:'applyStatus',title:'申请状态',width:150,formatter:function(value,row,index) {
             if (row.applyStatus == '0') {
                 return "未提交";
             } else if (row.applyStatus == '1') {
@@ -31,6 +31,8 @@ $(function(){
                 return "科主任已审核";
             } else if (row.applyStatus == '3') {
                 return "医务部主任已审核";
+            } else if (row.applyStatus == '9') {
+                return "审核不通过";
             }
             return '';
         }},

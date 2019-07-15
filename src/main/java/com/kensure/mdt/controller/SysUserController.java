@@ -6,6 +6,7 @@ import co.kensure.frame.ResultRowsInfo;
 import co.kensure.http.RequestUtils;
 import co.kensure.mem.PageInfo;
 import com.alibaba.fastjson.JSONObject;
+import com.kensure.mdt.entity.SysMenu;
 import com.kensure.mdt.entity.SysUser;
 import com.kensure.mdt.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,4 +72,18 @@ public class SysUserController  extends BaseController {
         return new ResultRowInfo(user);
 	}
 
+
+	/**
+	 * 首页菜单
+	 */
+	@ResponseBody
+	@RequestMapping(value = "indexMenus", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
+	public ResultInfo indexMenus(HttpServletRequest req, HttpServletResponse rep) {
+
+
+		SysMenu sysMenu = sysUserService.getTree(getCurrentUser(req));
+
+
+		return new ResultRowInfo(sysMenu);
+	}
 }

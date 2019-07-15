@@ -5,7 +5,6 @@ import co.kensure.mem.PageInfo;
 import com.kensure.mdt.dao.MdtTeamMapper;
 import com.kensure.mdt.entity.AuthUser;
 import com.kensure.mdt.entity.MdtTeam;
-import com.kensure.mdt.entity.MdtTeamInfo;
 import com.kensure.mdt.entity.MdtTeamObjective;
 import com.kensure.mdt.entity.query.MdtTeamQuery;
 import org.apache.commons.lang.StringUtils;
@@ -348,5 +347,74 @@ public class MdtTeamService {
 		}
 
 		update(team);
+	}
+
+	/**
+	 * 代办审核的
+	 * @return
+	 */
+	public List<MdtTeam> doSth(AuthUser user) {
+
+		Map<String, Object> parameters = MapUtils.genMap();
+
+		String auditStatus = "";
+
+		if (user.getRoleIds().contains("5")) {
+			auditStatus = "1";
+		} else if (user.getRoleIds().contains("3")) {
+			auditStatus = "2";
+		} else if (user.getRoleIds().contains("2")) {
+			auditStatus = "3";
+		} else if (user.getRoleIds().contains("7")) {
+			auditStatus = "9";
+		}
+
+		parameters.put("auditStatus", auditStatus);
+		parameters.put("isDelete", "0");
+
+		List<MdtTeam> list = selectByWhere(parameters);
+		return list;
+	}
+
+	/**
+	 * 团队年度 代办审核的
+	 * @return
+	 */
+	public List<MdtTeam> doSth2(AuthUser user) {
+
+		Map<String, Object> parameters = MapUtils.genMap();
+
+		String annualStatus = "";
+
+		if (user.getRoleIds().contains("3")) {
+			annualStatus = "2";
+		}
+
+		parameters.put("annualStatus", annualStatus);
+		parameters.put("isDelete", "0");
+
+		List<MdtTeam> list = selectByWhere(parameters);
+		return list;
+	}
+
+	/**
+	 * 团队两年度 代办审核的
+	 * @return
+	 */
+	public List<MdtTeam> doSth3(AuthUser user) {
+
+		Map<String, Object> parameters = MapUtils.genMap();
+
+		String twoYearStatus = "";
+
+		if (user.getRoleIds().contains("3")) {
+			twoYearStatus = "2";
+		}
+
+		parameters.put("twoYearStatus", twoYearStatus);
+		parameters.put("isDelete", "0");
+
+		List<MdtTeam> list = selectByWhere(parameters);
+		return list;
 	}
 }
