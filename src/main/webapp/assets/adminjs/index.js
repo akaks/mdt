@@ -530,7 +530,7 @@ function initGrid() {
 
     var columns=[[
 		/*{field:'id',title:'编号',width:100},*/
-        {field:'type',title:'类型',width:300,formatter:function(value,row,index) {
+        {field:'type',title:'类型',width:100,formatter:function(value,row,index) {
             if (row.type == '1') {
                 return "MDT团队";
             } else if (row.type == '2') {
@@ -542,6 +542,8 @@ function initGrid() {
             }
             return "-";
         }},
+        {field:'applyDate',title:'申请时间',width:150},
+        {field:'applyPerson',title:'申请人',width:100},
         {field:'content',title:'内容',width:300},
         {field:'-',title:'操作',width:100,formatter:function(value,row,index) {
             var editBtn = "<a href='#' onclick='edit("+row.type+", "+row.id+")'>处理</a> ";

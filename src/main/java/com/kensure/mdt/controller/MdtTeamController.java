@@ -239,7 +239,7 @@ public class MdtTeamController extends BaseController {
 		JSONObject json = RequestUtils.paramToJson(req);
 		MdtTeamObjective teamObjective = JSONObject.parseObject(json.toJSONString(), MdtTeamObjective.class);
 
-		mdtTeamObjectiveService.save(teamObjective);
+		mdtTeamObjectiveService.save(teamObjective, getCurrentUser(req));
 		return new ResultInfo();
 	}
 
@@ -326,7 +326,7 @@ public class MdtTeamController extends BaseController {
 		JSONObject json = RequestUtils.paramToJson(req);
 		MdtTeamAssess obj = JSONObject.parseObject(json.toJSONString(), MdtTeamAssess.class);
 
-		mdtTeamAssessService.save(obj);
+		mdtTeamAssessService.save(obj, getCurrentUser(req));
 		return new ResultRowInfo(obj);
 	}
 

@@ -104,7 +104,7 @@ public class MdtTeamService {
 			mdtTeamObjective.setId(null);
 			mdtTeamObjective.setTeamId(team.getId());
             mdtTeamObjective.setFlag("1");  // 第一年
-			mdtTeamObjectiveService.save(mdtTeamObjective);
+			mdtTeamObjectiveService.save(mdtTeamObjective, user);
 
 		}
 		// 修改
@@ -117,7 +117,7 @@ public class MdtTeamService {
 
             mdtTeamObjective.setId(objective.getId());
             mdtTeamObjective.setTeamId(team.getId());
-            mdtTeamObjectiveService.save(mdtTeamObjective);
+            mdtTeamObjectiveService.save(mdtTeamObjective, user);
 		}
 	}
 

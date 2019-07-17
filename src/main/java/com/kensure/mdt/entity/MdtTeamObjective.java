@@ -1,7 +1,5 @@
 package com.kensure.mdt.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import java.io.Serializable;
 import java.util.Date;
 
@@ -70,7 +68,13 @@ public class MdtTeamObjective implements Serializable{
 	private Long month11; 
 
 	/**月度目标指标12*/		
-	private Long month12; 
+	private Long month12;
+
+	/***/
+	private Long createUserid;
+
+	/***/
+	private String createDept;
 
 	/**创建时间*/		
 	private Date createTime; 
@@ -223,6 +227,22 @@ public class MdtTeamObjective implements Serializable{
 	}
 	public Date getCreateTime() {
 		return createTime;
+	}
+
+	public Long getCreateUserid() {
+		return createUserid;
+	}
+
+	public void setCreateUserid(Long createUserid) {
+		this.createUserid = createUserid;
+	}
+
+	public String getCreateDept() {
+		return createDept;
+	}
+
+	public void setCreateDept(String createDept) {
+		this.createDept = createDept;
 	}
 
 	public void setCreateTime(Date createTime) {

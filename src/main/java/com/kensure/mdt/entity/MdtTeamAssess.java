@@ -1,7 +1,5 @@
 package com.kensure.mdt.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import java.io.Serializable;
 import java.util.Date;
 
@@ -49,7 +47,13 @@ public class MdtTeamAssess implements Serializable{
 	private Long assistantMajorNum; 
 
 	/**主任医生数量*/		
-	private Long directorNum; 
+	private Long directorNum;
+
+	/***/
+	private Long createUserid;
+
+	/***/
+	private String createDept;
 
 	/**创建时间*/		
 	private Date createTime; 
@@ -149,6 +153,23 @@ public class MdtTeamAssess implements Serializable{
 	public void setDirectorNum(Long directorNum) {
 		this.directorNum = directorNum;
 	}
+
+	public Long getCreateUserid() {
+		return createUserid;
+	}
+
+	public void setCreateUserid(Long createUserid) {
+		this.createUserid = createUserid;
+	}
+
+	public String getCreateDept() {
+		return createDept;
+	}
+
+	public void setCreateDept(String createDept) {
+		this.createDept = createDept;
+	}
+
 	public Date getCreateTime() {
 		return createTime;
 	}

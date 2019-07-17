@@ -23,6 +23,8 @@
 		month10,
 		month11,
 		month12,
+		create_userid as createUserid,
+		create_dept as createDept,
 		create_time as createTime,
 		update_time as updateTime
     </sql>
@@ -48,6 +50,8 @@
 		month10,
 		month11,
 		month12,
+		create_userid,
+		create_dept,
 		create_time,
 		update_time
     </sql>
@@ -75,6 +79,8 @@
 			#{month10},
 			#{month11},
 			#{month12},
+			#{createUserid},
+			#{createDept},
 			#{createTime},
 			#{updateTime}
 		)

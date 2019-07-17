@@ -3,20 +3,16 @@ package com.kensure.mdt.service;
 
 import co.kensure.mem.MapUtils;
 import com.kensure.mdt.dao.MdtTeamObjectiveMapper;
-import com.kensure.mdt.entity.MdtApply;
-import com.kensure.mdt.entity.MdtTeam;
+import com.kensure.mdt.entity.AuthUser;
 import com.kensure.mdt.entity.MdtTeamObjective;
-import com.kensure.mdt.service.MdtTeamObjectiveService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 
 /**
@@ -79,10 +75,12 @@ public class MdtTeamObjectiveService {
 	}
 
 	@Transactional
-	public void save(MdtTeamObjective teamObjective) {
+	public void save(MdtTeamObjective teamObjective, AuthUser user) {
 
 		if (teamObjective.getId() == null) {
 
+			teamObjective.setCreateUserid(user.getId());
+			teamObjective.setCreateDept(user.getDepartment());
 			insert(teamObjective);
 
 			mdtTeamService.toAuditAnnualAssess(teamObjective.getTeamId());

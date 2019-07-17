@@ -8,6 +8,8 @@
 		name,
 		research_date as researchDate,
 		project_fund as projectFund,
+		create_userid as createUserid,
+		create_dept as createDept,
 		create_time as createTime,
 		update_time as updateTime
     </sql>
@@ -18,6 +20,8 @@
 		name,
 		research_date,
 		project_fund,
+		create_userid,
+		create_dept,
 		create_time,
 		update_time
     </sql>

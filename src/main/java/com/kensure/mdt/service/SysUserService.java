@@ -252,4 +252,14 @@ public class SysUserService {
 
 		return sysMenu;
     }
+
+    public String getUsername(Long id) {
+
+        SysUser sysUser = selectOne(id);
+        if (sysUser != null) {
+            return sysUser.getName();
+        }
+
+        return "";
+    }
 }

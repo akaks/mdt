@@ -1,8 +1,6 @@
 package com.kensure.mdt.service;
 
-import com.kensure.mdt.entity.AuthUser;
-import com.kensure.mdt.entity.MdtApply;
-import com.kensure.mdt.entity.MdtTeam;
+import com.kensure.mdt.entity.*;
 import com.kensure.mdt.entity.resp.ToSthResp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +16,15 @@ public class IndexService {
 
 	@Autowired
 	private MdtApplyService mdtApplyService;
+
+	@Autowired
+	private SysUserService sysUserService;
+
+	@Autowired
+	private MdtTeamObjectiveService mdtTeamObjectiveService;
+
+	@Autowired
+	private MdtTeamAssessService mdtTeamAssessService;
 
     /**
      * 代办
@@ -46,6 +53,8 @@ public class IndexService {
 
                 content = "MDT团队申请 待审核：" + mdtTeam.getName();
             }
+            bean.setApplyPerson(sysUserService.getUsername(mdtTeam.getCreateUserid()));
+            bean.setApplyDate(mdtTeam.getCreateTime());
             bean.setContent(content);
 
             list.add(bean);
@@ -62,11 +71,13 @@ public class IndexService {
             String content = "";
             if ("9".equals(mdtApply.getApplyStatus())) {
 
-                content = "MDT申请 审核不通过：" + mdtApply.getApplyStatus();
+                content = "MDT申请 审核不通过：" + mdtApply.getName();
             } else {
 
-                content = "MDT申请 待审核：" + mdtApply.getApplyStatus();
+                content = "MDT申请 待审核：" + mdtApply.getName();
             }
+            bean.setApplyPerson(sysUserService.getUsername(mdtApply.getCreateUserid()));
+            bean.setApplyDate(mdtApply.getCreateTime());
             bean.setContent(content);
 
             list.add(bean);
@@ -87,6 +98,14 @@ public class IndexService {
 
                 content = "MDT团队年度评估 待审核：" + mdtTeam.getName();
             }
+
+            MdtTeamObjective teamObjective = mdtTeamObjectiveService.getTeamObjective(mdtTeam.getId());
+            if (teamObjective == null) {
+
+                bean.setApplyPerson(sysUserService.getUsername(teamObjective.getCreateUserid()));
+                bean.setApplyDate(teamObjective.getCreateTime());
+            }
+
             bean.setContent(content);
 
             list.add(bean);
@@ -106,6 +125,14 @@ public class IndexService {
 
                 content = "MDT团队满两年评估 待审核：" + mdtTeam.getName();
             }
+
+            MdtTeamAssess teamAssess = mdtTeamAssessService.getTeamAssess(mdtTeam.getId());
+            if (teamAssess == null) {
+
+                bean.setApplyPerson(sysUserService.getUsername(teamAssess.getCreateUserid()));
+                bean.setApplyDate(teamAssess.getCreateTime());
+            }
+
             bean.setContent(content);
 
             list.add(bean);

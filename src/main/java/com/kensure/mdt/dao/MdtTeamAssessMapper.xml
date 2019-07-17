@@ -54,6 +54,8 @@
 			#{majorNum},
 			#{assistantMajorNum},
 			#{directorNum},
+			#{createUserid},
+			#{createDept},
 			#{createTime},
 			#{updateTime}
 		)
