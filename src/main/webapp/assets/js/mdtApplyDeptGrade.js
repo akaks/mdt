@@ -24,8 +24,8 @@ function initGrid1(applyId) {
         {field:'phone',title:'手机长号',width:100},
         {field:'phoneCornet',title:'手机短号',width:100},
         {field:'-',title:'操作',width:100,formatter:function(value,row,index) {
-            return "<a href='#' onclick='grade("+row.id+", "+row.userId+")'>打分</a> " +
-                "<a href='#' onclick='opinion("+row.userId+")'>专家意见</a>";
+            return "<a href='#' onclick='grade("+row.userId+")'>打分</a> " ;
+              //   "<a href='#' onclick='opinion("+row.userId+")'>专家意见</a>";
         }}
     ]];
 
@@ -58,7 +58,7 @@ function initData(id){
     });
 }
 
-function grade(id, userId) {
+function grade(userId) {
 
     layer.open({
         type: 2,

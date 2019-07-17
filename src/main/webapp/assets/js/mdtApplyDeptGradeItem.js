@@ -8,6 +8,8 @@ $(function(){
     userId = getQueryVariable("userId");
     if(id != undefined && id != null){
         initData(id);
+        initData2();
+
 
         $("#applyId").val(id)
         $("#userId").val(userId)
@@ -27,6 +29,22 @@ function initData(id){
         type:'post',
         success:function(value){
             if(value.type == 'success'){
+                // $('#editForm').form('load', value.resultData.row);
+            }
+        }
+    });
+}
+
+
+function initData2() {
+
+    $.ajax({
+        url: baseUrl + '/mdtApply/getApplyOpinion?applyId=' + id + '&userId=' + userId,
+        data:{},
+        dataType:'json',
+        type:'post',
+        success:function(value){
+            if(value.type == 'success') {
                 $('#editForm').form('load', value.resultData.row);
             }
         }

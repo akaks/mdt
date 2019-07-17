@@ -19,10 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * MDT申请
@@ -277,6 +274,11 @@ public class MdtApplyController extends BaseController {
 	public ResultInfo saveDeptGrade(HttpServletRequest req, HttpServletResponse rep, MdtGradeReq mdtGradeReq) {
 
 		mdtGradeItemService.saveDeptGrade(mdtGradeReq);
+
+		JSONObject json = RequestUtils.paramToJson(req);
+		MdtApplyOpinion obj = JSONObject.parseObject(json.toJSONString(), MdtApplyOpinion.class);
+
+		mdtApplyOpinionService.save(obj);
 
         return new ResultInfo();
 	}

@@ -46,7 +46,7 @@ $(function(){
             var informBtn = "<a href='#' onclick='informFun("+row.id+")'>知情同意书</a> ";
             var consultBtn = "<a href='#' onclick='consultFun("+row.id+")'>MDT会诊</a> ";
             var expertGradeBtn = "<a href='#' onclick='expertGradeFun("+row.id+")'>专家打分</a> ";
-            var viewExpertGradeBtn = "<a href='#' onclick='viewExpertGradeFun("+row.id+")'>查看状态</a> ";
+            var viewExpertGradeBtn = "<a href='#' onclick='viewExpertGradeFun("+row.id+")'>概述</a> ";
             var summaryBtn = "<a href='#' onclick='summaryFun("+row.id+")'>申请小结</a> ";
             var departmentGradeBtn = "<a href='#' onclick='departmentGradeFun("+row.id+")'>组织科室打分</a> ";
             var feedbackBtn = "<a href='#' onclick='feedbackFun("+row.id+")'>反馈</a> ";
