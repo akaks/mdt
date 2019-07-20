@@ -20,24 +20,18 @@ function save() {
 		 //对医生的评分和意见
 		 var doctor = {}
 		 doctor.userId = $(tr).attr("id"); 
-		 doctor.ksPinFenList = [];
-		 doctor.zjYiJian = {}; 
+		 doctor.zjPinFenList = [];
 		 var tds = $(tr).children();
 		 tds.each(function(y, tdd) {
 			 var td = $(tdd);
 			 if(y == 0){
 				 return;
 			 }
-			 if(y == tds.length-1){
-				 doctor.zjYiJian.content = td.find("input").val();
-				 return;
-			 }
-			 var hd = headgrade[y-1];
-			
+			 var hd = headgrade[y-1];		
 			 var divs = $(td.children()[0]);
 			 var maxvalue = divs.attr("dataid");
 			 var pinfenitem = {sysGradeId:hd.id,grade:maxvalue};
-			 doctor.ksPinFenList.push(pinfenitem);
+			 doctor.zjPinFenList.push(pinfenitem);
 		 });
 		 doctors.push(doctor);	
 	 })	
@@ -45,7 +39,7 @@ function save() {
 
 	 
 	 $.ajax({
-	        url: baseUrl + '/mdtApply/saveDeptGrade',
+	        url: baseUrl + '/mdtApply/saveZJPinFen',
 	        data:formdata,
 	        dataType:'json',
 	        type:'post',
@@ -66,9 +60,9 @@ function save() {
  */
 var headgrade = null;
 function initGrid1(apply) {
-	if(apply.doctors[0].ksPinFenList && apply.doctors[0].ksPinFenList.length > 0){
+	if(apply.doctors[0].zjPinFenList && apply.doctors[0].zjPinFenList.length > 0){
 		headgrade = [];
-		var pinfens = apply.doctors[0].ksPinFenList;
+		var pinfens = apply.doctors[0].zjPinFenList;
 		for(var i=0;i<pinfens.length;i++){
 			var pinfen = pinfens[i];
 			var bz = {id:pinfen.sysGradeId,type:pinfen.type,description:pinfen.description,minValue:pinfen.minValue,maxValue:pinfen.maxValue};
@@ -77,7 +71,7 @@ function initGrid1(apply) {
 		genItem(headgrade,apply);            
 	}else{
 		$.ajax({
-	        url: baseUrl + '/mdtApply/getGradeItem?type=' + 2,
+	        url: baseUrl + '/mdtApply/getGradeItem?type=' + 1,
 	        dataType:'json',
 	        type:'post',
 	        success:function(result){
@@ -102,23 +96,22 @@ function genItem(data,apply) {
     	tr += ' <td>'+da.description+'</td>';
         tr += '</td>';
     }
-    tr += '<td>意见</td></tr>';
+    tr += '</tr>';
     $("#grid1").append(tr)
     
     var rows = apply.doctors;
   	for(var i=0;i<rows.length;i++){
   		var row = rows[i];
-  		var content = row.zjYiJian.content;
-  		var ksPinFenList = row.ksPinFenList;
-  		if(ksPinFenList && ksPinFenList.length>0){
+  		var zjPinFenList = row.zjPinFenList;
+  		if(zjPinFenList && zjPinFenList.length>0){
   			tds = '';
-  			for (var jj=0; jj< ksPinFenList.length; jj++) {
-  		    	var da = ksPinFenList[jj];
+  			for (var jj=0; jj< zjPinFenList.length; jj++) {
+  		    	var da = zjPinFenList[jj];
   		    	var xing = doxinghtml(da.maxValue,da.grade);
   		    	tds += ' <td>'+xing+'</td>';
   		    }
   		}	
-  		var html = "<tr id='"+row.userId+"'><td class='labelcss'>"+row.name+"</td>"+tds+"<td><input type='text' class='easyui-textbox' data-options='multiline:true' value='"+content+"' style='width:500px;height:200px'></td></tr>";
+  		var html = "<tr id='"+row.userId+"'><td class='labelcss'>"+row.name+"</td>"+tds+"</tr>";
   		$('#grid1').append(html);
   	} 
 }
@@ -173,53 +166,3 @@ function initData(id){
     });
 }
 
-function grade(userId) {
-
-    layer.open({
-        type: 2,
-        title: '打分',
-        maxmin: true,
-        shadeClose: true, //点击遮罩关闭层
-        area : ['80%' , '80%'],
-        content: 'mdtApplyDeptGradeItem.html?id=' + id + '&userId=' + userId
-    });
-}
-
-function opinion(userId) {
-
-    layer.open({
-        type: 2,
-        title: '专家意见',
-        maxmin: true,
-        shadeClose: true, //点击遮罩关闭层
-        area : ['80%' , '80%'],
-        content: 'mdtApplyOpinion.html?id=' + id + '&userId=' + userId
-    });
-}
-
-function sendMsg() {
-
-    //判断：编辑表单的所有控件是否都通过验证
-    var isValidate= $('#editForm').form('validate');
-    if(isValidate==false){
-        return ;
-    }
-
-    var formdata=getFormData('editForm');
-
-    $.ajax({
-        url: baseUrl + '/mdtApply/sendMsg',
-        data:formdata,
-        dataType:'json',
-        type:'post',
-        success:function(value){
-            if(value.type == 'success') {
-
-                $.messager.alert('提示', "发送成功");
-            } else {
-
-                $.messager.alert('提示',value.message);
-            }
-        }
-    });
-}

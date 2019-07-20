@@ -16,11 +16,18 @@ function conveterParamsToJson(paramsAndValues) {
  * @returns
  */
 function getFormData(form) {  
-    var formValues = $("#" + form).serialize();  
-  
-    //关于jquery的serialize方法转换空格为+号的解决方法  
-    formValues = formValues.replace(/\+/g," ");   // g表示对整个字符串中符合条件的都进行替换  
-    var temp =  decodeURIComponent(JSON.stringify(conveterParamsToJson(formValues)));  
-    var queryParam = JSON.parse(temp);
-    return queryParam;
+    var formValues = $("#" + form);  
+	var o = {};
+    var formvals = formValues.serializeArray();
+    $.each(formvals, function() {
+        if (o[this.name]) {
+            if (!o[this.name].push) {
+                o[this.name] = [o[this.name]];
+            }
+            o[this.name].push(this.value || '');
+        } else {
+            o[this.name] = this.value || '';
+        }
+    });
+    return o;
 }  

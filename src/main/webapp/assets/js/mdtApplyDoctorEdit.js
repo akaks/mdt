@@ -3,10 +3,9 @@ var applyId;  // MDT申请主id
 
 $(function() {
 
-    var url = window.location.href;
-    id = url.split("id=")[1];
-    applyId = url.split("applyId=")[1];
-    if(id != undefined && id != null){
+	id = getQueryVariable("id");
+	applyId = getQueryVariable("applyId");
+    if(id){
         edit(id);
     }
 

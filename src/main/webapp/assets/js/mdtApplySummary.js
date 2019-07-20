@@ -13,13 +13,22 @@ $(function(){
 function initData() {
 
     $.ajax({
-        url: baseUrl + '/mdtApply/get?id=' + id,
+        url: baseUrl + '/mdtApply/detail?id=' + id,
         data:{},
         dataType:'json',
         type:'post',
         success:function(value){
             if(value.type == 'success') {
-                $('#editForm').form('load', value.resultData.row);
+            	var row = value.resultData.row;
+            	if(!row.summary){
+            		var d = "";
+            		$(row.doctors).each(function(x, doc) {
+            			d += "专家"+doc.name+"意见:"+doc.zjYiJian.content+"\n";
+            		})
+            		row.summary = d;
+            	}
+            	
+                $('#editForm').form('load', row);
             }
         }
     });

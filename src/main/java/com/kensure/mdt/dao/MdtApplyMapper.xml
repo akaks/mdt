@@ -27,19 +27,14 @@
 		apply_createtime as applyCreatetime,
 		apply_phone as applyPhone,
 		apply_status as applyStatus,
-		audit_result1 as auditResult1,
-		audit_opinion1 as auditOpinion1,
-		audit_person1 as auditPerson1,
-		audit_time1 as auditTime1,
-		audit_result2 as auditResult2,
-		audit_opinion2 as auditOpinion2,
-		audit_person2 as auditPerson2,
-		audit_time2 as auditTime2,
 		share as share,
 		summary,
 		create_userid as createUserid,
 		create_dept as createDept,
 		is_delete as isDelete,
+		apply_person_id as applyPersonId,
+		patient_id as patientId,
+		idcard,
 		create_time as createTime,
 		update_time as updateTime
     </sql>
@@ -69,19 +64,14 @@
 		apply_createtime,
 		apply_phone,
 		apply_status,
-		audit_result1,
-		audit_opinion1,
-		audit_person1,
-		audit_time1,
-		audit_result2,
-		audit_opinion2,
-		audit_person2,
-		audit_time2,
 		share,
 		summary,
 		create_userid,
 		create_dept,
 		is_delete,
+		apply_person_id,
+		patient_id,
+		idcard,
 		create_time,
 		update_time
     </sql>
@@ -113,19 +103,14 @@
 			#{applyCreatetime},
 			#{applyPhone},
 			#{applyStatus},
-			#{auditResult1},
-			#{auditOpinion1},
-			#{auditPerson1},
-			#{auditTime1},
-			#{auditResult2},
-			#{auditOpinion2},
-			#{auditPerson2},
-			#{auditTime2},
 			#{share},
 			#{summary},
 			#{createUserid},
 			#{createDept},
 			#{isDelete},
+			#{applyPersonId},
+			#{patientId},
+			#{idcard},
 			#{createTime},
 			#{updateTime}
 		)
@@ -201,30 +186,6 @@
 		<if test="applyStatus != null">			
 			and apply_status = #{applyStatus}			
 		</if>
-		<if test="auditResult1 != null">			
-			and audit_result1 = #{auditResult1}			
-		</if>
-		<if test="auditOpinion1 != null">			
-			and audit_opinion1 = #{auditOpinion1}			
-		</if>
-		<if test="auditPerson1 != null">			
-			and audit_person1 = #{auditPerson1}			
-		</if>
-		<if test="auditTime1 != null">			
-			and audit_time1 = #{auditTime1}			
-		</if>
-		<if test="auditResult2 != null">			
-			and audit_result2 = #{auditResult2}			
-		</if>
-		<if test="auditOpinion2 != null">			
-			and audit_opinion2 = #{auditOpinion2}			
-		</if>
-		<if test="auditPerson2 != null">			
-			and audit_person2 = #{auditPerson2}			
-		</if>
-		<if test="auditTime2 != null">			
-			and audit_time2 = #{auditTime2}			
-		</if>
 		<if test="share != null">
 			and share = #{share}
 		</if>
@@ -236,6 +197,26 @@
 		</if>
 		<if test="isDelete != null">
 			and is_delete = #{isDelete}
+		</if>
+		<if test="isManager != null">
+			and (apply_person_id = #{applyPersonId1}
+			<if test="idList != null">
+				or id in
+				<foreach collection="idList" item="item" open="(" close=")" separator=",">
+					#{item}
+				</foreach>
+			</if>
+			)
+		</if>
+		
+		<if test="applyPersonId != null">
+			and apply_person_id = #{applyPersonId}
+		</if>
+		<if test="patientId != null">
+			and patient_id = #{patientId}
+		</if>
+		<if test="idcard != null">
+			and idcard = #{idcard}
 		</if>
 		<if test="createTime != null">			
 			and create_time = #{createTime}			
@@ -347,30 +328,6 @@
 		<if test="applyStatus != null">
 			apply_status = #{applyStatus},
 		</if>
-		<if test="auditResult1 != null">
-			audit_result1 = #{auditResult1},
-		</if>
-		<if test="auditOpinion1 != null">
-			audit_opinion1 = #{auditOpinion1},
-		</if>
-		<if test="auditPerson1 != null">
-			audit_person1 = #{auditPerson1},
-		</if>
-		<if test="auditTime1 != null">
-			audit_time1 = #{auditTime1},
-		</if>
-		<if test="auditResult2 != null">
-			audit_result2 = #{auditResult2},
-		</if>
-		<if test="auditOpinion2 != null">
-			audit_opinion2 = #{auditOpinion2},
-		</if>
-		<if test="auditPerson2 != null">
-			audit_person2 = #{auditPerson2},
-		</if>
-		<if test="auditTime2 != null">
-			audit_time2 = #{auditTime2},
-		</if>
 		<if test="share != null">
 			share = #{share},
 		</if>
@@ -385,6 +342,15 @@
 		</if>
 		<if test="isDelete != null">
 			is_delete = #{isDelete},
+		</if>
+		<if test="applyPersonId != null">
+			apply_person_id = #{applyPersonId},
+		</if>
+		<if test="patientId != null">
+			patient_id = #{patientId},
+		</if>
+		<if test="idcard != null">
+			idcard = #{idcard},
 		</if>
 		<if test="createTime != null">
 			create_time = #{createTime},

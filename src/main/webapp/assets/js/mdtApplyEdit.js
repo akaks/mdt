@@ -10,14 +10,15 @@ $(function(){
         initData(id);
 
         initGrid1(id);
+        initGrid2(id);
     } else {
-
         getMdtApplyKey();
-
         getMdtPurpose();
+        //初始化值
+        createVal();
     }
 
-
+    setUser();
     if(type != undefined && type != null){
         if (type == 'add') {
 
@@ -28,15 +29,94 @@ $(function(){
 
             $("#btn1").show();
         }
-        if (type == 'view') {
-
-            $("#audit1").show();
-            $("#audit2").show();
-            $("#audit3").show();
-            $("#audit4").show();
-        }
-    }
+     }
 });
+
+
+
+//设置患者下拉框
+function setUser() {
+
+    $('#userSelect').combobox({
+        url: baseUrl + "/patient/list",
+        loadFilter: function(data){
+            return data.resultData.rows;
+        },
+        onSelect: function(param){
+        	getPatient(param.id)
+        },
+        valueField:'id',
+        textField:'name'
+    });
+}
+
+function getPatient(id) {
+    $.ajax({
+        url: baseUrl + '/patient/get?id='+id,
+        dataType:'json',
+        type:'post',
+        success:function(value){
+
+            if(value.type == 'success'){
+                setTeamInfoFrom(value.resultData.row);
+            } else {
+                $.messager.alert('提示',value.message);
+            }
+        }
+    });
+}
+
+function setTeamInfoFrom(user) {
+    var myObject = {};
+    myObject.userId = user.id;
+    myObject.name = user.name;
+    myObject.gender = user.gender;
+    myObject.birthday = user.birthday;
+    myObject.age = user.age;
+    myObject.idcard = user.idcard;
+    myObject.number = user.medicalNo; 
+    myObject.patientId = user.id; 
+    myObject.idcard = user.idcard; 
+    
+    
+    myObject.overview = "病史："+user.medicalHistory +"\n体检："+user.medicalExam+"\n处理："+user.dispose+"\n初步诊断："+user.primaryDiagnosis; 
+
+    $('#editForm').form('load', myObject);
+}
+
+
+//设置当前用户的值
+function createVal() {
+    $.ajax({
+        url: baseUrl + '/auth/getUser',
+        dataType:'json',
+        type:'post',
+        success:function(value){
+            if(value.type == 'success'){
+                var user = value.resultData.row;
+                var myObject = {};
+                myObject.applyPerson = user.name;
+                myObject.applyPersonId = user.id;
+                myObject.applyPhone = user.phone;
+                myObject.applyCreatetime = (new Date()).Format("yyyy-MM-dd hh:mm:ss");
+                $('#editForm').form('load', myObject);               
+            } else {
+                $.messager.alert('提示',value.message);
+            }
+        }
+    });
+}
+
+function timeStamp2String(datetime){
+    var year = datetime.getFullYear();
+    var month = datetime.getMonth() + 1 < 10 ? "0" + (datetime.getMonth() + 1) : datetime.getMonth() + 1;
+    var date = datetime.getDate() < 10 ? "0" + datetime.getDate() : datetime.getDate();
+    var hour = datetime.getHours()< 10 ? "0" + datetime.getHours() : datetime.getHours();
+    var minute = datetime.getMinutes()< 10 ? "0" + datetime.getMinutes() : datetime.getMinutes();
+    var second = datetime.getSeconds()< 10 ? "0" + datetime.getSeconds() : datetime.getSeconds();
+    return year + "-" + month + "-" + date+" "+hour+":"+minute+":"+second;
+}
+
 
 // 获取MDT目的的多选框值
 function getMdtPurpose() {
@@ -55,14 +135,10 @@ function getMdtPurpose() {
                 for (var i=0; i<data.length; i++) {
 
                     if ($("#mdtPurpose").val().indexOf(data[i].code) != -1) {
-
                         box += '<input type="checkbox" name="mdtPurposeBox" onclick="changePurposeBox()" checked value="'+ data[i].code +'">' + data[i].value
-
                     } else {
-
                         box += '<input type="checkbox" name="mdtPurposeBox" onclick="changePurposeBox()" value="'+ data[i].code +'">' + data[i].value
                     }
-
                 }
 
                 $("#mdtPurposeSpan").html(box);
@@ -128,6 +204,43 @@ function initGrid1(applyId) {
 }
 
 
+/**
+ * 生成 意见列表
+ * @param applyId
+ */
+function initGrid2(applyId) {
+
+    var columns=[[
+        {field:'entryName',title:'审批步骤',width:100},
+        {field:'userid',title:'审批人',width:200,formatter:function(value,row,index) {
+            return row.user.name;
+        }},
+        {field:'auditResult',title:'审批结果',width:200,formatter:function(value,row,index) {
+            return row.auditResult == 1?"通过":"不通过";
+        }},
+        {field:'auditOpinion',title:'审批意见',width:200},
+        {field:'createdTimeStr',title:'审批时间',width:200}
+    ]];
+
+    var toolbar = [];
+
+    //表格数据初始化
+    $('#grid2').datagrid({
+        title:'审批信息',
+        url:baseUrl + '/lc/list.do?busitype=mdt_apply&bisiid=' + applyId,
+        loadFilter: function(data){
+            return data.resultData;
+        },
+        columns:columns,
+        singleSelect:true,
+        rownumbers:true,
+        toolbar: toolbar
+
+    });
+}
+
+
+
 // 获取主键
 function getMdtApplyKey() {
     $.ajax({
@@ -181,6 +294,7 @@ function save(){
         type:'post',
         success:function(value){
             if(value.type == 'success'){
+            	 $.messager.alert('保存成功');
                 var mylay = parent.layer.getFrameIndex(window.name);
                 parent.layer.close(mylay);
 
@@ -242,14 +356,13 @@ function initData(id){
 
                 // 住院病人，需要审核
                 if (type == 'audit' && data.patientType == '1') {
-
-                    if (data.applyStatus == '1') {
-                        $("#audit1").show();
-                        $("#audit2").show();
-                    } else if (data.applyStatus == '2') {
-                        $("#audit3").show();
-                        $("#audit4").show();
-                    }
+                    $("#audit1").show();
+                    $("#audit2").show();
+                    var user = getUser();
+                    var myObject = {};
+                    myObject.auditName = user.name;
+                    myObject.createdTime = (new Date()).Format("yyyy-MM-dd hh:mm:ss");;
+                    $('#editForm2').form('load', myObject);         
                     $("#btn4").show();
                 }
 
@@ -296,7 +409,8 @@ function auditSave() {
         return ;
     }
 
-    var formdata=getFormData('editForm2');
+    var formdata = getFormData('editForm2');
+    formdata.yijian = JSON.stringify(formdata);
 
     $.ajax({
         url: baseUrl + '/mdtApply/audit',

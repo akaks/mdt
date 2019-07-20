@@ -1,27 +1,34 @@
 package com.kensure.mdt.service;
 
-import co.kensure.exception.BusinessExceptionUtil;
-import co.kensure.mem.MapUtils;
-import co.kensure.mem.PageInfo;
-import com.kensure.mdt.dao.MdtApplyDoctorMapper;
-import com.kensure.mdt.entity.*;
-import com.kensure.mdt.entity.resp.ExpertGradeList;
-import com.kensure.mdt.service.MdtApplyDoctorService;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import co.kensure.exception.BusinessExceptionUtil;
+import co.kensure.mem.CollectionUtils;
+import co.kensure.mem.MapUtils;
+
+import com.kensure.mdt.dao.MdtApplyDoctorMapper;
+import com.kensure.mdt.entity.MdtApplyDoctor;
+import com.kensure.mdt.entity.MdtApplyOpinion;
+import com.kensure.mdt.entity.MdtGradeItem;
+import com.kensure.mdt.entity.MdtTeamInfo;
+import com.kensure.mdt.entity.SysOrg;
+import com.kensure.mdt.entity.resp.ExpertGradeList;
 
 /**
  * MDT参加专家表服务实现类
  */
 @Service
 public class MdtApplyDoctorService {
-	
+
 	@Resource
 	private MdtApplyDoctorMapper dao;
 
@@ -30,53 +37,52 @@ public class MdtApplyDoctorService {
 
 	@Resource
 	private MdtGradeItemService mdtGradeItemService;
-    
-    
-    public MdtApplyDoctor selectOne(Long id){
-    	return dao.selectOne(id);
-    }
-	
-	public List<MdtApplyDoctor> selectByIds(Collection<Long> ids){
+	@Resource
+	private MdtApplyOpinionService mdtApplyOpinionService;
+
+	public MdtApplyDoctor selectOne(Long id) {
+		return dao.selectOne(id);
+	}
+
+	public List<MdtApplyDoctor> selectByIds(Collection<Long> ids) {
 		return dao.selectByIds(ids);
 	}
-	
-	public List<MdtApplyDoctor> selectByWhere(Map<String, Object> parameters){
+
+	public List<MdtApplyDoctor> selectByWhere(Map<String, Object> parameters) {
 		return dao.selectByWhere(parameters);
 	}
-	
-	public long selectCountByWhere(Map<String, Object> parameters){
+
+	public long selectCountByWhere(Map<String, Object> parameters) {
 		return dao.selectCountByWhere(parameters);
 	}
-	
-	
-	public boolean insert(MdtApplyDoctor obj){
+
+	public boolean insert(MdtApplyDoctor obj) {
 		return dao.insert(obj);
 	}
-	
-	
-	public boolean update(MdtApplyDoctor obj){
+
+	public boolean update(MdtApplyDoctor obj) {
 		return dao.update(obj);
 	}
-    
-    public boolean updateByMap(Map<String, Object> params){
+
+	public boolean updateByMap(Map<String, Object> params) {
 		return dao.updateByMap(params);
 	}
-    
-    
-	public boolean delete(Long id){
+
+	public boolean delete(Long id) {
 		return dao.delete(id);
-	}	
-	
-    public boolean deleteMulti(Collection<Long> ids){
+	}
+
+	public boolean deleteMulti(Collection<Long> ids) {
 		return dao.deleteMulti(ids);
 	}
-    
-    public boolean deleteByWhere(Map<String, Object> parameters){
+
+	public boolean deleteByWhere(Map<String, Object> parameters) {
 		return dao.deleteByWhere(parameters);
 	}
 
 	/**
 	 * 从MDT团队中将专家选入MDT专家库
+	 * 
 	 * @param applyId
 	 * @param mdtTeamInfo
 	 */
@@ -95,32 +101,60 @@ public class MdtApplyDoctorService {
 		save(entiy);
 	}
 
-    /**
-     * 保存MDT拟请专家
-     * @param entiy
-     */
+	/**
+	 * 保存MDT拟请专家
+	 * 
+	 * @param entiy
+	 */
 	public void save(MdtApplyDoctor entiy) {
 
-        List<MdtApplyDoctor> list = selectByApplyIdAndUserId(entiy.getApplyId(), entiy.getUserId());
-        if (list.size() > 0) {
+		List<MdtApplyDoctor> list = selectByApplyIdAndUserId(entiy.getApplyId(), entiy.getUserId());
+		if (list.size() > 0) {
+			BusinessExceptionUtil.threwException("该专家已存在不可重复添加!");
+		}
+		entiy.setCreateTime(new Date());
+		entiy.setUpdateTime(new Date());
+		insert(entiy);
+	}
 
-            BusinessExceptionUtil.threwException("该专家已存在不可重复添加!");
-        }
-
-        entiy.setCreateTime(new Date());
-        entiy.setUpdateTime(new Date());
-        insert(entiy);
-    }
-
+	/**
+	 * 获取申请的专家
+	 * 
+	 * @param applyId
+	 * @return
+	 */
 	public List<MdtApplyDoctor> selectByApplyId(Long applyId) {
-
 		Map<String, Object> parameters = MapUtils.genMap("applyId", applyId);
 		List<MdtApplyDoctor> list = selectByWhere(parameters);
 		return list;
 	}
 
-	public List<MdtApplyDoctor> selectByApplyIdAndUserId(Long applyId, Long userId) {
+	/**
+	 * 获取申请的专家
+	 * 
+	 * @param applyId
+	 * @return
+	 */
+	public List<MdtApplyDoctor> getDetailByApplyId(Long applyId) {
+		List<MdtApplyDoctor> list = selectByApplyId(applyId);
+		if (CollectionUtils.isEmpty(list)) {
+			return null;
+		}
+		for (MdtApplyDoctor doc : list) {
+			// 科室评分
+			List<MdtGradeItem> ksPinFenList = mdtGradeItemService.getMdtGradeItem("2", applyId, doc.getUserId());
+			doc.setKsPinFenList(ksPinFenList);
+			MdtApplyOpinion zjYiJian = mdtApplyOpinionService.getApplyOpinion(applyId, doc.getUserId());
+			doc.setZjYiJian(zjYiJian);
+			//专家评分
+			List<MdtGradeItem> zjPinFenList = mdtGradeItemService.getMdtGradeItem("1", applyId, doc.getUserId());
+			doc.setZjPinFenList(zjPinFenList);
+		}
 
+		return list;
+	}
+
+	public List<MdtApplyDoctor> selectByApplyIdAndUserId(Long applyId, Long userId) {
 		Map<String, Object> parameters = MapUtils.genMap("applyId", applyId, "userId", userId);
 		List<MdtApplyDoctor> list = selectByWhere(parameters);
 		return list;
@@ -128,6 +162,7 @@ public class MdtApplyDoctorService {
 
 	/**
 	 * 根据MDT申请id查询 MDT专家库
+	 * 
 	 * @param applyId
 	 * @return
 	 */
@@ -147,15 +182,15 @@ public class MdtApplyDoctorService {
 		return list;
 	}
 
-    public List<ExpertGradeList> listExpertGrade(Long applyId) {
+	public List<ExpertGradeList> listExpertGrade(Long applyId) {
 
 		Map<String, Object> parameters = MapUtils.genMap("applyId", applyId);
 
 		List<MdtApplyDoctor> list = selectByWhere(parameters);
 
-        List<ExpertGradeList> expertGradeLists = new ArrayList<>();
+		List<ExpertGradeList> expertGradeLists = new ArrayList<>();
 
-        for (MdtApplyDoctor mdtApplyDoctor : list) {
+		for (MdtApplyDoctor mdtApplyDoctor : list) {
 			SysOrg org = sysOrgService.selectOne(mdtApplyDoctor.getDepartment());
 			if (org != null) {
 				mdtApplyDoctor.setDepartment(org.getName());
@@ -164,20 +199,19 @@ public class MdtApplyDoctorService {
 			ExpertGradeList expertGrade = new ExpertGradeList();
 			BeanUtils.copyProperties(mdtApplyDoctor, expertGrade);
 
+			List<MdtGradeItem> gradeItemList = mdtGradeItemService.getMdtGradeItem("1", applyId, expertGrade.getUserId());
+			expertGrade.setList(gradeItemList);
 
-            List<MdtGradeItem> gradeItemList = mdtGradeItemService.getMdtGradeItem("1", applyId, expertGrade.getUserId());
-            expertGrade.setList(gradeItemList);
+			if (!gradeItemList.isEmpty()) {
+				expertGrade.setReply("已回复");
+				expertGrade.setReplyTime(gradeItemList.get(0).getCreateTime());
+			} else {
+				expertGrade.setReply("未回复");
+			}
 
-            if (!gradeItemList.isEmpty()) {
-                expertGrade.setReply("已回复");
-                expertGrade.setReplyTime(gradeItemList.get(0).getCreateTime());
-            } else {
-                expertGrade.setReply("未回复");
-            }
-
-            expertGradeLists.add(expertGrade);
-        }
+			expertGradeLists.add(expertGrade);
+		}
 
 		return expertGradeLists;
-    }
+	}
 }

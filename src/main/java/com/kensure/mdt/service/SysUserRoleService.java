@@ -87,6 +87,17 @@ public class SysUserRoleService {
 		return list;
 	}
 
+	/**
+	 * 根据角色获取角色的数据
+	 * @param roleId
+	 * @return
+	 */
+	public List<SysUserRole> selectByRoleId(Long roleId) {
+		Map<String, Object> parameters = MapUtils.genMap("roleId", roleId);
+		List<SysUserRole> sysRoleMenus = selectByWhere(parameters);
+		return sysRoleMenus;
+	}
+	
 
 	public void save(Long userId, Long roleId) {
 

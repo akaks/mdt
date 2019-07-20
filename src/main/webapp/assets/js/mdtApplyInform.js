@@ -18,9 +18,18 @@ function initData(id){
         type:'post',
         success:function(value){
             if(value.type == 'success'){
-
                 var data = value.resultData.row;
-                $("#name").html("" + data.name + "");
+                var kongge = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                $("#name").html(kongge + data.name + kongge);
+                $("#gender").html(kongge + data.gender + kongge);
+                $("#phone").html(kongge + data.phone + kongge);
+                $("#idcard").html(kongge + data.idcard + kongge);
+                if(data.patientType == 1){
+                	$("#number1").html(kongge + data.number + kongge);
+                }else{
+                	$("#number2").html(kongge + data.number + kongge);
+                }
+                $("#diseaseName").html(kongge + data.diseaseName + kongge); 
 
 
             }

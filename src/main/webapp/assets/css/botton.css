@@ -1,6 +1,7 @@
 .labelcss{
    	text-align:center;
-  	background-color:#E0ECFF
+  	background-color:#E0ECFF;
+  	height:40px;
   }
  .proll{
  	z-index: 9999;
@@ -16,3 +17,4 @@
  	top: 10px;
  	text-align:right;
  }
+ .myfloatleft{float:left;}

@@ -15,17 +15,20 @@
 
 	<script type="text/javascript" src="js/common.js"></script>
 	<script type="text/javascript" src="js/form.js"></script>
+	<script type="text/javascript" src="js/date.js"></script>
 	<script type="text/javascript" src="js/mdtApplyEdit.js"></script>
 	<script type="text/javascript">
 
 
 	</script>
 </head>
-<body  style="width:99%;font-size:12px;">
+<body style="width:99%;font-size:12px;">
 
 	<form id="editForm" style="padding:10px;">
 		<input id="id" name="id" type="hidden">
 		<input id="applyStatus" name="applyStatus" type="hidden">
+		<input id="patientId" name="patientId" type="hidden">
+		<input id="idcard" name="idcard" type="hidden">
 
 		<table border="1" cellspacing="0" style="width:100%; ">
 			<tr>
@@ -34,9 +37,11 @@
 					<input type="radio" name="patientType" value="1" label="">住院病人
 					<input type="radio" name="patientType" value="2" label="">门诊病人
 				</td>
-				<td class="labelcss">患者类型</td>
+				<td class="labelcss">患者选择</td>
 				<td>
-					<a id="link4" class="easyui-linkbutton">患者选择</a>
+					<select id="userSelect" class="easyui-combobox" name="userSelect" style="width:200px;">
+
+					</select>
 				</td>
 			</tr>
 			<tr>
@@ -44,8 +49,8 @@
 				<td style="width: 40%"><input name="name" class="easyui-textbox"></td>
 				<td style="width: 10%" class="labelcss">性别</td>
 				<td style="width: 40%">
-					<input type="radio" name="gender" value="1" label="">男
-					<input type="radio" name="gender" value="2" label="">女
+					<input type="radio" name="gender" value="男" label="">男
+					<input type="radio" name="gender" value="女" label="">女
 				</td>
 			</tr>
 			<tr>
@@ -67,7 +72,7 @@
 			<tr>
 				<td class="labelcss">病情概述</td>
 				<td colspan="3">
-					<input name="overview" class="easyui-textbox" data-options="multiline:true" style="width:300px;height:50px"/>
+					<input name="overview" class="easyui-textbox" data-options="multiline:true" style="width:600px;height:200px"/>
 					<!--<textarea rows="2" cols="20"></textarea>-->
 				</td>
 			</tr>
@@ -131,6 +136,7 @@
 				</td>
 				<td class="labelcss">申请人</td>
 				<td>
+					<input name="applyPersonId" id="applyPersonId" type="hidden"/>
 					<input name="applyPerson" class="easyui-textbox"/>
 				</td>
 			</tr>
@@ -185,62 +191,46 @@
 			</tr>-->
 
 		</table>
-
+	
+	</form>
+	
 	<div id="dg" class="proll">
 		<div class="divroll">
 				<button id="btn1" style="display: none" onclick="save()"  class="layui-btn layui-btn-normal">保存</button>
 				<button id="btn2" style="display: none" onclick="commintAudit()"  class="layui-btn layui-btn-normal">保存并提交审核</button>
 				<button id="btn3" style="display: none" onclick="saveAudit()"  class="layui-btn layui-btn-normal">审核</button>
+				<button id="btn4" style="display: none" onclick="auditSave()"  class="layui-btn layui-btn-normal">提交</button>
 		</div>
 	</div>
-	</form>
+	
 
 	<form id="editForm2"  style="padding:10px;">
 		<input id="id2" name="id" type="hidden">
+		
+		<table id="grid2">
+		</table>
 
 		<table border="1" cellspacing="0" style="width:100%; ">
 
 			<tr id="audit1" style="display: none;">
-				<td style="width: 10%" class="labelcss">科主任审核:</td>
+				<td style="width: 10%" class="labelcss">审核结果:</td>
 				<td style="width: 40%">
-					<input type="radio" name="auditResult1" value="1" label="">通过
-					<input type="radio" name="auditResult1" value="2" label="">不通过
+					<input type="radio" name="auditResult" value="1" label="">通过
+					<input type="radio" name="auditResult" value="-1" label="">不通过
 				</td>
 				<td style="width: 10%" class="labelcss">审核意见:</td>
 				<td style="width: 40%">
-					<input name="auditOpinion1" class="easyui-textbox" data-options="multiline:true" style="width:300px;height:50px"/>
+					<input name="auditOpinion" class="easyui-textbox" data-options="multiline:true" style="width:500px;height:50px"/>
 				</td>
 			</tr>
 			<tr id="audit2" style="display: none">
-				<td style="width: 10%" class="labelcss">科主任名称:</td>
+				<td style="width: 10%" class="labelcss">审核人姓名:</td>
 				<td style="width: 40%">
-					<input name="auditPerson1" class="easyui-textbox"/>
+					<input name="auditName" class="easyui-textbox"/>
 				</td>
 				<td style="width: 10%" class="labelcss">审核时间:</td>
 				<td style="width: 40%">
-					<input id="auditTime1" name="auditTime1" type="text" class="easyui-datebox" >
-				</td>
-			</tr>
-
-			<tr id="audit3" style="display: none;">
-				<td style="width: 10%" class="labelcss">医务部主任审核:</td>
-				<td style="width: 40%">
-					<input type="radio" name="auditResult2" value="1" label="">通过
-					<input type="radio" name="auditResult2" value="2" label="">不通过
-				</td>
-				<td style="width: 10%" class="labelcss">审核意见:</td>
-				<td style="width: 40%">
-					<input name="auditOpinion2" class="easyui-textbox" data-options="multiline:true" style="width:300px;height:50px"/>
-				</td>
-			</tr>
-			<tr id="audit4" style="display: none">
-				<td style="width: 10%" class="labelcss">医务部主任名称:</td>
-				<td style="width: 40%">
-					<input name="auditPerson2" class="easyui-textbox"/>
-				</td>
-				<td style="width: 10%" class="labelcss">审核时间:</td>
-				<td style="width: 40%">
-					<input id="auditTime2" name="auditTime2" type="text" class="easyui-datebox" >
+					<input id="createdTime" name="createdTime" type="text" class="easyui-datebox" >
 				</td>
 			</tr>
 
@@ -248,8 +238,7 @@
 
 
 		<br/><br/>&nbsp;&nbsp;
-		<!--<button id="btnSave" type="button">保存</button>-->
-		<a id="btn4" style="display: none" onclick="auditSave()" class="easyui-linkbutton">保存</a>
+	
 	</form>
 
 </body>

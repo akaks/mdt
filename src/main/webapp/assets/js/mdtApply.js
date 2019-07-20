@@ -11,17 +11,11 @@ $(function(){
             return '';
         }},
         {field:'name',title:'患者姓名',width:120},
-        {field:'gender',title:'性别',width:50,formatter:function(value,row,index) {
-            if (row.gender == '1') {
-                return "男";
-            } else if (row.gender == '2') {
-                return "女";
-            }
-            return '';
-        }},
+        {field:'gender',title:'性别',width:50},
         {field:'diagnoseDate',title:'入院/首诊时间',width:120},
         {field:'mdtDate',title:'MDT时间',width:120},
         {field:'mdtLocation',title:'MDT地点',width:150},
+        {field:'applyPerson',title:'申请人',width:120},
         {field:'applyStatus',title:'申请状态',width:150,formatter:function(value,row,index) {
             if (row.applyStatus == '0') {
                 return "未提交";
@@ -29,10 +23,12 @@ $(function(){
                 return "已提交未审核";
             }  else if (row.applyStatus == '2') {
                 return "科主任已审核";
-            } else if (row.applyStatus == '3') {
-                return "医务部主任已审核";
+            } else if (row.applyStatus == '11') {
+                return "病人缴费";
             } else if (row.applyStatus == '9') {
                 return "审核不通过";
+            } else if (row.applyStatus == '13') {
+                return "MDT会诊";
             }
             return '';
         }},
@@ -46,6 +42,7 @@ $(function(){
             var informBtn = "<a href='#' onclick='informFun("+row.id+")'>知情同意书</a> ";
             var consultBtn = "<a href='#' onclick='consultFun("+row.id+")'>MDT会诊</a> ";
             var expertGradeBtn = "<a href='#' onclick='expertGradeFun("+row.id+")'>专家打分</a> ";
+            var expertGradeBtn1 = "<a href='#' onclick='departmentGradeFun1("+row.id+")'>专家打分录入</a> ";
             var viewExpertGradeBtn = "<a href='#' onclick='viewExpertGradeFun("+row.id+")'>概述</a> ";
             var summaryBtn = "<a href='#' onclick='summaryFun("+row.id+")'>申请小结</a> ";
             var departmentGradeBtn = "<a href='#' onclick='departmentGradeFun("+row.id+")'>组织科室打分</a> ";
@@ -55,89 +52,56 @@ $(function(){
             var btn = "";
             btn = btn + viewBtn;
 
-            var roleIds = getUser().roleIds;
+            var user = getUser();
+            
+            var roleIds = user.roleIds;
 
-            // 普通用户
-            if (roleIds.indexOf('7') != -1) {
-
+            // 申请人本人才有这个权限
+            if (user.id == row.applyPersonId && (row.applyStatus == "0" || row.applyStatus == "9" )) {
                 btn = btn + editBtn;
+                btn = btn + deleBtn;
             }
 
-            // 住院病人，需要审核
-            if (row.patientType == '1' && (row.applyStatus == '1' || row.applyStatus == '2') ) {
-
-                // 科室主任
-                if (roleIds.indexOf('5') != -1 && row.applyStatus == '1') {
-
-                    btn = btn + auditBtn;
-                }
-
-                // 医务部主任
-                if (roleIds.indexOf('3') != -1 && row.applyStatus == '2') {
-
-                    btn = btn + auditBtn;
-                }
-
+            // 是否需要审批按钮
+            if (row.isSp == 1) {
+            	btn = btn + auditBtn;
             }
 
             // 住院病人
-            if (row.patientType == '1' && row.applyStatus == '3' ) {
-
-                // 普通用户
-                if (roleIds.indexOf('7') != -1) {
-
-                    if (row.isCharge == '1') {
-
-                        btn = btn + feeBtn;
-                    }
-
-                    btn = btn + informBtn + msgBtn;
-
+            if (row.patientType == '1' && parseInt(row.applyStatus) >= 11 ) {
+        		//如果收费，就要打印缴费通知单
+                if (row.isCharge == '1') {
+                    btn = btn + feeBtn;
                 }
+                btn = btn + informBtn + msgBtn;
 
-                // 组织科室
-                if (roleIds.indexOf('5') != -1 || roleIds.indexOf('7') != -1) {
 
-                    btn = btn + departmentGradeBtn + viewExpertGradeBtn + summaryBtn;
-                }
-
+                // 本人的一些操作
+                btn = btn + departmentGradeBtn + viewExpertGradeBtn + summaryBtn;
                 // 专家
                 if (roleIds.indexOf('6') != -1) {
-
                     btn = btn + expertGradeBtn;
                 }
-
-                // 普通用户
-                if (roleIds.indexOf('7') != -1) {
-
-                    btn += feedbackBtn;
-                }
-
+                //反馈
+                btn += feedbackBtn;
             }
-
             // 门诊病人
             if (row.patientType == '2' && row.applyStatus == '0' && roleIds.indexOf('7') != -1) {
                 btn = btn + informBtn + msgBtn + feedbackBtn;
             }
-
-            // 普通用户
-            if (roleIds.indexOf('7') != -1) {
-
-                btn = btn + deleBtn;
+            //后续操作
+            if(parseInt(row.applyStatus) >= 11 ){
+            	btn = btn +expertGradeBtn1;
             }
-
+            
             return btn;
         }}
     ]];
 
-    var toolbar;
-    if (getUser().roleIds.indexOf('7') != -1) {
-
-        toolbar = [{
+    var toolbar = [{
             iconCls: 'icon-add',
             text:'增加',
             handler: function(){
-
                 layer.open({
                     type: 2,
                     title: 'MDT申请',
@@ -148,9 +112,7 @@ $(function(){
                 });
             }
         }]
-    } else {
-        toolbar = []
-    }
+ 
 
 	//表格数据初始化
 	$('#grid').datagrid({
@@ -270,7 +232,6 @@ function summaryFun(id) {
 
 // MDT会诊
 function departmentGradeFun(id) {
-
     layer.open({
         type: 2,
         title: '组织科室打分',
@@ -280,6 +241,19 @@ function departmentGradeFun(id) {
         content: 'mdtApplyDeptGrade.html?id=' + id
     });
 }
+
+//MDT会诊
+function departmentGradeFun1(id) {
+    layer.open({
+        type: 2,
+        title: '专家打分录入',
+        maxmin: true,
+        shadeClose: true, //点击遮罩关闭层
+        area : ['80%' , '80%'],
+        content: 'mdtApplyDeptLuru.html?id=' + id
+    });
+}
+
 
 // 反馈
 function feedbackFun(id) {

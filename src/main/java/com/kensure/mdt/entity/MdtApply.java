@@ -1,9 +1,11 @@
 package com.kensure.mdt.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.kensure.mdt.lc.model.LCHistory;
 
 /**
  * MDT申请表对象类
@@ -77,6 +79,16 @@ public class MdtApply implements Serializable{
 
 	/**申请人*/		
 	private String applyPerson; 
+	/**申请人id*/		
+	private Integer applyPersonId;
+	/**流程意见列表*/		
+	private List<LCHistory> lCHistoryList;
+	
+	/**专家列表*/		
+	private List<MdtApplyDoctor> doctors;
+	
+	/**审批时的意见*/		
+	private LCHistory yijian;
 
 	/**申请递交时间*/
 	@JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", timezone="GMT+8")
@@ -85,34 +97,11 @@ public class MdtApply implements Serializable{
 	/**申请人电话*/		
 	private String applyPhone; 
 
-	/**申请状态*/		
-	private String applyStatus; 
-
-	/**审核结果(科主任审核)*/		
-	private String auditResult1; 
-
-	/**审核意见(科主任审核)*/		
-	private String auditOpinion1; 
-
-	/**科主任名称(科主任审核)*/		
-	private String auditPerson1; 
-
-	/**审核时间(科主任审核)*/
-	@JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", timezone="GMT+8")
-	private Date auditTime1; 
-
-	/**审核结果(医务部主任审核)*/		
-	private String auditResult2; 
-
-	/**审核意见(医务部主任审核)*/		
-	private String auditOpinion2; 
-
-	/**医务部主任名称(医务部主任审核)*/		
-	private String auditPerson2; 
-
-	/**审核时间(医务部主任审核)*/
-	@JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", timezone="GMT+8")
-	private Date auditTime2; 
+	/**申请状态  1是申请人申请，2是科室主任同意，9是审核退回，11是病人缴费 ，12是发短信通知 13是mdt会诊 ，15是申请人填写反馈   */		
+	private String applyStatus; 	
+	
+	/**是否审批 1是，0否*/		
+	private Integer isSp = 0; 
 
 	/**创建人*/		
 	private Long createUserid;
@@ -128,6 +117,12 @@ public class MdtApply implements Serializable{
 
 	/***/
 	private String isDelete;
+	
+	/**患者id*/
+	private Long patientId;
+	
+	/**身份证*/
+	private String idcard;
 
 	/**创建时间*/
 	@JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", timezone="GMT+8")
@@ -306,62 +301,7 @@ public class MdtApply implements Serializable{
 	public void setApplyStatus(String applyStatus) {
 		this.applyStatus = applyStatus;
 	}
-	public String getAuditResult1() {
-		return auditResult1;
-	}
 
-	public void setAuditResult1(String auditResult1) {
-		this.auditResult1 = auditResult1;
-	}
-	public String getAuditOpinion1() {
-		return auditOpinion1;
-	}
-
-	public void setAuditOpinion1(String auditOpinion1) {
-		this.auditOpinion1 = auditOpinion1;
-	}
-	public String getAuditPerson1() {
-		return auditPerson1;
-	}
-
-	public void setAuditPerson1(String auditPerson1) {
-		this.auditPerson1 = auditPerson1;
-	}
-	public Date getAuditTime1() {
-		return auditTime1;
-	}
-
-	public void setAuditTime1(Date auditTime1) {
-		this.auditTime1 = auditTime1;
-	}
-	public String getAuditResult2() {
-		return auditResult2;
-	}
-
-	public void setAuditResult2(String auditResult2) {
-		this.auditResult2 = auditResult2;
-	}
-	public String getAuditOpinion2() {
-		return auditOpinion2;
-	}
-
-	public void setAuditOpinion2(String auditOpinion2) {
-		this.auditOpinion2 = auditOpinion2;
-	}
-	public String getAuditPerson2() {
-		return auditPerson2;
-	}
-
-	public void setAuditPerson2(String auditPerson2) {
-		this.auditPerson2 = auditPerson2;
-	}
-	public Date getAuditTime2() {
-		return auditTime2;
-	}
-
-	public void setAuditTime2(Date auditTime2) {
-		this.auditTime2 = auditTime2;
-	}
 	public Long getCreateUserid() {
 		return createUserid;
 	}
@@ -414,4 +354,62 @@ public class MdtApply implements Serializable{
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
 	}
+
+	public Integer getApplyPersonId() {
+		return applyPersonId;
+	}
+
+	public void setApplyPersonId(Integer applyPersonId) {
+		this.applyPersonId = applyPersonId;
+	}
+
+	public Integer getIsSp() {
+		return isSp;
+	}
+
+	public void setIsSp(Integer isSp) {
+		this.isSp = isSp;
+	}
+
+	public List<LCHistory> getlCHistoryList() {
+		return lCHistoryList;
+	}
+
+	public void setlCHistoryList(List<LCHistory> lCHistoryList) {
+		this.lCHistoryList = lCHistoryList;
+	}
+
+	public LCHistory getYijian() {
+		return yijian;
+	}
+
+	public void setYijian(LCHistory yijian) {
+		this.yijian = yijian;
+	}
+
+	public Long getPatientId() {
+		return patientId;
+	}
+
+	public void setPatientId(Long patientId) {
+		this.patientId = patientId;
+	}
+
+	public String getIdcard() {
+		return idcard;
+	}
+
+	public void setIdcard(String idcard) {
+		this.idcard = idcard;
+	}
+
+	public List<MdtApplyDoctor> getDoctors() {
+		return doctors;
+	}
+
+	public void setDoctors(List<MdtApplyDoctor> doctors) {
+		this.doctors = doctors;
+	}
+	
+	
 }

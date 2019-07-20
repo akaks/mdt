@@ -20,13 +20,9 @@ $(function(){
 		}
 		
 	});
-
 	getUser();
-	
-	
 	tabClose();
 	tabCloseEven();
-	
 	showName();
 	
 })
@@ -35,15 +31,13 @@ $(function(){
  * 显示用户真实姓名
  */
 function showName(){
-	
 	$.ajax({
-		url:'login_showName.action',
+		url:baseUrl + '/auth/getUser',
 		dataType:'json',
-		success:function(value){
-			if(value.success){
-				$('#name').html(value.message);
-			}else
-			{
+		success:function(data){
+			if(data.type == 'success'){
+				$('#name').html(data.resultData.row.name);
+			}else {
 				location.href='login.html';
 			}			
 		}		
@@ -385,16 +379,10 @@ $(function() {
 
 
 $(function(){
-
-
-    // initGrid1();
-    //
-    // initGrid2();
-    //
-    // initGrid3();
-
-
     initGrid();
+    initGrid1();
+    initGrid2();
+    initGrid3();
 });
 
 function initGrid1() {
@@ -504,7 +492,7 @@ function edit(type, id) {
         }
     }
 
-    if (type == '2') {
+    if (type == 'mdt_apply') {
         // 普通用户
         if (roleIds.indexOf('7') != -1) {
             layerOpen('MDT申请', 'mdtApplyEdit.html?type=edit&id=' + id);
@@ -530,23 +518,14 @@ function initGrid() {
 
     var columns=[[
 		/*{field:'id',title:'编号',width:100},*/
-        {field:'type',title:'类型',width:100,formatter:function(value,row,index) {
-            if (row.type == '1') {
-                return "MDT团队";
-            } else if (row.type == '2') {
-                return "MDT申请";
-            } else if (row.type == '3') {
-                return "MDT团队年度评估";
-            } else if (row.type == '4') {
-                return "MDT团队满两年评估";
-            }
-            return "-";
+        {field:'busitypeStr',title:'类型',width:100},
+        {field:'createdTimeStr',title:'申请时间',width:150},
+        {field:'userid',title:'申请人',width:100,formatter:function(value,row,index) {
+            return row.user.name;
         }},
-        {field:'applyDate',title:'申请时间',width:150},
-        {field:'applyPerson',title:'申请人',width:100},
-        {field:'content',title:'内容',width:300},
+        {field:'title',title:'内容',width:300},
         {field:'-',title:'操作',width:100,formatter:function(value,row,index) {
-            var editBtn = "<a href='#' onclick='edit("+row.type+", "+row.id+")'>处理</a> ";
+            var editBtn = "<a href='#' onclick='edit(\""+row.busitype+"\", "+row.bisiid+")'>处理</a> ";
             return editBtn;
         }}
     ]];
@@ -555,7 +534,7 @@ function initGrid() {
     //表格数据初始化
     $('#grid').datagrid({
         title:'代办',
-        url:baseUrl + '/index/doSth',
+        url:baseUrl + '/daiban/list.do',
         loadFilter: function(data){
             return data.resultData;
         },

@@ -3,12 +3,15 @@ package com.kensure.mdt.service;
 import co.kensure.exception.BusinessExceptionUtil;
 import co.kensure.mem.MapUtils;
 import co.kensure.mem.PageInfo;
+
 import com.kensure.mdt.dao.SysUserMapper;
 import com.kensure.mdt.entity.*;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+
 import java.util.*;
 
 
@@ -262,4 +265,35 @@ public class SysUserService {
 
         return "";
     }
+    
+    
+    /**
+     * 获取当前用户的科室主任
+     * @return
+     */
+    public List<SysUser> selectKSZR(Long applyPersonId) {
+    	SysUser one = selectOne(applyPersonId);
+    	
+    	Map<String, Object> parameters = MapUtils.genMap("department",one.getDepartment());
+    	//部门下的人
+ 		List<SysUser> deptUserList = selectByWhere(parameters);
+ 		Map<String,SysUser> deptUserMap = new HashMap<>();
+ 		for(SysUser user:deptUserList){
+ 			deptUserMap.put(user.getId().toString(), user);
+ 		}
+ 		
+ 		
+ 		//角色5是科室主任
+ 		List<SysUserRole> list = sysUserRoleService.selectByRoleId(5L);
+ 		
+ 		List<SysUser> userList = new ArrayList<>();
+ 		for(SysUserRole sysuerrole:list){
+ 			SysUser user = deptUserMap.get(sysuerrole.getUserId().toString());
+ 			if(user != null){
+ 				userList.add(user);
+ 			}
+ 		}	
+ 		
+ 		return userList;
+     }
 }
