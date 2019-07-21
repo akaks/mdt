@@ -14,8 +14,8 @@
 		visit_phone as visitPhone,
 		visit_time as visitTime,
 		share as share,
-		create_time as createTime,
-		update_time as updateTime
+		created_time as createdTime,
+		updated_time as updatedTime
     </sql>
     
 	<sql id="insertFields">
@@ -30,8 +30,8 @@
 		visit_phone,
 		visit_time,
 		share,
-		create_time,
-		update_time
+		created_time,
+		updated_time
     </sql>
 	
 	<insert id="insert" parameterType="com.kensure.mdt.entity.MdtApplyFeedback">
@@ -48,8 +48,8 @@
 			#{visitPhone},
 			#{visitTime},
 			#{share},
-			#{createTime},
-			#{updateTime}
+			#{createdTime},
+			#{updatedTime}
 		)
 	</insert>	
 	
@@ -84,11 +84,11 @@
 		<if test="share != null">
 			and share = #{share}
 		</if>
-		<if test="createTime != null">			
-			and create_time = #{createTime}			
+		<if test="createdTime != null">			
+			and created_time = #{createdTime}			
 		</if>
-		<if test="updateTime != null">			
-			and update_time = #{updateTime}			
+		<if test="updatedTime != null">			
+			and updated_time = #{updatedTime}			
 		</if>
 	</sql>
     
@@ -121,6 +121,9 @@
 		</where>				
 		<if test="orderby != null">
 			ORDER BY ${orderby}
+		</if>
+		<if test="limit != null">
+			LIMIT #{limit} OFFSET #{offset}
 		</if>
 	</select>
 	
@@ -155,11 +158,11 @@
 		<if test="share != null">
 			share = #{share},
 		</if>
-		<if test="createTime != null">
-			create_time = #{createTime},
+		<if test="createdTime != null">
+			created_time = #{createdTime},
 		</if>
-		<if test="updateTime != null">
-			update_time = #{updateTime}
+		<if test="updatedTime != null">
+			updated_time = #{updatedTime}
 		</if>
 	</sql>
 	

@@ -1,11 +1,8 @@
 package com.kensure.mdt.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import co.kensure.frame.BaseInfo;
 
-import java.io.Serializable;
-import java.util.Date;
-
-public class MdtTeamInfo implements Serializable{
+public class MdtTeamInfo extends BaseInfo{
 
 	private static final long serialVersionUID = 3545276994084105527L;
 	
@@ -36,11 +33,6 @@ public class MdtTeamInfo implements Serializable{
 	/**专家类型*/		
 	private String specialistType; 
 
-	/**创建时间*/		
-	private Date createTime; 
-
-	/**更新时间*/		
-	private Date updateTime; 
 
 
 	public Long getId() {
@@ -105,19 +97,5 @@ public class MdtTeamInfo implements Serializable{
 
 	public void setSpecialistType(String specialistType) {
 		this.specialistType = specialistType;
-	}
-	public Date getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
-	public Date getUpdateTime() {
-		return updateTime;
-	}
-
-	public void setUpdateTime(Date updateTime) {
-		this.updateTime = updateTime;
 	}
 }

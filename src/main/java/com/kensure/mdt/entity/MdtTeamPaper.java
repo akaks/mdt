@@ -1,5 +1,7 @@
 package com.kensure.mdt.entity;
 
+import co.kensure.frame.BaseInfo;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.io.Serializable;
@@ -8,7 +10,7 @@ import java.util.Date;
 /**
  * MDT团队论文表对象类
  */
-public class MdtTeamPaper implements Serializable{
+public class MdtTeamPaper extends BaseInfo{
 
 	private static final long serialVersionUID = 3545276994084105527L;
 	
@@ -27,13 +29,6 @@ public class MdtTeamPaper implements Serializable{
 	/**发表时间*/
 	@JsonFormat(pattern="yyyy-MM-dd", timezone="GMT+8")
 	private Date postedDate; 
-
-	/**创建时间*/		
-	private Date createTime; 
-
-	/**更新时间*/		
-	private Date updateTime; 
-
 
 	public Long getId() {
 		return id;
@@ -69,19 +64,5 @@ public class MdtTeamPaper implements Serializable{
 
 	public void setPostedDate(Date postedDate) {
 		this.postedDate = postedDate;
-	}
-	public Date getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
-	public Date getUpdateTime() {
-		return updateTime;
-	}
-
-	public void setUpdateTime(Date updateTime) {
-		this.updateTime = updateTime;
 	}
 }

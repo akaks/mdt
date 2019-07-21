@@ -5,10 +5,13 @@ import co.kensure.frame.ResultRowInfo;
 import co.kensure.frame.ResultRowsInfo;
 import co.kensure.http.RequestUtils;
 import co.kensure.mem.PageInfo;
+
 import com.alibaba.fastjson.JSONObject;
+import com.kensure.mdt.entity.AuthUser;
 import com.kensure.mdt.entity.SysMenu;
 import com.kensure.mdt.entity.SysUser;
 import com.kensure.mdt.service.SysUserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.util.List;
 
 @Controller
@@ -31,9 +35,9 @@ public class SysUserController  extends BaseController {
 	public ResultInfo list(HttpServletRequest req, HttpServletResponse rep) {
 		JSONObject json = RequestUtils.paramToJson(req);
 		PageInfo page = JSONObject.parseObject(json.toJSONString(), PageInfo.class);
-
-        List<SysUser> list = sysUserService.selectList(page);
-		long cont = sysUserService.selectListCount(page);
+		AuthUser user = getCurrentUser(req);
+        List<SysUser> list = sysUserService.selectList(page,user);
+		long cont = sysUserService.selectListCount(user);
 
 		return new ResultRowsInfo(list, cont);
 	}
@@ -41,14 +45,14 @@ public class SysUserController  extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "listAll", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
 	public ResultInfo listAll(HttpServletRequest req, HttpServletResponse rep) {
-        List<SysUser> list = sysUserService.selectList();
+		AuthUser user = getCurrentUser(req);
+        List<SysUser> list = sysUserService.selectList(user);
 		return new ResultRowsInfo(list);
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "saveRole", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
 	public ResultInfo save(Long userId, String checkedStr) {
-
 		sysUserService.saveRole(userId, checkedStr);
 		return new ResultInfo();
 	}

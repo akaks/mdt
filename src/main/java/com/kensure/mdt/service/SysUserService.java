@@ -1,6 +1,7 @@
 package com.kensure.mdt.service;
 
 import co.kensure.exception.BusinessExceptionUtil;
+import co.kensure.frame.JSBaseService;
 import co.kensure.mem.MapUtils;
 import co.kensure.mem.PageInfo;
 
@@ -19,7 +20,7 @@ import java.util.*;
  * 用户表服务实现类
  */
 @Service
-public class SysUserService {
+public class SysUserService extends JSBaseService{
 	
 	@Resource
 	private SysUserMapper dao;
@@ -34,7 +35,7 @@ public class SysUserService {
 	private SysRoleMenuService sysRoleMenuService;
 
 	@Resource
-	private SysRoleService sysrRoleService;
+	private SysRoleService sysRoleService;
 
 	@Resource
 	private SysMenuService sysMenuService;
@@ -57,14 +58,13 @@ public class SysUserService {
 	
 	
 	public boolean insert(SysUser obj){
-		obj.setCreateTime(new Date());
-		obj.setUpdateTime(new Date());
+		super.beforeInsert(obj);
 		return dao.insert(obj);
 	}
 	
 	
 	public boolean update(SysUser obj){
-		obj.setUpdateTime(new Date());
+		super.beforeUpdate(obj);
 		return dao.update(obj);
 	}
     
@@ -86,34 +86,30 @@ public class SysUserService {
 	}
 
 
-    public List<SysUser> selectList(PageInfo page) {
-
+    public List<SysUser> selectList(PageInfo page,AuthUser user) {
 		Map<String, Object> parameters = MapUtils.genMap();
 		MapUtils.putPageInfo(parameters, page);
-
+		setOrgLevel(parameters, user);
 		List<SysUser> userList = selectByWhere(parameters);
-
 		for (SysUser sysUser : userList) {
             SysOrg org = sysOrgService.selectOne(sysUser.getDepartment());
             if (org != null) {
                 sysUser.setDepartment(org.getName());
             }
         }
-
 		return userList;
     }
 
-    public List<SysUser> selectList() {
-
+    public List<SysUser> selectList(AuthUser user) {
 		Map<String, Object> parameters = MapUtils.genMap();
+		setOrgLevel(parameters, user);
 		List<SysUser> userList = selectByWhere(parameters);
 		return userList;
     }
 
-    public long selectListCount(PageInfo page) {
-
+    public long selectListCount(AuthUser user) {
 		Map<String, Object> parameters = MapUtils.genMap();
-
+		setOrgLevel(parameters, user);
 		return selectCountByWhere(parameters);
     }
 
@@ -121,15 +117,13 @@ public class SysUserService {
 	 * 保存
 	 * @param user
 	 */
-	public void save(SysUser user) {
-
+	public void save(SysUser user) {	
+		SysOrg org = sysOrgService.selectOne(user.getDepartment());
+		user.setCreatedOrgid(org.getCreatedOrgid());
     	if (user.getId() == null) {
-
     		user.setPassword("123456");
-
 			insert(user);
 		} else {
-
     		update(user);
 		}
 	}
@@ -162,37 +156,29 @@ public class SysUserService {
     public AuthUser login(String username, String password) {
 
 		Map<String, Object> parameters = MapUtils.genMap("name", username, "password", password);
-
         List<SysUser> list = selectByWhere(parameters);
-
         if (list.isEmpty()) {
             BusinessExceptionUtil.threwException("账号或者密码错误");
         }
-
         SysUser sysUser = list.get(0);
-
+        
         AuthUser user = new AuthUser();
         BeanUtils.copyProperties(sysUser, user);
-
         List<SysUserRole> userRoles = sysUserRoleService.getSysUserRoleByUserId(user.getId());
-
+        
         String roleIds = "";  // 角色id取所有
         String roleLevel = "100";  // 角色级别取最大
-
+        
         for (SysUserRole userRole : userRoles) {
-
-            SysRole sysRole = sysrRoleService.selectOne(userRole.getRoleId());
-
+            SysRole sysRole = sysRoleService.selectOne(userRole.getRoleId());
             roleIds += sysRole.getId() + ",";
-
             if (roleLevel.compareTo(sysRole.getLevel()) < 0) {
                 roleLevel = sysRole.getLevel();
             }
         }
-
         user.setRoleIds(roleIds);
         user.setRoleLevel(roleLevel);
-
+        
         return user;
 
     }
@@ -283,8 +269,9 @@ public class SysUserService {
  		}
  		
  		
- 		//角色5是科室主任
- 		List<SysUserRole> list = sysUserRoleService.selectByRoleId(5L);
+ 		//获取科室主任角色
+ 		SysRole role = sysRoleService.selectByCode("kszr", one.getCreatedOrgid());	
+ 		List<SysUserRole> list = sysUserRoleService.selectByRoleId(role.getId());
  		
  		List<SysUser> userList = new ArrayList<>();
  		for(SysUserRole sysuerrole:list){

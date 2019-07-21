@@ -16,8 +16,10 @@
 		major_num as majorNum,
 		assistant_major_num as assistantMajorNum,
 		director_num as directorNum,
-		create_time as createTime,
-		update_time as updateTime
+		created_userid as createdUserid,
+		created_deptid as createdDeptid,
+		created_time as createdTime,
+		updated_time as updatedTime
     </sql>
     
 	<sql id="insertFields">
@@ -34,8 +36,10 @@
 		major_num,
 		assistant_major_num,
 		director_num,
-		create_time,
-		update_time
+		created_userid,
+		created_deptid,
+		created_time,
+		updated_time
     </sql>
 	
 	<insert id="insert" parameterType="com.kensure.mdt.entity.MdtTeamAssess">
@@ -54,10 +58,10 @@
 			#{majorNum},
 			#{assistantMajorNum},
 			#{directorNum},
-			#{createUserid},
-			#{createDept},
-			#{createTime},
-			#{updateTime}
+			#{createdUserid},
+			#{createdDeptid},
+			#{createdTime},
+			#{updatedTime}
 		)
 	</insert>	
 	
@@ -98,11 +102,21 @@
 		<if test="directorNum != null">			
 			and director_num = #{directorNum}			
 		</if>
-		<if test="createTime != null">			
-			and create_time = #{createTime}			
+		
+		<if test="assistantMajorNum != null">			
+			and assistant_major_num = #{assistantMajorNum}			
 		</if>
-		<if test="updateTime != null">			
-			and update_time = #{updateTime}			
+		<if test="createdUserid != null">			
+			and created_userid = #{createdUserid}			
+		</if>
+		<if test="createdDeptid != null">			
+			and created_deptid = #{createdDeptid}			
+		</if>
+		<if test="createdTime != null">			
+			and created_time = #{createdTime}			
+		</if>
+		<if test="updatedTime != null">			
+			and updated_time = #{updatedTime}			
 		</if>
 	</sql>
     
@@ -135,6 +149,9 @@
 		</where>				
 		<if test="orderby != null">
 			ORDER BY ${orderby}
+		</if>
+		<if test="limit != null">
+			LIMIT #{limit} OFFSET #{offset}
 		</if>
 	</select>
 	
@@ -175,11 +192,11 @@
 		<if test="directorNum != null">
 			director_num = #{directorNum},
 		</if>
-		<if test="createTime != null">
-			create_time = #{createTime},
+		<if test="createdTime != null">
+			created_time = #{createdTime},
 		</if>
-		<if test="updateTime != null">
-			update_time = #{updateTime}
+		<if test="updatedTime != null">
+			updated_time = #{updatedTime}
 		</if>
 	</sql>
 	

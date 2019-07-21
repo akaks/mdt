@@ -44,41 +44,12 @@ $(function(){
             var auditBtn = "<a href='#' onclick='auditFun("+row.id+")'>审核</a> ";
             var deleBtn = "<a href='#' onclick='dele("+row.id+")'>删除</a> ";
 
-            var btn = '' ;
-
-            btn += viewBtn;
-
-            // 不需要审核时，去除审核按钮
-            if (audit == '1') {
-                return editBtn + deleBtn;
-            }
-
+            var btn = viewBtn ;
             var roleIds = getUser().roleIds;
-
             // 普通用户
-            if (roleIds.indexOf('7') != -1) {
-
+            if (row.auditStatus == '0' || row.auditStatus == '9') {
                 btn += editBtn + deleBtn;
             }
-
-            // 科室主任
-            if (roleIds.indexOf('5') != -1 && row.auditStatus == '1') {
-
-                btn += auditBtn;
-            }
-
-            // 医务部主任
-            if (roleIds.indexOf('3') != -1 && row.auditStatus == '2') {
-
-                btn += auditBtn;
-            }
-
-            // 分管院长
-            if (roleIds.indexOf('2') != -1 && row.auditStatus == '3') {
-
-                btn += auditBtn;
-            }
-
             return btn;
         }}
     ]];

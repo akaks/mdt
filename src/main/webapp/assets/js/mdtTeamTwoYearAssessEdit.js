@@ -10,27 +10,44 @@ $(function(){
 
     if(teamId != undefined && teamId != null){
         initData(teamId);
-
+        initTeam(teamId);
         initGrid1(teamId);
-
         initGrid2(teamId);
+        initGrid20(teamId);
+        
+        var user = getUser();
+        var myObject = {};
+        myObject.auditName = user.name;
+        myObject.createdTime = (new Date()).Format("yyyy-MM-dd hh:mm:ss");;
+        $('#editForm2').form('load', myObject); 
     }
-
-
-    if(type != undefined && type != null){
-        if (type == 'edit') {
-
-            $("#btn1").show();
-        }
-        if (type == 'audit') {
-
-            $("#btn2").show();
-            $("#btn3").show();
-        }
-
-    }
-
 });
+
+
+/**
+ * 编辑
+ */
+function initTeam(id){
+    $.ajax({
+        url: baseUrl + '/mdtTeam/get?id='+id,
+        dataType:'json',
+        type:'post',
+        success:function(value){
+            if(value.type == 'success'){
+            	var row = value.resultData.row
+
+        	    if (row.twoYearStatus == '1') {
+                   $("#btn1").show();
+                }
+                if (row.twoYearStatus == '2') { 
+                   $("#audit1").show();
+               	   $("#audit2").show();
+                   $("#btn2").show();
+                }
+            }
+        }
+    });
+}
 
 
 function initGrid1(teamId) {
@@ -112,6 +129,42 @@ function initGrid2(teamId) {
                 });
             }
         }]
+
+    });
+}
+
+
+/**
+ * 生成 意见列表
+ * @param applyId
+ */
+function initGrid20(id) {
+
+    var columns=[[
+        {field:'entryName',title:'审批步骤',width:100},
+        {field:'userid',title:'审批人',width:200,formatter:function(value,row,index) {
+            return row.user.name;
+        }},
+        {field:'auditResult',title:'审批结果',width:200,formatter:function(value,row,index) {
+            return row.auditResult == 1?"通过":"不通过";
+        }},
+        {field:'auditOpinion',title:'审批意见',width:200},
+        {field:'createdTimeStr',title:'审批时间',width:200}
+    ]];
+
+    var toolbar = [];
+
+    //表格数据初始化
+    $('#grid20').datagrid({
+        title:'审批信息',
+        url:baseUrl + '/lc/list.do?busitype=mdt_team_assess&bisiid=' + id,
+        loadFilter: function(data){
+            return data.resultData;
+        },
+        columns:columns,
+        singleSelect:true,
+        rownumbers:true,
+        toolbar: toolbar
 
     });
 }
@@ -202,18 +255,22 @@ function doSearch() {
     $('#grid2').datagrid('load');
 }
 
-function sauditSave(val) {
-
+function sauditSave() {
+	 var formdata=getFormData('editForm'); 
+	 var formdata2 = getFormData('editForm2');
+	 formdata.yijian = JSON.stringify(formdata2);
     $.ajax({
-        url: baseUrl + '/mdtTeam/auditTwoYearAssess?teamId=' + teamId + '&result=' + val,
+        url: baseUrl + '/mdtTeam/auditTwoYearAssess',
+        data:formdata,
         dataType:'json',
+        type:'post',
         success:function(value){
-            if(value.type == 'success'){
-                var mylay = parent.layer.getFrameIndex(window.name);
-                parent.layer.close(mylay);
-
-                window.parent.doSearch();
-            }
+        	 if(value.type == 'success'){
+                 var mylay = parent.layer.getFrameIndex(window.name);
+                 parent.layer.close(mylay);
+                 window.parent.doSearch();
+             }
+             $.messager.alert('提示',value.message);
         }
     });
 }

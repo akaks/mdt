@@ -23,10 +23,10 @@
 		month10,
 		month11,
 		month12,
-		create_userid as createUserid,
-		create_dept as createDept,
-		create_time as createTime,
-		update_time as updateTime
+		created_userid as createdUserid,
+		created_deptid as createdDeptid,
+		created_time as createdTime,
+		updated_time as updatedTime
     </sql>
     
 	<sql id="insertFields">
@@ -50,10 +50,10 @@
 		month10,
 		month11,
 		month12,
-		create_userid,
-		create_dept,
-		create_time,
-		update_time
+		created_userid,
+		created_deptid,
+		created_time,
+		updated_time
     </sql>
 	
 	<insert id="insert" parameterType="com.kensure.mdt.entity.MdtTeamObjective">
@@ -79,10 +79,10 @@
 			#{month10},
 			#{month11},
 			#{month12},
-			#{createUserid},
-			#{createDept},
-			#{createTime},
-			#{updateTime}
+			#{createdUserid},
+			#{createdDeptid},
+			#{createdTime},
+			#{updatedTime}
 		)
 	</insert>	
 	
@@ -141,11 +141,11 @@
 		<if test="month12 != null">			
 			and month12 = #{month12}			
 		</if>
-		<if test="createTime != null">			
-			and create_time = #{createTime}			
+		<if test="createdTime != null">			
+			and created_time = #{createdTime}			
 		</if>
-		<if test="updateTime != null">			
-			and update_time = #{updateTime}			
+		<if test="updatedTime != null">			
+			and updated_time = #{updatedTime}			
 		</if>
 	</sql>
     
@@ -178,6 +178,9 @@
 		</where>				
 		<if test="orderby != null">
 			ORDER BY ${orderby}
+		</if>
+		<if test="limit != null">
+			LIMIT #{limit} OFFSET #{offset}
 		</if>
 	</select>
 	
@@ -239,11 +242,11 @@
 		<if test="month12 != null">
 			month12 = #{month12},
 		</if>
-		<if test="createTime != null">
-			create_time = #{createTime},
+		<if test="createdTime != null">
+			created_time = #{createdTime},
 		</if>
-		<if test="updateTime != null">
-			update_time = #{updateTime}
+		<if test="updatedTime != null">
+			updated_time = #{updatedTime}
 		</if>
 	</sql>
 	

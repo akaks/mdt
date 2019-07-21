@@ -13,9 +13,10 @@
 		title,
 		education,
 		phone,
+		created_orgid as createdOrgid,
 		phone_cornet as phoneCornet,
-		create_time as createTime,
-		update_time as updateTime
+		created_time as createdTime,
+		updated_time as updatedTime
     </sql>
     
 	<sql id="insertFields">
@@ -29,9 +30,10 @@
 		title,
 		education,
 		phone,
+		created_orgid,
 		phone_cornet,
-		create_time,
-		update_time
+		created_time,
+		updated_time
     </sql>
 	
 	<insert id="insert" parameterType="com.kensure.mdt.entity.SysUser">
@@ -47,9 +49,10 @@
 			#{title},
 			#{education},
 			#{phone},
+			#{createdOrgid},
 			#{phoneCornet},
-			#{createTime},
-			#{updateTime}
+			#{createdTime},
+			#{updatedTime}
 		)
 	</insert>	
 	
@@ -81,14 +84,17 @@
 		<if test="phone != null">			
 			and phone = #{phone}			
 		</if>
+		<if test="createdOrgid != null">			
+			and created_orgid = #{createdOrgid}			
+		</if>
 		<if test="phoneCornet != null">			
 			and phone_cornet = #{phoneCornet}			
 		</if>
-		<if test="createTime != null">			
-			and create_time = #{createTime}			
+		<if test="createdTime != null">			
+			and created_time = #{createdTime}			
 		</if>
-		<if test="updateTime != null">			
-			and update_time = #{updateTime}			
+		<if test="updatedTime != null">			
+			and updated_time = #{updatedTime}			
 		</if>
 	</sql>
     
@@ -155,14 +161,17 @@
 		<if test="phone != null">
 			phone = #{phone},
 		</if>
+		<if test="createdOrgid != null">			
+			created_orgid = #{createdOrgid},		
+		</if>
 		<if test="phoneCornet != null">
 			phone_cornet = #{phoneCornet},
 		</if>
-		<if test="createTime != null">
-			create_time = #{createTime},
+		<if test="createdTime != null">
+			created_time = #{createdTime},
 		</if>
-		<if test="updateTime != null">
-			update_time = #{updateTime}
+		<if test="updatedTime != null">
+			updated_time = #{updatedTime}
 		</if>
 	</sql>
 	

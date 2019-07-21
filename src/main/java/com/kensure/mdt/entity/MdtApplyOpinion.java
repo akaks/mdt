@@ -1,14 +1,11 @@
 package com.kensure.mdt.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
-import java.io.Serializable;
-import java.util.Date;
+import co.kensure.frame.BaseInfo;
 
 /**
  * MDT专家意见表对象类
  */
-public class MdtApplyOpinion implements Serializable{
+public class MdtApplyOpinion extends BaseInfo{
 
 	private static final long serialVersionUID = 3545276994084105527L;
 	
@@ -23,13 +20,6 @@ public class MdtApplyOpinion implements Serializable{
 
 	/**内容*/		
 	private String content; 
-
-	/**创建时间*/		
-	private Date createTime; 
-
-	/**更新时间*/		
-	private Date updateTime;
-
 	/***/
 	private String username;
 
@@ -80,18 +70,5 @@ public class MdtApplyOpinion implements Serializable{
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public Date getCreateTime() {
-		return createTime;
-	}
 
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
-	public Date getUpdateTime() {
-		return updateTime;
-	}
-
-	public void setUpdateTime(Date updateTime) {
-		this.updateTime = updateTime;
-	}
 }

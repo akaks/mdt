@@ -80,6 +80,9 @@
 		<if test="orderby != null">
 			ORDER BY ${orderby}
 		</if>
+		<if test="limit != null">
+			LIMIT #{limit} OFFSET #{offset}
+		</if>
 	</select>
 	
 	<sql id="setComn">		

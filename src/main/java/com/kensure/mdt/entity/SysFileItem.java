@@ -1,12 +1,11 @@
 package com.kensure.mdt.entity;
 
-import java.io.Serializable;
-import java.util.Date;
+import co.kensure.frame.BaseInfo;
 
 /**
  * 文件项表对象类
  */
-public class SysFileItem implements Serializable{
+public class SysFileItem extends BaseInfo{
 
 	private static final long serialVersionUID = 3545276994084105527L;
 	
@@ -21,13 +20,6 @@ public class SysFileItem implements Serializable{
 
 	/**文件路径*/		
 	private String filePath; 
-
-	/**创建时间*/		
-	private Date createTime; 
-
-	/**更新时间*/		
-	private Date updateTime; 
-
 
 	public Long getId() {
 		return id;
@@ -56,19 +48,5 @@ public class SysFileItem implements Serializable{
 
 	public void setFilePath(String filePath) {
 		this.filePath = filePath;
-	}
-	public Date getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
-	public Date getUpdateTime() {
-		return updateTime;
-	}
-
-	public void setUpdateTime(Date updateTime) {
-		this.updateTime = updateTime;
 	}
 }

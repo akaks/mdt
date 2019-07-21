@@ -11,17 +11,12 @@
 		annual_status as annualStatus,
 		two_year_status as twoYearStatus,
 		audit_status as auditStatus,
-		audit_result1 as auditResult1,
-		audit_opinion1 as auditOpinion1,
-		audit_result2 as auditResult2,
-		audit_opinion2 as auditOpinion2,
-		audit_result3 as auditResult3,
-		audit_opinion3 as auditOpinion3,
-		create_userid as createUserid,
-		create_dept as createDept,
+		created_userid as createdUserid,
+		created_deptid as createdDeptid,
 		is_delete as isDelete,
-		create_time as createTime,
-		update_time as updateTime
+		created_orgid as createdOrgid,
+		created_time as createdTime,
+		updated_time as updatedTime
     </sql>
     
 	<sql id="insertFields">
@@ -33,17 +28,12 @@
 		annual_status,
 		two_year_status,
 		audit_status,
-		audit_result1,
-		audit_opinion1,
-		audit_result2,
-		audit_opinion2,
-		audit_result3,
-		audit_opinion3,
-		create_userid,
-		create_dept,
+		created_userid,
+		created_deptid,
 		is_delete,
-		create_time,
-		update_time
+		created_orgid,
+		created_time,
+		updated_time
     </sql>
 	
 	<insert id="insert" parameterType="com.kensure.mdt.entity.MdtTeam">
@@ -57,17 +47,12 @@
 			#{annualStatus},
 			#{twoYearStatus},
 			#{auditStatus},
-			#{auditResult1},
-			#{auditOpinion1},
-			#{auditResult2},
-			#{auditOpinion2},
-			#{auditResult3},
-			#{auditOpinion3},
-			#{createUserid},
-			#{createDept},
+			#{createdUserid},
+			#{createdDeptid},
 			#{isDelete},
-			#{createTime},
-			#{updateTime}
+			#{createdOrgid},
+			#{createdTime},
+			#{updatedTime}
 		)
 	</insert>	
 	
@@ -91,37 +76,25 @@
 			and two_year_status = #{twoYearStatus}
 		</if>
 		<if test="annualStatusIn != null">
-			annual_status in ( #{annualStatusIn} ) ,
+			and annual_status in ( ${annualStatusIn} )
 		</if>
 		<if test="auditStatus != null">			
 			and audit_status = #{auditStatus}			
 		</if>
-		<if test="auditResult1 != null">			
-			and audit_result1 = #{auditResult1}			
-		</if>
-		<if test="auditOpinion1 != null">			
-			and audit_opinion1 = #{auditOpinion1}			
-		</if>
-		<if test="auditResult2 != null">			
-			and audit_result2 = #{auditResult2}			
-		</if>
-		<if test="auditOpinion2 != null">			
-			and audit_opinion2 = #{auditOpinion2}			
-		</if>
-		<if test="auditResult3 != null">			
-			and audit_result3 = #{auditResult3}			
-		</if>
-		<if test="auditOpinion3 != null">			
-			and audit_opinion3 = #{auditOpinion3}			
-		</if>
 		<if test="isDelete != null">			
 			and is_delete = #{isDelete}			
 		</if>
-		<if test="createTime != null">			
-			and create_time = #{createTime}			
+		<if test="createdOrgid != null">			
+			and created_orgid = #{createdOrgid}			
 		</if>
-		<if test="updateTime != null">			
-			and update_time = #{updateTime}			
+		<if test="createdUserid != null">			
+			and created_userid = #{createdUserid}			
+		</if>
+		<if test="createdTime != null">			
+			and created_time = #{createdTime}			
+		</if>
+		<if test="updatedTime != null">			
+			and updated_time = #{updatedTime}			
 		</if>
 	</sql>
     
@@ -155,6 +128,9 @@
 		<if test="orderby != null">
 			ORDER BY ${orderby}
 		</if>
+		<if test="limit != null">
+			LIMIT #{limit} OFFSET #{offset}
+		</if>
 	</select>
 	
 	<sql id="setComn">		
@@ -179,32 +155,17 @@
 		<if test="auditStatus != null">
 			audit_status = #{auditStatus},
 		</if>
-		<if test="auditResult1 != null">
-			audit_result1 = #{auditResult1},
-		</if>
-		<if test="auditOpinion1 != null">
-			audit_opinion1 = #{auditOpinion1},
-		</if>
-		<if test="auditResult2 != null">
-			audit_result2 = #{auditResult2},
-		</if>
-		<if test="auditOpinion2 != null">
-			audit_opinion2 = #{auditOpinion2},
-		</if>
-		<if test="auditResult3 != null">
-			audit_result3 = #{auditResult3},
-		</if>
-		<if test="auditOpinion3 != null">
-			audit_opinion3 = #{auditOpinion3},
-		</if>
 		<if test="isDelete != null">
 			is_delete = #{isDelete},
 		</if>
-		<if test="createTime != null">
-			create_time = #{createTime},
+		<if test="createdOrgid != null">
+			created_orgid = #{createdOrgid},
 		</if>
-		<if test="updateTime != null">
-			update_time = #{updateTime}
+		<if test="createdTime != null">
+			created_time = #{createdTime},
+		</if>
+		<if test="updatedTime != null">
+			updated_time = #{updatedTime}
 		</if>
 	</sql>
 	

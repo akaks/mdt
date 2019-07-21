@@ -5,9 +5,12 @@ import co.kensure.frame.ResultRowInfo;
 import co.kensure.frame.ResultRowsInfo;
 import co.kensure.http.RequestUtils;
 import co.kensure.mem.PageInfo;
+
 import com.alibaba.fastjson.JSONObject;
+import com.kensure.mdt.entity.AuthUser;
 import com.kensure.mdt.entity.SysOrg;
 import com.kensure.mdt.service.SysOrgService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.util.List;
 
 /**
@@ -39,9 +43,9 @@ public class SysOrgController  extends BaseController {
 	public ResultInfo findByPage(HttpServletRequest req, HttpServletResponse rep) {
 		JSONObject json = RequestUtils.paramToJson(req);
 		PageInfo page = JSONObject.parseObject(json.toJSONString(), PageInfo.class);
-
-        List<SysOrg> list = sysOrgService.selectList(page);
-		long cont = sysOrgService.selectListCount();
+		AuthUser user = getCurrentUser(req);
+        List<SysOrg> list = sysOrgService.selectList(page,user);
+		long cont = sysOrgService.selectListCount(user);
 
 		return new ResultRowsInfo(list, cont);
 	}
@@ -55,8 +59,8 @@ public class SysOrgController  extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "listAll", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
 	public ResultInfo listAll(HttpServletRequest req, HttpServletResponse rep) {
-
-        List<SysOrg> list = sysOrgService.selectAllList();
+		AuthUser user = getCurrentUser(req);
+        List<SysOrg> list = sysOrgService.selectAllList(user);
 		return new ResultRowsInfo(list);
 	}
 
@@ -85,7 +89,6 @@ public class SysOrgController  extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "update", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
 	public ResultInfo update(HttpServletRequest req, HttpServletResponse rep) {
-
 		JSONObject json = RequestUtils.paramToJson(req);
 		SysOrg org = JSONObject.parseObject(json.toJSONString(), SysOrg.class);
 		sysOrgService.update(org);

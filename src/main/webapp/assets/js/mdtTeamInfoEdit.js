@@ -2,18 +2,13 @@ var id;  // id
 var teamId;  // 团队表主id
 
 $(function() {
-
-    var url = window.location.href;
-    id = url.split("id=")[1];
-    teamId = url.split("teamId=")[1];
+    id = getQueryVariable("id");
+    teamId = getQueryVariable("teamId");
     if(id != undefined && id != null){
         edit(id);
     }
-
     $("#teamId").val(teamId);
-
     setDepartment();
-
     setUser();
 });
 

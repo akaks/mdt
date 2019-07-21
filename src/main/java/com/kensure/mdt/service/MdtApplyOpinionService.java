@@ -1,13 +1,7 @@
 
 package com.kensure.mdt.service;
 
-import co.kensure.mem.MapUtils;
-import com.kensure.mdt.dao.MdtApplyOpinionMapper;
-import com.kensure.mdt.entity.*;
-import com.kensure.mdt.service.MdtApplyOpinionService;
-
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -15,12 +9,22 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import co.kensure.frame.JSBaseService;
+import co.kensure.mem.MapUtils;
+
+import com.kensure.mdt.dao.MdtApplyOpinionMapper;
+import com.kensure.mdt.entity.MdtApply;
+import com.kensure.mdt.entity.MdtApplyDoctor;
+import com.kensure.mdt.entity.MdtApplyOpinion;
+import com.kensure.mdt.entity.SysOrg;
+import com.kensure.mdt.entity.SysUser;
+
 
 /**
  * MDT专家意见表服务实现类
  */
 @Service
-public class MdtApplyOpinionService {
+public class MdtApplyOpinionService extends JSBaseService{
 	
 	@Resource
 	private MdtApplyOpinionMapper dao;
@@ -50,14 +54,13 @@ public class MdtApplyOpinionService {
 	
 	
 	public boolean insert(MdtApplyOpinion obj){
-		obj.setCreateTime(new Date());
-		obj.setUpdateTime(new Date());
+		super.beforeInsert(obj);
 		return dao.insert(obj);
 	}
 	
 	
 	public boolean update(MdtApplyOpinion obj){
-		obj.setUpdateTime(new Date());
+		super.beforeUpdate(obj);
 		return dao.update(obj);
 	}
     

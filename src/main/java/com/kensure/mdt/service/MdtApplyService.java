@@ -3,7 +3,6 @@ package com.kensure.mdt.service;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -15,6 +14,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
 import co.kensure.exception.BusinessExceptionUtil;
+import co.kensure.frame.JSBaseService;
 import co.kensure.mem.CollectionUtils;
 import co.kensure.mem.MapUtils;
 import co.kensure.mem.PageInfo;
@@ -25,6 +25,7 @@ import com.kensure.mdt.entity.MdtApply;
 import com.kensure.mdt.entity.MdtApplyDoctor;
 import com.kensure.mdt.entity.MdtTeamInfo;
 import com.kensure.mdt.entity.SysMsgTemplate;
+import com.kensure.mdt.entity.SysRole;
 import com.kensure.mdt.entity.SysUser;
 import com.kensure.mdt.entity.SysUserRole;
 import com.kensure.mdt.lc.model.LCDaiBan;
@@ -39,7 +40,7 @@ import com.kensure.mdt.lc.service.LCHistoryService;
  * @since
  */
 @Service
-public class MdtApplyService {
+public class MdtApplyService extends JSBaseService{
 
 	@Resource
 	private MdtApplyMapper dao;
@@ -64,11 +65,14 @@ public class MdtApplyService {
 	@Resource
 	private SysUserRoleService sysUserRoleService;
 	@Resource
+	private SysRoleService sysRoleService;
+	@Resource
 	private MdtGradeItemService mdtGradeItemService;
 	@Resource
 	private MdtApplyFeedbackService mdtApplyFeedbackService;
 	@Resource
 	private MdtApplyOpinionService mdtApplyOpinionService;
+
 
 	private static final String table = "mdt_apply";
 
@@ -80,7 +84,8 @@ public class MdtApplyService {
 		MdtApply app = selectOne(id);
 		List<LCHistory> lCHistoryList = lCHistoryService.selectByBusiid(table, id);
 		app.setlCHistoryList(lCHistoryList);
-		app.setDoctors(mdtApplyDoctorService.getDetailByApplyId(id));;
+		app.setDoctors(mdtApplyDoctorService.getDetailByApplyId(id));
+		;
 		return app;
 	}
 
@@ -97,13 +102,11 @@ public class MdtApplyService {
 	}
 
 	public boolean insert(MdtApply obj) {
-		obj.setCreateTime(new Date());
-		obj.setUpdateTime(new Date());
 		return dao.insert(obj);
 	}
 
 	public boolean update(MdtApply obj) {
-		obj.setUpdateTime(new Date());
+		super.beforeUpdate(obj);
 		return dao.update(obj);
 	}
 
@@ -132,8 +135,7 @@ public class MdtApplyService {
 			}
 			apply.setShare("0"); // "分享" 状态
 			apply.setIsDelete("0");
-			apply.setCreateDept(user.getDepartment());
-			apply.setCreateUserid(user.getId());
+			initBase(apply, user);
 			insert(apply);
 		} else {
 			update(apply);
@@ -158,7 +160,7 @@ public class MdtApplyService {
 					daiban.setUserid(kszruser.getId().intValue());
 					daibanlist.add(daiban);
 				}
-				liucheng(daibanlist, apply.getId());
+				lCDaiBanService.liucheng(daibanlist, apply.getId(), table);
 			} else {
 				// 门诊没有流程，直接到缴费
 				apply.setApplyStatus("11");
@@ -167,20 +169,10 @@ public class MdtApplyService {
 		}
 	}
 
-	private void liucheng(List<LCDaiBan> list, Long bisiid) {
-		// 删除上一步的
-		lCDaiBanService.deleteByBisiid(bisiid, table);
-		if (CollectionUtils.isEmpty(list)) {
-			return;
-		}
-		for (LCDaiBan daiban : list) {
-			lCDaiBanService.add(daiban);
-		}
-	}
-
 	public List<MdtApply> selectList(PageInfo page, AuthUser user) {
 		List<Long> idList = daibanList(user);
 		Map<String, Object> parameters = MapUtils.genMap("isManager", 1, "applyPersonId1", user.getId(), "idList", idList);
+		setOrgLevel(parameters, user);
 		MapUtils.putPageInfo(parameters, page);
 		List<MdtApply> list = selectByWhere(parameters);
 
@@ -197,6 +189,7 @@ public class MdtApplyService {
 	public long selectListCount(AuthUser user) {
 		List<Long> idList = daibanList(user);
 		Map<String, Object> parameters = MapUtils.genMap("isManager", 1, "applyPersonId1", user.getId(), "idList", idList);
+		setOrgLevel(parameters, user);
 		return selectCountByWhere(parameters);
 	}
 
@@ -245,38 +238,35 @@ public class MdtApplyService {
 		}
 		lCHistoryService.insert(yijian);
 
-		// 待办入库
-		if ("1".equals(old.getApplyStatus())) {
-			if (1 == yijian.getAuditResult()) {
+		// 退回走退回逻辑
+		if (-1 == yijian.getAuditResult()) {
+			old.setApplyStatus("9");
+			back(old);
+		} else {
+			// 下一步流程人
+			if ("1".equals(old.getApplyStatus())) {
 				old.setApplyStatus("2");
-			} else {
-				old.setApplyStatus("9");
-				back(old);
-			}
-			// 获取医务部主任
-			List<SysUserRole> userlist = sysUserRoleService.selectByRoleId(3L);
-			if (CollectionUtils.isEmpty(userlist)) {
-				BusinessExceptionUtil.threwException("找不到对应的科室主任");
-			}
-			List<LCDaiBan> daibanlist = new ArrayList<>();
-			for (SysUserRole kszruser : userlist) {
-				LCDaiBan daiban = new LCDaiBan();
-				daiban.setApplyPersonId(old.getApplyPersonId());
-				daiban.setBisiid(old.getId());
-				daiban.setEntryName("医务部主任审核");
-				daiban.setTitle(old.getName());
-				daiban.setBusitype(table);
-				daiban.setUserid(kszruser.getUserId().intValue());
-				daibanlist.add(daiban);
-			}
-			liucheng(daibanlist, old.getId());
-		} else if ("2".equals(old.getApplyStatus())) {
-			if (1 == yijian.getAuditResult()) {
+				// 获取医务部主任
+				SysRole role = sysRoleService.selectByCode("ywbzr", user.getCreatedOrgid());	
+				List<SysUserRole> userlist = sysUserRoleService.selectByRoleId(role.getId());
+				if (CollectionUtils.isEmpty(userlist)) {
+					BusinessExceptionUtil.threwException("找不到对应的医务部主任");
+				}
+				List<LCDaiBan> daibanlist = new ArrayList<>();
+				for (SysUserRole kszruser : userlist) {
+					LCDaiBan daiban = new LCDaiBan();
+					daiban.setApplyPersonId(old.getApplyPersonId());
+					daiban.setBisiid(old.getId());
+					daiban.setEntryName("医务部主任审核");
+					daiban.setTitle(old.getName());
+					daiban.setBusitype(table);
+					daiban.setUserid(kszruser.getUserId().intValue());
+					daibanlist.add(daiban);
+				}
+				lCDaiBanService.liucheng(daibanlist, old.getId(), table);
+			} else if ("2".equals(old.getApplyStatus())) {
 				old.setApplyStatus("11");
-				liucheng(null, old.getId());
-			} else {
-				old.setApplyStatus("9");
-				back(old);
+				lCDaiBanService.liucheng(null, old.getId(), table);
 			}
 		}
 		update(old);
@@ -295,7 +285,7 @@ public class MdtApplyService {
 		daiban.setBusitype(table);
 		daiban.setUserid(old.getApplyPersonId());
 		daibanlist.add(daiban);
-		liucheng(daibanlist, old.getId());
+		lCDaiBanService.liucheng(daibanlist, old.getId(), table);
 	}
 
 	/**
@@ -398,9 +388,7 @@ public class MdtApplyService {
 		List<MdtApply> list = selectByWhere(parameters);
 		return list;
 	}
-	
-	
-	
+
 	/**
 	 * 保存科室打分和意见
 	 * 
@@ -409,9 +397,9 @@ public class MdtApplyService {
 	public void saveKSPinFen(MdtApply apply) {
 		mdtGradeItemService.saveDeptGrade(apply);
 		mdtApplyOpinionService.saveZJYJ(apply);
-	
+
 	}
-	
+
 	/**
 	 * 录入专家的打分
 	 * 

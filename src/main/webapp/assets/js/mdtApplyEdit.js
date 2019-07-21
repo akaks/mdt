@@ -8,7 +8,6 @@ $(function(){
 
     if(id != undefined && id != null){
         initData(id);
-
         initGrid1(id);
         initGrid2(id);
     } else {
@@ -21,12 +20,10 @@ $(function(){
     setUser();
     if(type != undefined && type != null){
         if (type == 'add') {
-
             $("#btn1").show();
             $("#btn2").show();
         }
         if (type == 'edit') {
-
             $("#btn1").show();
         }
      }
@@ -347,33 +344,24 @@ function initData(id){
         success:function(value){
             if(value.type == 'success'){
                 var data = value.resultData.row;
-                $('#editForm').form('load', value.resultData.row);
-                $('#editForm2').form('load', value.resultData.row);
+                $('#editForm').form('load', data);
 
-                if (type == 'edit' && $("#applyStatus").val() == '0') {
-                    $("#btn2").show();
+                if (type == 'edit' || type == 'audit') {
+                	  if (data.applyStatus == '0' || data.applyStatus == '9' ) {
+                          $("#btn2").show();
+                      }else if (data.applyStatus == "1" || data.applyStatus == "2") {
+                		  $("#audit1").show();
+                          $("#audit2").show();
+                          $("#btn4").show();
+                          var user = getUser();
+                          var myObject = {};
+                          myObject.auditName = user.name;
+                          myObject.createdTime = (new Date()).Format("yyyy-MM-dd hh:mm:ss");;
+                          $('#editForm2').form('load', myObject);   
+                	  }
+                   
                 }
-
-                // 住院病人，需要审核
-                if (type == 'audit' && data.patientType == '1') {
-                    $("#audit1").show();
-                    $("#audit2").show();
-                    var user = getUser();
-                    var myObject = {};
-                    myObject.auditName = user.name;
-                    myObject.createdTime = (new Date()).Format("yyyy-MM-dd hh:mm:ss");;
-                    $('#editForm2').form('load', myObject);         
-                    $("#btn4").show();
-                }
-
-                if (type == 'edit') {
-                    if (data.applyStatus == '9') {
-                        $("#btn2").show();
-                    }
-                }
-
                 $("#id").val(data.id);
-
                 getMdtPurpose();
             }
         }
@@ -408,8 +396,8 @@ function auditSave() {
     if(isValidate==false){
         return ;
     }
-
     var formdata = getFormData('editForm2');
+    formdata.id = id;
     formdata.yijian = JSON.stringify(formdata);
 
     $.ajax({

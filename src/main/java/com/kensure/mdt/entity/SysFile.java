@@ -1,33 +1,24 @@
 package com.kensure.mdt.entity;
 
-import java.io.Serializable;
-import java.util.Date;
+import java.util.List;
+
+import co.kensure.frame.BaseInfo;
 
 /**
  * 文件表对象类
  */
-public class SysFile implements Serializable{
+public class SysFile extends BaseInfo {
 
 	private static final long serialVersionUID = 3545276994084105527L;
-	
-	/**文件表*/		
-	private Long id; 
 
-	/**内容*/		
-	private String content; 
+	/** 文件表 */
+	private Long id;
+	/** 内容 */
+	private String content;
+	/** 标题 */
+	private String title;
 
-	/**创建人id*/		
-	private Long createUserid; 
-
-	/**创建人科室*/		
-	private String createDept; 
-
-	/**创建时间*/		
-	private Date createTime; 
-
-	/**更新时间*/		
-	private Date updateTime; 
-
+	private List<SysFileItem> fileList;
 
 	public Long getId() {
 		return id;
@@ -36,6 +27,7 @@ public class SysFile implements Serializable{
 	public void setId(Long id) {
 		this.id = id;
 	}
+
 	public String getContent() {
 		return content;
 	}
@@ -43,32 +35,21 @@ public class SysFile implements Serializable{
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public Long getCreateUserid() {
-		return createUserid;
+
+	public String getTitle() {
+		return title;
 	}
 
-	public void setCreateUserid(Long createUserid) {
-		this.createUserid = createUserid;
-	}
-	public String getCreateDept() {
-		return createDept;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
-	public void setCreateDept(String createDept) {
-		this.createDept = createDept;
-	}
-	public Date getCreateTime() {
-		return createTime;
+	public List<SysFileItem> getFileList() {
+		return fileList;
 	}
 
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
-	public Date getUpdateTime() {
-		return updateTime;
+	public void setFileList(List<SysFileItem> fileList) {
+		this.fileList = fileList;
 	}
 
-	public void setUpdateTime(Date updateTime) {
-		this.updateTime = updateTime;
-	}
 }

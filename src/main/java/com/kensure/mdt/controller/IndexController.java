@@ -24,19 +24,7 @@ public class IndexController extends BaseController {
 	@Autowired
 	private IndexService indexService;
 
-    /**
-     * 代办
-     * @param req
-     * @param rep
-     * @return
-     */
-	@ResponseBody
-	@RequestMapping(value = "doSth", method = { RequestMethod.POST, RequestMethod.GET }, produces = "application/json;charset=UTF-8")
-	public ResultInfo doSth(HttpServletRequest req, HttpServletResponse rep) {
 
-        List<ToSthResp> list = indexService.doSth(getCurrentUser(req));
-        return new ResultRowsInfo(list);
-	}
 
 
 }

@@ -1,14 +1,7 @@
 
 package com.kensure.mdt.service;
 
-import co.kensure.mem.MapUtils;
-import com.kensure.mdt.dao.MdtTeamPaperMapper;
-import com.kensure.mdt.entity.MdtTeamIssue;
-import com.kensure.mdt.entity.MdtTeamPaper;
-import com.kensure.mdt.service.MdtTeamPaperService;
-
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -16,12 +9,18 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import co.kensure.frame.JSBaseService;
+import co.kensure.mem.MapUtils;
+
+import com.kensure.mdt.dao.MdtTeamPaperMapper;
+import com.kensure.mdt.entity.MdtTeamPaper;
+
 
 /**
  * MDT团队论文表服务实现类
  */
 @Service
-public class MdtTeamPaperService {
+public class MdtTeamPaperService extends JSBaseService {
 	
 	@Resource
 	private MdtTeamPaperMapper dao;
@@ -45,14 +44,13 @@ public class MdtTeamPaperService {
 	
 	
 	public boolean insert(MdtTeamPaper obj){
-		obj.setCreateTime(new Date());
-		obj.setUpdateTime(new Date());
+		super.beforeInsert(obj);
 		return dao.insert(obj);
 	}
 	
 	
 	public boolean update(MdtTeamPaper obj){
-		obj.setUpdateTime(new Date());
+		super.beforeUpdate(obj);
 		return dao.update(obj);
 	}
     
@@ -84,12 +82,9 @@ public class MdtTeamPaperService {
 
 
 	public void save(MdtTeamPaper obj) {
-
 		if (obj.getId() == null) {
-
 			insert(obj);
 		} else {
-
 			update(obj);
 		}
 	}

@@ -29,14 +29,15 @@
 		apply_status as applyStatus,
 		share as share,
 		summary,
-		create_userid as createUserid,
-		create_dept as createDept,
+		created_userid as createdUserid,
+		created_deptid as createdDeptid,
 		is_delete as isDelete,
 		apply_person_id as applyPersonId,
 		patient_id as patientId,
 		idcard,
-		create_time as createTime,
-		update_time as updateTime
+		created_orgid as createdOrgid,
+		created_time as createdTime,
+		updated_time as updatedTime
     </sql>
     
 	<sql id="insertFields">
@@ -66,14 +67,15 @@
 		apply_status,
 		share,
 		summary,
-		create_userid,
-		create_dept,
+		created_userid,
+		created_deptid,
 		is_delete,
 		apply_person_id,
 		patient_id,
 		idcard,
-		create_time,
-		update_time
+		created_orgid,
+		created_time,
+		updated_time
     </sql>
 	
 	<insert id="insert" parameterType="com.kensure.mdt.entity.MdtApply">
@@ -105,14 +107,15 @@
 			#{applyStatus},
 			#{share},
 			#{summary},
-			#{createUserid},
-			#{createDept},
+			#{createdUserid},
+			#{createdDeptid},
 			#{isDelete},
 			#{applyPersonId},
 			#{patientId},
 			#{idcard},
-			#{createTime},
-			#{updateTime}
+			#{createdOrgid},
+			#{createdTime},
+			#{updatedTime}
 		)
 	</insert>	
 	
@@ -189,12 +192,16 @@
 		<if test="share != null">
 			and share = #{share}
 		</if>
-		<if test="createUserid != null">
-			and create_userid = #{createUserid}
+		<if test="createdUserid != null">
+			and created_userid = #{createdUserid}
 		</if>
-		<if test="createDept != null">
-			and create_dept = #{createDept}
+		<if test="createdOrgid != null">
+			and created_orgid = #{createdOrgid}
 		</if>
+		<if test="createdDeptid != null">
+			and created_deptid = #{createdDeptid}
+		</if>
+		
 		<if test="isDelete != null">
 			and is_delete = #{isDelete}
 		</if>
@@ -218,11 +225,11 @@
 		<if test="idcard != null">
 			and idcard = #{idcard}
 		</if>
-		<if test="createTime != null">			
-			and create_time = #{createTime}			
+		<if test="createdTime != null">			
+			and created_time = #{createdTime}			
 		</if>
-		<if test="updateTime != null">			
-			and update_time = #{updateTime}			
+		<if test="updatedTime != null">			
+			and updated_time = #{updatedTime}			
 		</if>
 	</sql>
     
@@ -255,6 +262,9 @@
 		</where>				
 		<if test="orderby != null">
 			ORDER BY ${orderby}
+		</if>
+		<if test="limit != null">
+			LIMIT #{limit} OFFSET #{offset}
 		</if>
 	</select>
 	
@@ -334,11 +344,11 @@
 		<if test="summary != null">
 			summary = #{summary},
 		</if>
-		<if test="createUserid != null">
-			create_userid = #{createUserid},
+		<if test="createdUserid != null">
+			created_userid = #{createdUserid},
 		</if>
-		<if test="createDept != null">
-			create_dept = #{createDept},
+		<if test="createdDeptid != null">
+			created_deptid = #{createdDeptid},
 		</if>
 		<if test="isDelete != null">
 			is_delete = #{isDelete},
@@ -352,11 +362,14 @@
 		<if test="idcard != null">
 			idcard = #{idcard},
 		</if>
-		<if test="createTime != null">
-			create_time = #{createTime},
+		<if test="createdOrgid != null">
+			created_orgid = #{createdOrgid},
 		</if>
-		<if test="updateTime != null">
-			update_time = #{updateTime}
+		<if test="createdTime != null">
+			created_time = #{createdTime},
+		</if>
+		<if test="updatedTime != null">
+			updated_time = #{updatedTime}
 		</if>
 	</sql>
 	

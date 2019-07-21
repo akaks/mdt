@@ -9,8 +9,7 @@ $(function(){
         $(this).hide();
     });
 
-    var url = window.location.href;
-    id = url.split("id=")[1];
+    id = getQueryVariable("id");
 
     if(id != undefined && id != null){
         // 初始化数据
@@ -59,7 +58,6 @@ function save() {
  * 编辑
  */
 function initData(id){
-
     $.ajax({
         url: baseUrl + '/patient/get?id='+id,
         dataType:'json',
@@ -73,7 +71,6 @@ function initData(id){
             }
         }
     });
-
 }
 
 function changePatientType(val) {

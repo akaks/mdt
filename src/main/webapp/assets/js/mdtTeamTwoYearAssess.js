@@ -21,7 +21,7 @@ $(function(){
             return '';
         }},
         {field:'-',title:'操作',width:500,formatter:function(value,row,index) {
-            var launchBtn = "<a href='#' onclick='launch("+row.id+")'>发起年度评估</a> ";
+            var launchBtn = "<a href='#' onclick='launch("+row.id+")'>发起满2年度评估</a> ";
             var viewBtn = "<a href='#' onclick='view("+row.id+")'>查看</a> ";
             var editBtn = "<a href='#' onclick='edit("+row.id+")'>MDT团队首席专家填写</a> ";
             var auditBtn = "<a href='#' onclick='auditFun("+row.id+")'>审核</a> ";
@@ -55,7 +55,7 @@ $(function(){
 	
 	//表格数据初始化
 	$('#grid').datagrid({
-		url:baseUrl + '/mdtTeam/findByPage',
+		url:baseUrl + '/mdtTeam/selectAnnualTeam',
         loadFilter: function(data){
             return data.resultData;
         },

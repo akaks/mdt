@@ -1,14 +1,15 @@
 package com.kensure.mdt.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
-import java.io.Serializable;
 import java.util.Date;
+
+import co.kensure.frame.BaseInfo;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
  * MDT随访反馈表对象类
  */
-public class MdtApplyFeedback implements Serializable{
+public class MdtApplyFeedback extends BaseInfo{
 
 	private static final long serialVersionUID = 3545276994084105527L;
 	
@@ -45,13 +46,6 @@ public class MdtApplyFeedback implements Serializable{
 	/**随访日期*/
 	@JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", timezone="GMT+8")
 	private Date visitTime; 
-
-	/**创建时间*/		
-	private Date createTime; 
-
-	/**更新时间*/		
-	private Date updateTime; 
-
 
 	public Long getId() {
 		return id;
@@ -131,18 +125,5 @@ public class MdtApplyFeedback implements Serializable{
 	public void setVisitTime(Date visitTime) {
 		this.visitTime = visitTime;
 	}
-	public Date getCreateTime() {
-		return createTime;
-	}
 
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
-	public Date getUpdateTime() {
-		return updateTime;
-	}
-
-	public void setUpdateTime(Date updateTime) {
-		this.updateTime = updateTime;
-	}
 }

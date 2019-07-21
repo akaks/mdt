@@ -108,7 +108,10 @@ function genItem(data,apply) {
     var rows = apply.doctors;
   	for(var i=0;i<rows.length;i++){
   		var row = rows[i];
-  		var content = row.zjYiJian.content;
+  		var content = '';	
+  		if(row.zjYiJian){
+  			content = row.zjYiJian.content;
+  		}
   		var ksPinFenList = row.ksPinFenList;
   		if(ksPinFenList && ksPinFenList.length>0){
   			tds = '';

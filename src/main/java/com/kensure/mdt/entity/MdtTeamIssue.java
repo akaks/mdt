@@ -1,17 +1,16 @@
 package com.kensure.mdt.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
-import java.io.Serializable;
 import java.util.Date;
+
+import co.kensure.frame.BaseInfo;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
  * MDT团队课题表对象类
  */
-public class MdtTeamIssue implements Serializable{
-
-	private static final long serialVersionUID = 3545276994084105527L;
-	
+public class MdtTeamIssue extends BaseInfo{
+	protected static final long serialVersionUID = 3545276994084105527L;
 	/**MDT团队课题表*/		
 	private Long id; 
 
@@ -27,13 +26,6 @@ public class MdtTeamIssue implements Serializable{
 
 	/**项目经费*/		
 	private String projectFund; 
-
-	/**创建时间*/		
-	private Date createTime; 
-
-	/**更新时间*/		
-	private Date updateTime; 
-
 
 	public Long getId() {
 		return id;
@@ -69,19 +61,5 @@ public class MdtTeamIssue implements Serializable{
 
 	public void setProjectFund(String projectFund) {
 		this.projectFund = projectFund;
-	}
-	public Date getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
-	public Date getUpdateTime() {
-		return updateTime;
-	}
-
-	public void setUpdateTime(Date updateTime) {
-		this.updateTime = updateTime;
 	}
 }

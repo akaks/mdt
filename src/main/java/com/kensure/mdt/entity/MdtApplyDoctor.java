@@ -1,13 +1,13 @@
 package com.kensure.mdt.entity;
 
-import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
+
+import co.kensure.frame.BaseInfo;
 
 /**
  * MDT参加专家表对象类
  */
-public class MdtApplyDoctor implements Serializable {
+public class MdtApplyDoctor extends BaseInfo {
 
 	private static final long serialVersionUID = 3545276994084105527L;
 
@@ -34,12 +34,6 @@ public class MdtApplyDoctor implements Serializable {
 
 	/** 手机短号 */
 	private String phoneCornet;
-
-	/** 创建时间 */
-	private Date createTime;
-
-	/** 更新时间 */
-	private Date updateTime;
 
 	/** 科室对专家评分 */
 	private List<MdtGradeItem> ksPinFenList;
@@ -110,22 +104,6 @@ public class MdtApplyDoctor implements Serializable {
 
 	public void setPhoneCornet(String phoneCornet) {
 		this.phoneCornet = phoneCornet;
-	}
-
-	public Date getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
-
-	public Date getUpdateTime() {
-		return updateTime;
-	}
-
-	public void setUpdateTime(Date updateTime) {
-		this.updateTime = updateTime;
 	}
 
 	public List<MdtGradeItem> getKsPinFenList() {

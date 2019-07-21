@@ -313,9 +313,9 @@ public class MapUtils {
 	 * 
 	 * @return
 	 */
-	public static void putPageInfo(Map<String, Object> map, PageInfo page) {
-		map.put("limit", page.getPageSize());
-		map.put("offset", page.getPageOffset());
+	public static void putPageInfo(Map<String, Object> parameters, PageInfo page) {
+		parameters.put("limit", page.getPageSize());
+		parameters.put("offset", page.getPageOffset());
 	}
 
 }

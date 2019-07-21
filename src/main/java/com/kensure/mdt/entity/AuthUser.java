@@ -1,44 +1,46 @@
 package com.kensure.mdt.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import java.util.Date;
+
+import co.kensure.frame.BaseInfo;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
  * 用户登录对象
  */
-public class AuthUser {
+public class AuthUser extends BaseInfo {
+	private static final long serialVersionUID = 3545276994084105527L;
+	/** 用户表 */
+	private Long id;
 
-	/**用户表*/
-	private Long id; 
+	/** 工号 */
+	private String number;
 
-	/**工号*/		
-	private String number; 
+	/** 姓名 */
+	private String name;
 
-	/**姓名*/		
-	private String name; 
+	/** 年龄 */
+	private Long age;
 
-	/**年龄*/		
-	private Long age; 
+	/** 生日 */
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+	private Date birthday;
 
-	/**生日*/
-	@JsonFormat(pattern="yyyy-MM-dd", timezone="GMT+8")
-	private Date birthday; 
+	/** 所在科室 */
+	private String department;
 
-	/**所在科室*/		
-	private String department; 
+	/** 职称 */
+	private String title;
 
-	/**职称*/		
-	private String title; 
+	/** 学历 */
+	private String education;
 
-	/**学历*/		
-	private String education; 
+	/** 手机长号 */
+	private String phone;
 
-	/**手机长号*/		
-	private String phone; 
-
-	/**手机短号*/		
-	private String phoneCornet; 
+	/** 手机短号 */
+	private String phoneCornet;
 
 	private String roleIds;
 
@@ -139,4 +141,5 @@ public class AuthUser {
 	public void setRoleLevel(String roleLevel) {
 		this.roleLevel = roleLevel;
 	}
+
 }

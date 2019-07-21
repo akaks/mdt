@@ -134,5 +134,22 @@ public class LCDaiBanService extends JSBaseService{
 		}
 		return list;
 	}
+	
+	/**
+	 * 先删除，后增加代办
+	 * @param list
+	 * @param bisiid
+	 * @param table
+	 */
+	public void liucheng(List<LCDaiBan> list, Long bisiid,String table) {
+		// 删除上一步的
+		deleteByBisiid(bisiid, table);
+		if (CollectionUtils.isEmpty(list)) {
+			return;
+		}
+		for (LCDaiBan daiban : list) {
+			add(daiban);
+		}
+	}
 
 }

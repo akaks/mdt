@@ -1,16 +1,7 @@
 
 package com.kensure.mdt.service;
 
-import co.kensure.mem.MapUtils;
-import com.kensure.mdt.dao.MdtTeamIssueMapper;
-import com.kensure.mdt.entity.MdtTeamInfo;
-import com.kensure.mdt.entity.MdtTeamIssue;
-import com.kensure.mdt.entity.MdtTeamPaper;
-import com.kensure.mdt.entity.SysOrg;
-import com.kensure.mdt.service.MdtTeamIssueService;
-
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -18,12 +9,18 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import co.kensure.frame.JSBaseService;
+import co.kensure.mem.MapUtils;
+
+import com.kensure.mdt.dao.MdtTeamIssueMapper;
+import com.kensure.mdt.entity.MdtTeamIssue;
+
 
 /**
  * MDT团队课题表服务实现类
  */
 @Service
-public class MdtTeamIssueService {
+public class MdtTeamIssueService extends JSBaseService{
 	
 	@Resource
 	private MdtTeamIssueMapper dao;
@@ -47,14 +44,13 @@ public class MdtTeamIssueService {
 	
 	
 	public boolean insert(MdtTeamIssue obj){
-		obj.setCreateTime(new Date());
-		obj.setUpdateTime(new Date());
+		super.beforeInsert(obj);
 		return dao.insert(obj);
 	}
 	
 	
 	public boolean update(MdtTeamIssue obj){
-		obj.setUpdateTime(new Date());
+		super.beforeUpdate(obj);
 		return dao.update(obj);
 	}
     

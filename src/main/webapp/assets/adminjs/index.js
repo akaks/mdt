@@ -380,10 +380,51 @@ $(function() {
 
 $(function(){
     initGrid();
+    initGrid10();
     initGrid1();
     initGrid2();
     initGrid3();
 });
+
+
+function initGrid10() {
+    var columns=[[
+        {field:'title',title:'标题',width:400},
+        {field:'createdTimeStr',title:'创建时间',width:200},
+        {field:'-',title:'操作',width:200,formatter:function(value,row,index) {
+            return "<a href='#' onclick='fileView("+row.id+")'>查看</a>";
+        }}
+    ]];
+    //表格数据初始化
+    $('#grid10').datagrid({
+        title:'资料下载',
+        url:baseUrl + '/file/list.do',
+        loadFilter: function(data){
+            return data.resultData;
+        },
+        columns:columns,
+        singleSelect:true,
+        pagination:true
+
+    });
+}
+
+
+/**
+ * 查看
+ */
+function fileView(id){
+
+    layer.open({
+        type: 2,
+        title: '资料信息',
+        maxmin: true,
+        shadeClose: true, //点击遮罩关闭层
+        area : ['80%' , '80%'],
+        content: 'sysFileEdit.html?type=view&id=' + id
+    });
+}
+
 
 function initGrid1() {
 
@@ -483,7 +524,7 @@ function initGrid3() {
 function edit(type, id) {
     var roleIds = getUser().roleIds;
 
-    if (type == '1') {
+    if (type == 'mdt_team') {
         // 普通用户
         if (roleIds.indexOf('7') != -1) {
             layerOpen('MDT团队','mdtTeamEdit.html?type=edit&id=' + id)
@@ -491,7 +532,6 @@ function edit(type, id) {
             layerOpen('MDT团队审核','mdtTeamEdit.html?type=audit&id=' + id)
         }
     }
-
     if (type == 'mdt_apply') {
         // 普通用户
         if (roleIds.indexOf('7') != -1) {
@@ -500,17 +540,11 @@ function edit(type, id) {
             layerOpen('MDT申请审核', 'mdtApplyEdit.html?type=audit&id=' + id);
         }
     }
-    if (type == '3') {
-        // 普通用户
-        if (roleIds.indexOf('3') != -1) {
-            layerOpen('MDT团队年度评估', 'mdtTeamAnnualAssessEdit.html?type=audit&teamId=' + id);
-        }
+    if (type == 'mdt_team_objective') {
+        layerOpen('MDT团队年度评估', 'mdtTeamAnnualAssessEdit.html?type=audit&teamId=' + id);
     }
-    if (type == '4') {
-        // 普通用户
-        if (roleIds.indexOf('3') != -1) {
-            layerOpen('MDT团队满两年评估', 'mdtTeamTwoYearAssessEdit.html?type=audit&teamId=' + id);
-        }
+    if (type == 'mdt_team_assess') {
+        layerOpen('MDT团队满两年评估', 'mdtTeamTwoYearAssessEdit.html?type=audit&teamId=' + id);
     }
 }
 
@@ -518,12 +552,12 @@ function initGrid() {
 
     var columns=[[
 		/*{field:'id',title:'编号',width:100},*/
-        {field:'busitypeStr',title:'类型',width:100},
+        {field:'busitypeStr',title:'类型',width:160},
         {field:'createdTimeStr',title:'申请时间',width:150},
         {field:'userid',title:'申请人',width:100,formatter:function(value,row,index) {
             return row.user.name;
         }},
-        {field:'title',title:'内容',width:300},
+        {field:'title',title:'内容',width:400},
         {field:'-',title:'操作',width:100,formatter:function(value,row,index) {
             var editBtn = "<a href='#' onclick='edit(\""+row.busitype+"\", "+row.bisiid+")'>处理</a> ";
             return editBtn;

@@ -32,9 +32,10 @@
 		out_hospital_date as outHospitalDate,
 		mdt_before_project as mdtBeforeProject,
 		mdt_after_project as mdtAfterProject,
-		create_time as createTime,
+		created_orgid as createdOrgid, 
+		created_time as createdTime,
 		update_doctor as updateDoctor,
-		update_time as updateTime
+		updated_time as updatedTime
     </sql>
     
 	<sql id="insertFields">
@@ -67,9 +68,10 @@
 		out_hospital_date,
 		mdt_before_project,
 		mdt_after_project,
-		create_time,
+		created_orgid,
+		created_time,
 		update_doctor,
-		update_time
+		updated_time
     </sql>
 	
 	<insert id="insert" parameterType="com.kensure.mdt.entity.SysPatient">
@@ -104,9 +106,10 @@
 			#{outHospitalDate},
 			#{mdtBeforeProject},
 			#{mdtAfterProject},
-			#{createTime},
+			#{createdOrgid},
+			#{createdTime},
 			#{updateDoctor},
-			#{updateTime}
+			#{updatedTime}
 		)
 	</insert>	
 	
@@ -195,14 +198,17 @@
 		<if test="mdtAfterProject != null">			
 			and mdt_after_project = #{mdtAfterProject}			
 		</if>
-		<if test="createTime != null">			
-			and create_time = #{createTime}			
+		<if test="createdOrgid != null">			
+			and created_orgid = #{createdOrgid}			
+		</if>
+		<if test="createdTime != null">			
+			and created_time = #{createdTime}			
 		</if>
 		<if test="updateDoctor != null">			
 			and update_doctor = #{updateDoctor}			
 		</if>
-		<if test="updateTime != null">			
-			and update_time = #{updateTime}			
+		<if test="updatedTime != null">			
+			and updated_time = #{updatedTime}			
 		</if>
 	</sql>
     
@@ -235,6 +241,9 @@
 		</where>				
 		<if test="orderby != null">
 			ORDER BY ${orderby}
+		</if>
+		<if test="limit != null">
+			LIMIT #{limit} OFFSET #{offset}
 		</if>
 	</select>
 	
@@ -323,14 +332,17 @@
 		<if test="mdtAfterProject != null">
 			mdt_after_project = #{mdtAfterProject},
 		</if>
-		<if test="createTime != null">
-			create_time = #{createTime},
+		<if test="createdOrgid != null">
+			created_orgid = #{createdOrgid},
+		</if>
+		<if test="createdTime != null">
+			created_time = #{createdTime},
 		</if>
 		<if test="updateDoctor != null">
 			update_doctor = #{updateDoctor},
 		</if>
-		<if test="updateTime != null">
-			update_time = #{updateTime}
+		<if test="updatedTime != null">
+			updated_time = #{updatedTime}
 		</if>
 	</sql>
 	

@@ -13,13 +13,21 @@ import co.kensure.mem.DateUtils;
  */
 public class BaseInfo implements java.io.Serializable {
 
-	private static final long serialVersionUID = 3545276994084105527L;
+	protected static final long serialVersionUID = 3545276994084105527L;
 	
 	/**创建时间*/		
 	protected Date createdTime; 
 
 	/**更新时间*/		
 	protected Date updatedTime; 
+	
+	/**创建人*/		
+	protected Long createdUserid; 
+	
+	/**创建部门*/		
+	protected String createdDeptid; 
+	/**创建机构*/		
+	protected String createdOrgid; 
 	
 	public Date getCreatedTime() {
 		return createdTime;
@@ -49,4 +57,31 @@ public class BaseInfo implements java.io.Serializable {
 	public String getUpdatedTimeDay() {
 		return DateUtils.format(updatedTime,DateUtils.DAY_FORMAT);
 	}
+
+	public Long getCreatedUserid() {
+		return createdUserid;
+	}
+
+	public void setCreatedUserid(Long createdUserid) {
+		this.createdUserid = createdUserid;
+	}
+
+	public String getCreatedDeptid() {
+		return createdDeptid;
+	}
+
+	public void setCreatedDeptid(String createdDeptid) {
+		this.createdDeptid = createdDeptid;
+	}
+
+	public String getCreatedOrgid() {
+		return createdOrgid;
+	}
+
+	public void setCreatedOrgid(String createdOrgid) {
+		this.createdOrgid = createdOrgid;
+	}
+	
+	
+	
 }

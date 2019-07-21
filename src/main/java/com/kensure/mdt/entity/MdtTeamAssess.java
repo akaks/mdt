@@ -1,12 +1,13 @@
 package com.kensure.mdt.entity;
 
-import java.io.Serializable;
-import java.util.Date;
+import co.kensure.frame.BaseInfo;
+
+import com.kensure.mdt.lc.model.LCHistory;
 
 /**
  * MDT团队建设期满2年评估表对象类
  */
-public class MdtTeamAssess implements Serializable{
+public class MdtTeamAssess extends BaseInfo{
 
 	private static final long serialVersionUID = 3545276994084105527L;
 	
@@ -48,18 +49,9 @@ public class MdtTeamAssess implements Serializable{
 
 	/**主任医生数量*/		
 	private Long directorNum;
-
-	/***/
-	private Long createUserid;
-
-	/***/
-	private String createDept;
-
-	/**创建时间*/		
-	private Date createTime; 
-
-	/**更新时间*/		
-	private Date updateTime; 
+	
+	/**审批时的意见*/		
+	private LCHistory yijian;
 
 
 	public Long getId() {
@@ -154,34 +146,13 @@ public class MdtTeamAssess implements Serializable{
 		this.directorNum = directorNum;
 	}
 
-	public Long getCreateUserid() {
-		return createUserid;
+	public LCHistory getYijian() {
+		return yijian;
 	}
 
-	public void setCreateUserid(Long createUserid) {
-		this.createUserid = createUserid;
+	public void setYijian(LCHistory yijian) {
+		this.yijian = yijian;
 	}
-
-	public String getCreateDept() {
-		return createDept;
-	}
-
-	public void setCreateDept(String createDept) {
-		this.createDept = createDept;
-	}
-
-	public Date getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
-	public Date getUpdateTime() {
-		return updateTime;
-	}
-
-	public void setUpdateTime(Date updateTime) {
-		this.updateTime = updateTime;
-	}
+	
+	
 }

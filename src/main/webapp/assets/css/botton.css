@@ -18,3 +18,8 @@
  	text-align:right;
  }
  .myfloatleft{float:left;}
+ 
+.mdtinput{
+  	height:30px;
+  	border-radius: 6px solid #95B8E7;
+  }

@@ -5,12 +5,16 @@
     <sql id="allFields">
 		id,
 		name,
+		created_orgid as createdOrgid,
+		code,
 		level
     </sql>
     
 	<sql id="insertFields">
 		id,
 		name,
+		created_orgid,
+		code,
 		level
     </sql>
 	
@@ -18,13 +22,25 @@
 		insert into sys_role (<include refid="insertFields"/>)
 		values (
 			#{id},
-			#{name}
+			#{name},
+			#{createdOrgid},
+			#{code},
+			#{level}
 		)
 	</insert>	
 	
     <sql id="whereClause">
 		<if test="name != null">			
 			name = #{name}			
+		</if>
+		<if test="createdOrgid != null">			
+			and created_orgid = #{createdOrgid}			
+		</if>
+		<if test="code != null">			
+			and code = #{code}			
+		</if>
+		<if test="level != null">			
+			and level = #{level}			
 		</if>
 	</sql>
     
@@ -58,11 +74,23 @@
 		<if test="orderby != null">
 			ORDER BY ${orderby}
 		</if>
+		<if test="limit != null">
+			LIMIT #{limit} OFFSET #{offset}
+		</if>
 	</select>
 	
 	<sql id="setComn">		
 		<if test="name != null">
-			name = #{name}
+			name = #{name},
+		</if>
+		<if test="createdOrgid != null">			
+			created_orgid = #{createdOrgid},		
+		</if>
+		<if test="code != null">			
+			code = #{code},	
+		</if>
+		<if test="level != null">			
+			level = #{level}
 		</if>
 	</sql>
 	

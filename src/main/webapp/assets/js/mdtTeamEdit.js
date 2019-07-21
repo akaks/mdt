@@ -1,47 +1,35 @@
 var id;
-var audit = 0;  // 区分是否MDT团队是否需要审核  audit=1时是不需要审核的
 var type;  // 类型 区分 新增、编辑、审核等
 
 $(function(){
 
     id = getQueryVariable("id");
-    audit = getQueryVariable("audit");
     type = getQueryVariable("type");
 
     if(id != undefined && id != null){
         // 初始化数据
         initData(id);
-
+        initGrid2(id);
         // 获取第一个设置的MDT团队目标
         getFirstByTeamId(id);
 
         // 初始化团队明细列表
         initGrid1(id);
     } else {
-
         getMdtTeamKey();
+        initUser();
     }
 
 
     if(type != undefined && type != null){
         if (type == 'add') {
-
             $("#btn1").show();
             $("#btn2").show();
         }
         if (type == 'edit') {
-
             $("#btn1").show();
         }
-        if (type == 'view') {
-
-            $("#audit1").show();
-            $("#audit2").show();
-            $("#audit3").show();
-        }
-
         if (type == 'launch') {
-
             $("#btn5").show();
         }
         if (type == 'launch2') {
@@ -50,22 +38,11 @@ $(function(){
         }
     }
 
-    // 无需审核的情况下，审核状态直接设置为3
-    if(audit != undefined && audit != null && audit == '1'){
-        $("#auditStatus").val("3");
-        $("#btn2").hide();
-    }
-
-
     $('#date').datebox({
         onSelect: function(date){
             setDate(date);
         }
     });
-
-    // var user = getUser();
-    // // 申请人
-    // $('#proposer').textbox('setText', user.name);
 });
 
 function initGrid1(teamId) {
@@ -121,6 +98,43 @@ function initGrid1(teamId) {
     });
 }
 
+/**
+ * 生成 意见列表
+ * @param applyId
+ */
+function initGrid2(id) {
+
+    var columns=[[
+        {field:'entryName',title:'审批步骤',width:100},
+        {field:'userid',title:'审批人',width:200,formatter:function(value,row,index) {
+            return row.user.name;
+        }},
+        {field:'auditResult',title:'审批结果',width:200,formatter:function(value,row,index) {
+            return row.auditResult == 1?"通过":"不通过";
+        }},
+        {field:'auditOpinion',title:'审批意见',width:200},
+        {field:'createdTimeStr',title:'审批时间',width:200}
+    ]];
+
+    var toolbar = [];
+
+    //表格数据初始化
+    $('#grid2').datagrid({
+        title:'审批信息',
+        url:baseUrl + '/lc/list.do?busitype=mdt_team&bisiid=' + id,
+        loadFilter: function(data){
+            return data.resultData;
+        },
+        columns:columns,
+        singleSelect:true,
+        rownumbers:true,
+        toolbar: toolbar
+
+    });
+}
+
+
+
 // 获取主键
 function getMdtTeamKey() {
     $.ajax({
@@ -129,20 +143,45 @@ function getMdtTeamKey() {
         dataType:'json',
         type:'post',
         success:function(value){
-
             if(value.type == 'success'){
                 id = value.resultData.row;
                 $("#id").val(id);
-
                 initGrid1(id);
             }
         }
     });
 }
 
+
+//合计yearSum
+function sumyue() {
+    //判断：编辑表单的所有控件是否都通过验证
+	var yearsum = 0;
+	for(var i=1;i<=12;i++){
+		var yueval = $('#month'+i).val();
+		if(yueval){
+			yearsum = yearsum+parseInt(yueval);
+		}
+	}
+	 var myObject = {};
+     myObject.yearSum = yearsum;
+     $('#editForm').form('load', myObject);         
+}
+
+
+
+//进入页面初始化数据
+function initUser() {
+	  var user = getUser();
+      var myObject = {};
+      myObject.proposer = user.name;
+      myObject.date = (new Date()).Format("yyyy-MM-dd hh:mm:ss");
+      $('#editForm').form('load', myObject);         
+}
+
+
 //保存
 function save() {
-
     //判断：编辑表单的所有控件是否都通过验证
     var isValidate= $('#editForm').form('validate');
     if(isValidate==false){
@@ -170,15 +209,14 @@ function save() {
 }
 
 function auditSave() {
-
     //判断：编辑表单的所有控件是否都通过验证
     var isValidate= $('#editForm2').form('validate');
     if(isValidate==false){
         return ;
     }
-
-    var formdata=getFormData('editForm2');
-
+    var formdata = getFormData('editForm2');
+    formdata.yijian = JSON.stringify(formdata);
+    
     $.ajax({
         url: baseUrl + '/mdtTeam/audit',
         data:formdata,
@@ -199,7 +237,6 @@ function auditSave() {
 
 function commintAudit() {
     $("#auditStatus").val('1');
-
     save();
 }
 
@@ -213,33 +250,28 @@ function initData(id){
         type:'post',
         success:function(value){
             if(value.type == 'success'){
-                $('#editForm').form('load', value.resultData.row);
-                $('#editForm2').form('load', value.resultData.row);
+            	var row = value.resultData.row;
+                $('#editForm').form('load', row);
+                setDate(new Date(row.date));
 
-                setDate(new Date(value.resultData.row.date));
-
-                if (type == 'edit' && $("#auditStatus").val() == '0') {
-                    $("#btn2").show();
-                }
-
-                if (type == 'audit') {
-                    if ($("#auditStatus").val() == '1') {
-                        $("#audit1").show();
-                    } else if ($("#auditStatus").val() == '2') {
-                        $("#audit2").show();
-                    } else if ($("#auditStatus").val() == '3') {
-                        $("#audit3").show();
-                    }
-                    $("#btn4").show();
-                }
-                if (type == 'edit') {
-                    if ($("#auditStatus").val() == '9') {
-                        $("#btn2").show();
-                    }
-                }
-
-                $("#id2").val(value.resultData.row.id);
-                showLiuCheng(parseInt(value.resultData.row.auditStatus)+1);
+                $("#id2").val(row.id);
+                showLiuCheng(parseInt(row.auditStatus)+1);
+                
+                if (type == 'audit' || type == 'edit') {
+                	if(row.auditStatus == '0' || row.auditStatus == '9'){
+                		  $("#btn1").show()
+                		  $("#btn2").show();
+                	}else{
+                		 $("#audit1").show();
+	                   	 $("#audit2").show();
+	                   	 $("#btn4").show();
+	                   	var user = getUser();
+	                    var myObject = {};
+	                    myObject.auditName = user.name;
+	                    myObject.createdTime = (new Date()).Format("yyyy-MM-dd hh:mm:ss");;
+	                    $('#editForm2').form('load', myObject);     
+                	} 
+                }              
             }
         }
     });

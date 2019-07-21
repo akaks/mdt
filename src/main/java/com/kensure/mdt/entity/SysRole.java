@@ -1,13 +1,13 @@
 package com.kensure.mdt.entity;
 
-import java.io.Serializable;
+import co.kensure.frame.BaseInfo;
 
 /**
  * 角色表对象类
  * @author fankd created on 2019-6-10
  * @since
  */
-public class SysRole implements Serializable{
+public class SysRole extends BaseInfo{
 
 	private static final long serialVersionUID = 3545276994084105527L;
 	
@@ -19,6 +19,9 @@ public class SysRole implements Serializable{
 
 	/**数据权限级别*/
 	private String level;
+	
+	/**特殊角色标识*/
+	private String code;
 
 
 	public Long getId() {
@@ -43,4 +46,14 @@ public class SysRole implements Serializable{
 	public void setLevel(String level) {
 		this.level = level;
 	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+	
+	
 }

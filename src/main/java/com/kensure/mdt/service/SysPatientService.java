@@ -1,24 +1,26 @@
 package com.kensure.mdt.service;
 
-import co.kensure.mem.MapUtils;
-import co.kensure.mem.PageInfo;
-import com.kensure.mdt.dao.SysPatientMapper;
-import com.kensure.mdt.entity.SysOrg;
-import com.kensure.mdt.entity.SysPatient;
-import com.kensure.mdt.entity.SysUser;
-import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import co.kensure.frame.JSBaseService;
+import co.kensure.mem.MapUtils;
+import co.kensure.mem.PageInfo;
+
+import com.kensure.mdt.dao.SysPatientMapper;
+import com.kensure.mdt.entity.AuthUser;
+import com.kensure.mdt.entity.SysPatient;
 
 /**
  * 患者信息表服务实现类
  */
 @Service
-public class SysPatientService {
+public class SysPatientService extends JSBaseService{
 	
 	@Resource
 	private SysPatientMapper dao;
@@ -47,6 +49,7 @@ public class SysPatientService {
 	
 	
 	public boolean update(SysPatient obj){
+		super.beforeUpdate(obj);
 		return dao.update(obj);
 	}
     
@@ -68,32 +71,25 @@ public class SysPatientService {
 	}
 
 
-	public List<SysPatient> selectList(PageInfo page) {
-
+	public List<SysPatient> selectList(PageInfo page,AuthUser user) {
 		Map<String, Object> parameters = MapUtils.genMap();
 		MapUtils.putPageInfo(parameters, page);
-
+		setOrgLevel(parameters, user);
 		List<SysPatient> list = selectByWhere(parameters);
-
 		return list;
 	}
 
-	public long selectListCount(PageInfo page) {
-
+	public long selectListCount(AuthUser user) {
 		Map<String, Object> parameters = MapUtils.genMap();
-
+		setOrgLevel(parameters, user);
 		return selectCountByWhere(parameters);
 	}
 
-	public void save(SysPatient patient) {
-
-		patient.setUpdateTime(new Date());
-
+	public void save(SysPatient patient,AuthUser user) {
     	if (patient.getId() == null) {
-
+    		initBase(patient, user);
 			insert(patient);
 		} else {
-
 			update(patient);
 		}
 	}

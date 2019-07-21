@@ -5,19 +5,23 @@
     <sql id="allFields">
 		id,
 		content,
-		create_userid as createUserid,
-		create_dept as createDept,
-		create_time as createTime,
-		update_time as updateTime
+		created_userid as createdUserid,
+		created_deptid as createdDeptid,
+		title,
+		created_orgid as createdOrgid,
+		created_time as createdTime,
+		updated_time as updatedTime
     </sql>
     
 	<sql id="insertFields">
 		id,
 		content,
-		create_userid,
-		create_dept,
-		create_time,
-		update_time
+		created_userid,
+		created_deptid,
+		title,
+		created_orgid,
+		created_time,
+		updated_time
     </sql>
 	
 	<insert id="insert" parameterType="com.kensure.mdt.entity.SysFile">
@@ -25,10 +29,12 @@
 		values (
 			#{id},
 			#{content},
-			#{createUserid},
-			#{createDept},
-			#{createTime},
-			#{updateTime}
+			#{createdUserid},
+			#{createdDeptid},
+			#{title},
+			#{createdOrgid},
+			#{createdTime},
+			#{updatedTime}
 		)
 	</insert>	
 	
@@ -36,17 +42,23 @@
 		<if test="content != null">			
 			content = #{content}			
 		</if>
-		<if test="createUserid != null">			
-			and create_userid = #{createUserid}			
+		<if test="createdUserid != null">			
+			and created_userid = #{createdUserid}			
 		</if>
-		<if test="createDept != null">			
-			and create_dept = #{createDept}			
+		<if test="createdDeptid != null">			
+			and created_deptid = #{createdDeptid}			
 		</if>
-		<if test="createTime != null">			
-			and create_time = #{createTime}			
+		<if test="title != null">			
+			and title = #{title}			
 		</if>
-		<if test="updateTime != null">			
-			and update_time = #{updateTime}			
+		<if test="createdOrgid != null">			
+			and created_orgid = #{createdOrgid}			
+		</if>
+		<if test="createdTime != null">			
+			and created_time = #{createdTime}			
+		</if>
+		<if test="updatedTime != null">			
+			and updated_time = #{updatedTime}			
 		</if>
 	</sql>
     
@@ -80,23 +92,32 @@
 		<if test="orderby != null">
 			ORDER BY ${orderby}
 		</if>
+		<if test="limit != null">
+			LIMIT #{limit} OFFSET #{offset}
+		</if>
 	</select>
 	
 	<sql id="setComn">		
 		<if test="content != null">
 			content = #{content},
 		</if>
-		<if test="createUserid != null">
-			create_userid = #{createUserid},
+		<if test="createdUserid != null">
+			created_userid = #{createdUserid},
 		</if>
-		<if test="createDept != null">
-			create_dept = #{createDept},
+		<if test="createdDeptid != null">
+			created_deptid = #{createdDeptid},
 		</if>
-		<if test="createTime != null">
-			create_time = #{createTime},
+		<if test="title != null">			
+			title = #{title},			
 		</if>
-		<if test="updateTime != null">
-			update_time = #{updateTime}
+		<if test="createdOrgid != null">			
+			created_orgid = #{createdOrgid},		
+		</if>
+		<if test="createdTime != null">
+			created_time = #{createdTime},
+		</if>
+		<if test="updatedTime != null">
+			updated_time = #{updatedTime}
 		</if>
 	</sql>
 	

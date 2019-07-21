@@ -8,10 +8,8 @@
 		name,
 		research_date as researchDate,
 		project_fund as projectFund,
-		create_userid as createUserid,
-		create_dept as createDept,
-		create_time as createTime,
-		update_time as updateTime
+		created_time as createdTime,
+		updated_time as updatedTime
     </sql>
     
 	<sql id="insertFields">
@@ -20,10 +18,8 @@
 		name,
 		research_date,
 		project_fund,
-		create_userid,
-		create_dept,
-		create_time,
-		update_time
+		created_time,
+		updated_time
     </sql>
 	
 	<insert id="insert" parameterType="com.kensure.mdt.entity.MdtTeamIssue">
@@ -34,8 +30,8 @@
 			#{name},
 			#{researchDate},
 			#{projectFund},
-			#{createTime},
-			#{updateTime}
+			#{createdTime},
+			#{updatedTime}
 		)
 	</insert>	
 	
@@ -52,11 +48,11 @@
 		<if test="projectFund != null">			
 			and project_fund = #{projectFund}			
 		</if>
-		<if test="createTime != null">			
-			and create_time = #{createTime}			
+		<if test="createdTime != null">			
+			and created_time = #{createdTime}			
 		</if>
-		<if test="updateTime != null">			
-			and update_time = #{updateTime}			
+		<if test="updatedTime != null">			
+			and updated_time = #{updatedTime}			
 		</if>
 	</sql>
     
@@ -90,6 +86,9 @@
 		<if test="orderby != null">
 			ORDER BY ${orderby}
 		</if>
+		<if test="limit != null">
+			LIMIT #{limit} OFFSET #{offset}
+		</if>
 	</select>
 	
 	<sql id="setComn">		
@@ -105,11 +104,11 @@
 		<if test="projectFund != null">
 			project_fund = #{projectFund},
 		</if>
-		<if test="createTime != null">
-			create_time = #{createTime},
+		<if test="createdTime != null">
+			created_time = #{createdTime},
 		</if>
-		<if test="updateTime != null">
-			update_time = #{updateTime}
+		<if test="updatedTime != null">
+			updated_time = #{updatedTime}
 		</if>
 	</sql>
 	

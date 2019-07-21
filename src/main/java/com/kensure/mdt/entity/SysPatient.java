@@ -1,14 +1,15 @@
 package com.kensure.mdt.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
-import java.io.Serializable;
 import java.util.Date;
+
+import co.kensure.frame.BaseInfo;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
  * 患者信息表对象类
  */
-public class SysPatient implements Serializable{
+public class SysPatient extends BaseInfo{
 
 	private static final long serialVersionUID = 3545276994084105527L;
 	
@@ -102,17 +103,8 @@ public class SysPatient implements Serializable{
 	/**MDT后治疗方案*/		
 	private String mdtAfterProject; 
 
-	/**创建时间*/
-	@JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", timezone="GMT+8")
-	private Date createTime; 
-
 	/**修改医生*/		
 	private String updateDoctor; 
-
-	/**修改时间*/
-	@JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", timezone="GMT+8")
-	private Date updateTime; 
-
 
 	public Long getId() {
 		return id;
@@ -317,13 +309,7 @@ public class SysPatient implements Serializable{
 	public void setMdtAfterProject(String mdtAfterProject) {
 		this.mdtAfterProject = mdtAfterProject;
 	}
-	public Date getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
+	
 	public String getUpdateDoctor() {
 		return updateDoctor;
 	}
@@ -331,11 +317,5 @@ public class SysPatient implements Serializable{
 	public void setUpdateDoctor(String updateDoctor) {
 		this.updateDoctor = updateDoctor;
 	}
-	public Date getUpdateTime() {
-		return updateTime;
-	}
-
-	public void setUpdateTime(Date updateTime) {
-		this.updateTime = updateTime;
-	}
+	
 }

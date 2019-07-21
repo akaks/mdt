@@ -10,6 +10,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import co.kensure.frame.JSBaseService;
 import co.kensure.mem.MapUtils;
 import co.kensure.mem.NumberUtils;
 
@@ -25,7 +26,7 @@ import com.kensure.mdt.entity.bo.MdtGradeReq;
  * 评分表服务实现类
  */
 @Service
-public class MdtGradeItemService {
+public class MdtGradeItemService extends JSBaseService{
 
 	@Resource
 	private MdtGradeItemMapper dao;
@@ -49,13 +50,12 @@ public class MdtGradeItemService {
 	}
 
 	public boolean insert(MdtGradeItem obj) {
-		obj.setCreateTime(new Date());
-		obj.setUpdateTime(new Date());
+		super.beforeInsert(obj);
 		return dao.insert(obj);
 	}
 
 	public boolean update(MdtGradeItem obj) {
-		obj.setUpdateTime(new Date());
+		super.beforeUpdate(obj);
 		return dao.update(obj);
 	}
 

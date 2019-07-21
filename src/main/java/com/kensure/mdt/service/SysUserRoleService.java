@@ -97,7 +97,6 @@ public class SysUserRoleService {
 		List<SysUserRole> sysRoleMenus = selectByWhere(parameters);
 		return sysRoleMenus;
 	}
-	
 
 	public void save(Long userId, Long roleId) {
 

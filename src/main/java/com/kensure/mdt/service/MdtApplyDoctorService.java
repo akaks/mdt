@@ -2,7 +2,6 @@ package com.kensure.mdt.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +11,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import co.kensure.exception.BusinessExceptionUtil;
+import co.kensure.frame.JSBaseService;
 import co.kensure.mem.CollectionUtils;
 import co.kensure.mem.MapUtils;
 
@@ -27,7 +27,7 @@ import com.kensure.mdt.entity.resp.ExpertGradeList;
  * MDT参加专家表服务实现类
  */
 @Service
-public class MdtApplyDoctorService {
+public class MdtApplyDoctorService extends JSBaseService{
 
 	@Resource
 	private MdtApplyDoctorMapper dao;
@@ -57,10 +57,12 @@ public class MdtApplyDoctorService {
 	}
 
 	public boolean insert(MdtApplyDoctor obj) {
+		super.beforeInsert(obj);
 		return dao.insert(obj);
 	}
 
 	public boolean update(MdtApplyDoctor obj) {
+		super.beforeUpdate(obj);
 		return dao.update(obj);
 	}
 
@@ -112,8 +114,7 @@ public class MdtApplyDoctorService {
 		if (list.size() > 0) {
 			BusinessExceptionUtil.threwException("该专家已存在不可重复添加!");
 		}
-		entiy.setCreateTime(new Date());
-		entiy.setUpdateTime(new Date());
+	
 		insert(entiy);
 	}
 
@@ -204,7 +205,7 @@ public class MdtApplyDoctorService {
 
 			if (!gradeItemList.isEmpty()) {
 				expertGrade.setReply("已回复");
-				expertGrade.setReplyTime(gradeItemList.get(0).getCreateTime());
+				expertGrade.setReplyTime(gradeItemList.get(0).getCreatedTime());
 			} else {
 				expertGrade.setReply("未回复");
 			}

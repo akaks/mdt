@@ -1,14 +1,17 @@
 package com.kensure.mdt.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
-import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+
+import co.kensure.frame.BaseInfo;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.kensure.mdt.lc.model.LCHistory;
 
 /**
  * MDT团队表对象类
  */
-public class MdtTeam implements Serializable{
+public class MdtTeam extends BaseInfo{
 
 	private static final long serialVersionUID = 3545276994084105527L;
 	
@@ -25,48 +28,32 @@ public class MdtTeam implements Serializable{
 	@JsonFormat(pattern="yyyy-MM-dd", timezone="GMT+8")
 	private Date date; 
 
-	/**MDT病种纳入标准和诊疗规范（指南）*/		
+	/**MDT病种纳入标准和诊疗规范（指南）*/
 	private String standard;
 
+	/**
+	 * 年度审核状态0是未发起  1:发起 2:专家填写 3:审核完成
+	 */
 	private String annualStatus;
 
+	/**
+	 * 满两年度审核状态 0:未发起 1:发起 2:专家填写 3:审核通过 4:审核不通过
+	 */
 	private String twoYearStatus;
 
 	/**审核状态 (0:未审核 1:科主任审核 2:医务部主任审核 3:分管院长审核)*/		
 	private String auditStatus;
 
-	/**科主任审核结果 0:未通过 1:通过*/		
-	private String auditResult1; 
-
-	/**科主任审核意见*/		
-	private String auditOpinion1; 
-
-	/**医务部主任审核结果 0:未通过 1:通过*/		
-	private String auditResult2; 
-
-	/**医务部主任审核意见*/		
-	private String auditOpinion2; 
-
-	/**分管院长审核结果 0:未通过 1:通过*/		
-	private String auditResult3; 
-
-	/**分管院长审核意见*/		
-	private String auditOpinion3;
-
-	/***/
-	private Long createUserid;
-
-	/***/
-	private String createDept;
-
 	/**是否删除 1是 0否*/
 	private String isDelete;
 
-	/**创建时间*/		
-	private Date createTime; 
-
-	/**更新时间*/		
-	private Date updateTime; 
+	
+	/**审批时的意见*/		
+	private LCHistory yijian;
+	/**
+	 * 团队成员
+	 */
+	List<MdtTeamInfo> menbers;
 
 
 	public Long getId() {
@@ -128,48 +115,7 @@ public class MdtTeam implements Serializable{
 	public void setAuditStatus(String auditStatus) {
 		this.auditStatus = auditStatus;
 	}
-	public String getAuditResult1() {
-		return auditResult1;
-	}
-
-	public void setAuditResult1(String auditResult1) {
-		this.auditResult1 = auditResult1;
-	}
-	public String getAuditOpinion1() {
-		return auditOpinion1;
-	}
-
-	public void setAuditOpinion1(String auditOpinion1) {
-		this.auditOpinion1 = auditOpinion1;
-	}
-	public String getAuditResult2() {
-		return auditResult2;
-	}
-
-	public void setAuditResult2(String auditResult2) {
-		this.auditResult2 = auditResult2;
-	}
-	public String getAuditOpinion2() {
-		return auditOpinion2;
-	}
-
-	public void setAuditOpinion2(String auditOpinion2) {
-		this.auditOpinion2 = auditOpinion2;
-	}
-	public String getAuditResult3() {
-		return auditResult3;
-	}
-
-	public void setAuditResult3(String auditResult3) {
-		this.auditResult3 = auditResult3;
-	}
-	public String getAuditOpinion3() {
-		return auditOpinion3;
-	}
-
-	public void setAuditOpinion3(String auditOpinion3) {
-		this.auditOpinion3 = auditOpinion3;
-	}
+	
 	public String getIsDelete() {
 		return isDelete;
 	}
@@ -178,34 +124,20 @@ public class MdtTeam implements Serializable{
 		this.isDelete = isDelete;
 	}
 
-	public Long getCreateUserid() {
-		return createUserid;
+	public LCHistory getYijian() {
+		return yijian;
 	}
 
-	public void setCreateUserid(Long createUserid) {
-		this.createUserid = createUserid;
+	public void setYijian(LCHistory yijian) {
+		this.yijian = yijian;
 	}
 
-	public String getCreateDept() {
-		return createDept;
+	public List<MdtTeamInfo> getMenbers() {
+		return menbers;
 	}
 
-	public void setCreateDept(String createDept) {
-		this.createDept = createDept;
+	public void setMenbers(List<MdtTeamInfo> menbers) {
+		this.menbers = menbers;
 	}
-
-	public Date getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
-	public Date getUpdateTime() {
-		return updateTime;
-	}
-
-	public void setUpdateTime(Date updateTime) {
-		this.updateTime = updateTime;
-	}
+	
 }

@@ -1,15 +1,7 @@
 
 package com.kensure.mdt.service;
 
-import co.kensure.mem.MapUtils;
-import com.kensure.mdt.dao.MdtApplyFeedbackMapper;
-import com.kensure.mdt.entity.MdtApplyDoctor;
-import com.kensure.mdt.entity.MdtApplyFeedback;
-import com.kensure.mdt.entity.SysOrg;
-import com.kensure.mdt.service.MdtApplyFeedbackService;
-
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -18,12 +10,18 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import co.kensure.frame.JSBaseService;
+import co.kensure.mem.MapUtils;
+
+import com.kensure.mdt.dao.MdtApplyFeedbackMapper;
+import com.kensure.mdt.entity.MdtApplyFeedback;
+
 
 /**
  * MDT随访反馈表服务实现类
  */
 @Service
-public class MdtApplyFeedbackService {
+public class MdtApplyFeedbackService extends JSBaseService{
 	
 	@Resource
 	private MdtApplyFeedbackMapper dao;
@@ -50,14 +48,13 @@ public class MdtApplyFeedbackService {
 	
 	
 	public boolean insert(MdtApplyFeedback obj){
-		obj.setCreateTime(new Date());
-		obj.setUpdateTime(new Date());
+		super.beforeInsert(obj);
 		return dao.insert(obj);
 	}
 	
 	
 	public boolean update(MdtApplyFeedback obj){
-		obj.setUpdateTime(new Date());
+		super.beforeUpdate(obj);
 		return dao.update(obj);
 	}
     

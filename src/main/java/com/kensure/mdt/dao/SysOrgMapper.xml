@@ -7,6 +7,7 @@
 		name,
 		pid,
 		area,
+		created_orgid as createdOrgid,
 		sort
     </sql>
     
@@ -15,6 +16,7 @@
 		name,
 		pid,
 		area,
+		created_orgid,
 		sort
     </sql>
 	
@@ -25,6 +27,7 @@
 			#{name},
 			#{pid},
 			#{area},
+			#{createdOrgid},
 			#{sort}
 		)
 	</insert>	
@@ -38,6 +41,9 @@
 		</if>
 		<if test="area != null">			
 			and area = #{area}			
+		</if>
+		<if test="createdOrgid != null">			
+			and created_orgid = #{createdOrgid}			
 		</if>
 		<if test="sort != null">			
 			and sort = #{sort}			
@@ -88,6 +94,9 @@
 		</if>
 		<if test="area != null">
 			area = #{area},
+		</if>
+		<if test="createdOrgid != null">			
+			 created_orgid = #{createdOrgid},		
 		</if>
 		<if test="sort != null">
 			sort = #{sort}

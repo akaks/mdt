@@ -7,8 +7,8 @@
 		apply_id as applyId,
 		user_id as userId,
 		content,
-		create_time as createTime,
-		update_time as updateTime
+		created_time as createdTime,
+		updated_time as updatedTime
     </sql>
     
 	<sql id="insertFields">
@@ -16,8 +16,8 @@
 		apply_id,
 		user_id,
 		content,
-		create_time,
-		update_time
+		created_time,
+		updated_time
     </sql>
 	
 	<insert id="insert" parameterType="com.kensure.mdt.entity.MdtApplyOpinion">
@@ -27,8 +27,8 @@
 			#{applyId},
 			#{userId},
 			#{content},
-			#{createTime},
-			#{updateTime}
+			#{createdTime},
+			#{updatedTime}
 		)
 	</insert>	
 	
@@ -42,11 +42,11 @@
 		<if test="content != null">			
 			and content = #{content}			
 		</if>
-		<if test="createTime != null">			
-			and create_time = #{createTime}			
+		<if test="createdTime != null">			
+			and created_time = #{createdTime}			
 		</if>
-		<if test="updateTime != null">			
-			and update_time = #{updateTime}			
+		<if test="updatedTime != null">			
+			and updated_time = #{updatedTime}			
 		</if>
 	</sql>
     
@@ -80,6 +80,9 @@
 		<if test="orderby != null">
 			ORDER BY ${orderby}
 		</if>
+		<if test="limit != null">
+			LIMIT #{limit} OFFSET #{offset}
+		</if>
 	</select>
 	
 	<sql id="setComn">		
@@ -92,11 +95,11 @@
 		<if test="content != null">
 			content = #{content},
 		</if>
-		<if test="createTime != null">
-			create_time = #{createTime},
+		<if test="createdTime != null">
+			created_time = #{createdTime},
 		</if>
-		<if test="updateTime != null">
-			update_time = #{updateTime}
+		<if test="updatedTime != null">
+			updated_time = #{updatedTime}
 		</if>
 	</sql>
 	
